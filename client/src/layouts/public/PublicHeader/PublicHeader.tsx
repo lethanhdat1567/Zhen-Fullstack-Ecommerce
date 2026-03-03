@@ -1,69 +1,65 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Logo from "@/components/Logo/Logo";
-import HomeBtn from "@/layouts/public/PublicHeader/components/HomeBtn/HomeBtn";
+import { Separator } from "@/components/ui/separator";
+import CartHeader from "@/layouts/public/PublicHeader/components/CartHeader/CartHeader";
 import LanguageSwitcher from "@/layouts/public/PublicHeader/components/LanguageSwitcher/LanguageSwitcher";
 import Navbar from "@/layouts/public/PublicHeader/components/Navbar/Navbar";
-import NavInfomation from "@/layouts/public/PublicHeader/components/NavInfomation/NavInfomation";
 import PhoneSection from "@/layouts/public/PublicHeader/components/PhoneSection/PhoneSection";
-import Sidebar from "@/layouts/public/PublicHeader/components/Sidebar/Sidebar";
+import SearchSection from "@/layouts/public/PublicHeader/components/SearchSection/SearchSection";
+import UserSection from "@/layouts/public/PublicHeader/components/UserSection/UserSection";
+import { motion, useMotionValueEvent, useScroll } from "motion/react";
+import { useState } from "react";
 
-function PublicHeader({ isBg = false }: { isBg?: boolean }) {
-    const [isTop, setIsTop] = useState(true);
+function PublicHeader() {
+    const { scrollY } = useScroll();
+    const [hidden, setHidden] = useState(false);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            const isMobile = window.innerWidth < 1024;
-
-            if (isMobile) {
-                setIsTop(false);
-            } else {
-                setIsTop(window.scrollY === 0);
-            }
-        };
-
-        handleScroll();
-
-        window.addEventListener("scroll", handleScroll);
-        window.addEventListener("resize", handleScroll);
-
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-            window.removeEventListener("resize", handleScroll);
-        };
-    }, []);
-
-    const isWhiteBg = !isTop || isBg;
-
+    useMotionValueEvent(scrollY, "change", (current) => {
+        const previous = scrollY.getPrevious() ?? 0;
+        if (current > previous && current > 150) {
+            setHidden(true);
+        } else {
+            setHidden(false);
+        }
+    });
     return (
-        <div
-            className={`fixed top-0 right-0 left-0 z-50 flex w-screen items-center justify-between px-10 transition-[height,background-color,color] duration-500 lg:px-10 xl:px-18 ${
-                isWhiteBg
-                    ? "bg-white text-(--text-color)"
-                    : "bg-transparent text-white"
-            } ${
-                isTop
-                    ? "h-[calc(var(--header-height)+20px)]"
-                    : "h-(--header-height)"
-            }`}
+        <motion.header
+            className="fixed top-0 z-999 w-full bg-white"
+            animate={{
+                y: hidden ? -140 : 0,
+                opacity: hidden ? 0 : 1,
+            }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
         >
-            <div className="hidden items-center gap-2 lg:flex xl:gap-5">
-                <HomeBtn />
-                <Navbar />
-            </div>
-
-            <Logo isScale={isTop} />
-
-            <div className="flex items-center gap-5 xl:gap-5">
-                <div className="hidden lg:block">
-                    <NavInfomation />
+            <div className="bg-[#1c5b41] text-white">
+                <div className="container">
+                    <div className="flex items-center justify-between py-4">
+                        <Logo />
+                        <SearchSection />
+                        <div className="flex items-center gap-4">
+                            <UserSection />
+                            <CartHeader />
+                            <LanguageSwitcher />
+                        </div>
+                    </div>
                 </div>
-                <PhoneSection />
-                <LanguageSwitcher />
-                <Sidebar />
             </div>
-        </div>
+            <div className="bg-[#FFFAF0]">
+                <div className="container">
+                    <div className="flex items-center py-4">
+                        <div className="flex-1">
+                            <Navbar />
+                        </div>
+                        <Separator
+                            className="mr-5 h-6!"
+                            orientation="vertical"
+                        />
+                        <PhoneSection />
+                    </div>
+                </div>
+            </div>
+        </motion.header>
     );
 }
 

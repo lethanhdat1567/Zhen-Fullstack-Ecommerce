@@ -7,13 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Controller } from "react-hook-form";
 import * as z from "zod";
 import UploadThumbnail from "@/app/admin/components/UploadThumbnail/UploadThumbnail";
-import { uploadService } from "@/services/uploadService";
 import { HttpError } from "@/lib/http/errors";
 import { toast } from "sonner";
-import { adminService } from "@/services/adminService";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2 } from "lucide-react"; // Spinner icon shadcn
+import { userService } from "@/services/userService";
 
 export function AdminUserForm({
     form,
@@ -30,10 +29,10 @@ export function AdminUserForm({
             setLoading(true);
 
             if (updateId) {
-                await adminService.update(updateId, data);
+                await userService.update(updateId, data);
                 toast.success("Cập nhật thành công");
             } else {
-                await adminService.create(data);
+                await userService.create(data);
                 toast.success("Tạo mới thành công");
             }
 

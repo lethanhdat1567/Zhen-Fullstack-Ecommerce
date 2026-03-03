@@ -16,14 +16,14 @@ import { resolveMediaSrc } from "@/lib/image";
 import { Separator } from "@/components/ui/separator";
 import { LogOut, User } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Admin, adminService } from "@/services/adminService";
+import { User as UserType, userService } from "@/services/userService";
 
 function UserDropdown() {
     const refreshToken = useAuthStore((state) => state.refreshToken);
     const clearAuth = useAuthStore((state) => state.clearAuth);
     const router = useRouter();
-    const admin = useAuthStore((state) => state.admin);
-    const [info, setInfo] = useState<Admin | null>(null);
+    const admin = useAuthStore((state) => state.user);
+    const [info, setInfo] = useState<UserType | null>(null);
 
     async function handleLogout() {
         try {
@@ -42,7 +42,7 @@ function UserDropdown() {
         try {
             if (!admin) return;
 
-            const res = await adminService.detail(admin.id);
+            const res = await userService.detail(admin.id);
 
             setInfo(res);
         } catch (error) {

@@ -1,3 +1,5 @@
+"use client";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import navNameMap from "@/layouts/public/PublicHeader/components/Navbar/data";
 import NavItem from "@/layouts/public/PublicHeader/components/NavItem/NavItem";
@@ -8,6 +10,7 @@ import { productCategoryService } from "@/services/productCategoryService";
 import { serviceCategoryService } from "@/services/serviceCategoryService";
 import { useLocale } from "next-intl";
 import { useEffect, useState } from "react";
+
 function Navbar({ onClick }: { onClick?: () => void }) {
     const [navs, setNavs] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -15,18 +18,28 @@ function Navbar({ onClick }: { onClick?: () => void }) {
 
     const fetchNavs = async () => {
         try {
+            // 1. Bổ sung các mã code mới vào danh sách cho phép
             const allowedCodes = [
+                "home", // Thêm home nếu bạn muốn hiển thị
                 "introduce",
                 "services",
                 "product",
+                "news", // Mới bổ sung
+                "media", // Mới bổ sung
                 "recruitment",
+                "contact", // Mới bổ sung
             ];
 
+            // 2. Sắp xếp lại thứ tự hiển thị cho hợp lý
             const orderMap: Record<string, number> = {
-                introduce: 0,
-                services: 1,
-                product: 2,
-                recruitment: 3,
+                home: 0,
+                introduce: 1,
+                services: 2,
+                product: 3,
+                news: 4,
+                media: 5,
+                recruitment: 6,
+                contact: 7,
             };
 
             const [
@@ -37,22 +50,10 @@ function Navbar({ onClick }: { onClick?: () => void }) {
                 mediaCateRes,
             ] = await Promise.all([
                 navService.getAll(),
-                serviceCategoryService.list({
-                    isActive: true,
-                    lang: locale,
-                }),
-                productCategoryService.list({
-                    isActive: true,
-                    lang: locale,
-                }),
-                postCategoryService.list({
-                    isActive: true,
-                    lang: locale,
-                }),
-                mediaCategoryService.list({
-                    isActive: true,
-                    lang: locale,
-                }),
+                serviceCategoryService.list({ isActive: true, lang: locale }),
+                productCategoryService.list({ isActive: true, lang: locale }),
+                postCategoryService.list({ isActive: true, lang: locale }),
+                mediaCategoryService.list({ isActive: true, lang: locale }),
             ]);
 
             const serviceCategories = serviceCateRes.items;
@@ -74,50 +75,57 @@ function Navbar({ onClick }: { onClick?: () => void }) {
                             ? serviceCategories
                             : nav.code === "product"
                               ? productCategories
-                              : nav.code === "news"
+                              : nav.code === "news" // Logic mapping cho News
                                 ? postCategories
-                                : nav.code === "media"
+                                : nav.code === "media" // Logic mapping cho Media
                                   ? mediaCategories
                                   : null,
                 }))
-                .sort((a: any, b: any) => orderMap[a.code] - orderMap[b.code]);
+                // Sắp xếp dựa trên orderMap đã định nghĩa
+                .sort(
+                    (a: any, b: any) =>
+                        (orderMap[a.code] ?? 99) - (orderMap[b.code] ?? 99),
+                );
 
             setNavs(finalNavs);
         } catch (error) {
-            console.log(error);
+            console.error("Fetch Navs Error:", error);
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         fetchNavs();
     }, [locale]);
 
     if (loading)
         return (
             <div className="flex flex-col gap-4">
-                <Skeleton className="h-8" />
-                <Skeleton className="h-8" />
-                <Skeleton className="h-8" />
+                <Skeleton className="h-8 w-full" />
+                <Skeleton className="h-8 w-full" />
+                <Skeleton className="h-8 w-full" />
             </div>
         );
 
     return (
         <ul className="flex flex-col items-end gap-0 lg:flex-row lg:items-center lg:gap-2 xl:gap-5">
             {navs.map((navItem) => {
+                // Kiểm tra xem code có cần lấy slug của thằng con đầu tiên không
                 const needSlug = [
                     "product",
                     "services",
-                    "post",
+                    "news", // Đổi từ "post" thành "news" cho khớp code
                     "media",
                 ].includes(navItem.code);
 
+                // Tạo đường dẫn href
                 const href =
                     needSlug && navItem.children?.length
                         ? `/${navItem.code}/${navItem.children[0].slug}`
-                        : `/${navItem.code}`;
+                        : navItem.code === "home"
+                          ? "/"
+                          : `/${navItem.code}`;
 
                 return (
                     <NavItem

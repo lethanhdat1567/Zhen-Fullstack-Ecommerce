@@ -1,3 +1,5 @@
+"use client";
+
 import { TextAlignJustify, X } from "lucide-react";
 import {
     Drawer,

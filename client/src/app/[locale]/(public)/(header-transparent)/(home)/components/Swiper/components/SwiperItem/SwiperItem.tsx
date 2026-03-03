@@ -42,7 +42,7 @@ function SwiperItem({ src, isActive }: IProps) {
             <div className="absolute inset-0 bg-black/20" />
 
             <div
-                className={`absolute bottom-14 left-5 pr-2 text-white transition-transform duration-700 ease-out sm:pl-0 md:bottom-30 md:left-40 lg:bottom-40 lg:left-70 ${
+                className={`absolute bottom-14 left-5 pr-2 text-white transition-transform duration-700 ease-out sm:pl-0 md:bottom-30 md:left-40 lg:bottom-18 lg:left-70 ${
                     isActive
                         ? "translate-y-0 opacity-100"
                         : "translate-y-20 opacity-0"
@@ -60,7 +60,7 @@ function SwiperItem({ src, isActive }: IProps) {
                     </p>
                 </AnimatedContent>
 
-                <AnimatedContent duration={2} delay={0.2}>
+                <AnimatedContent duration={2} delay={0.2} threshold={-10}>
                     <Link href={`/services/${serviceSlug}`}>
                         <Button className="text-md bg-(--primary-color) lg:text-lg">
                             {t("Hero.btnText")}

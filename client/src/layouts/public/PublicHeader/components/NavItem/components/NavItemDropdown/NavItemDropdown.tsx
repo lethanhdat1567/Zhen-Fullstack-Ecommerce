@@ -11,8 +11,8 @@ type Props = {
 function NavItemDropdown({ navChildren, navCode }: Props) {
     return (
         <>
-            <div className="absolute right-0 bottom-0 left-0 hidden h-5 translate-y-full opacity-0 lg:block" />
-            <div className="invisible absolute -bottom-3 left-0 hidden min-w-50 translate-y-full flex-col overflow-hidden rounded-tl-2xl rounded-br-2xl bg-white opacity-0 shadow transition group-hover/nav:visible group-hover/nav:opacity-100 lg:flex">
+            <div className="absolute right-0 bottom-0 left-0 z-999999 hidden h-5 translate-y-full opacity-0 lg:block" />
+            <div className="invisible absolute -bottom-3 left-0 z-999999 hidden min-w-50 translate-y-full flex-col overflow-hidden rounded-tl-2xl rounded-br-2xl bg-white opacity-0 shadow transition group-hover/nav:visible group-hover/nav:opacity-100 lg:flex">
                 {navChildren.map((item, index) => (
                     <Link
                         href={`/${navCode}/${item.slug}`}

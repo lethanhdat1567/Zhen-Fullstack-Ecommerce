@@ -1,0 +1,177 @@
+"use client";
+
+import { checkoutSchema } from "@/app/[locale]/(public)/(single)/checkout/schema";
+import { Controller, UseFormReturn } from "react-hook-form";
+import z from "zod";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+
+type Props = {
+    form: UseFormReturn<z.infer<typeof checkoutSchema>>;
+};
+
+function FormInfo({ form }: Props) {
+    return (
+        <div className="space-y-6">
+            {/* Họ và tên */}
+            <Controller
+                name="full_name"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                    <div
+                        className="flex flex-col gap-2"
+                        data-invalid={fieldState.invalid}
+                    >
+                        <Label htmlFor={field.name} className="font-semibold">
+                            Họ và tên
+                        </Label>
+                        <Input
+                            {...field}
+                            id={field.name}
+                            aria-invalid={fieldState.invalid}
+                            placeholder="Nguyễn Văn A"
+                            className={
+                                fieldState.invalid
+                                    ? "border-red-500 focus-visible:ring-red-500"
+                                    : ""
+                            }
+                        />
+                        {fieldState.error && (
+                            <span className="text-sm font-medium text-red-500">
+                                {fieldState.error.message}
+                            </span>
+                        )}
+                    </div>
+                )}
+            />
+
+            {/* Số điện thoại */}
+            <Controller
+                name="phone_number"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                    <div
+                        className="flex flex-col gap-2"
+                        data-invalid={fieldState.invalid}
+                    >
+                        <Label htmlFor={field.name} className="font-semibold">
+                            Số điện thoại
+                        </Label>
+                        <Input
+                            {...field}
+                            id={field.name}
+                            aria-invalid={fieldState.invalid}
+                            placeholder="0901234567"
+                            className={
+                                fieldState.invalid
+                                    ? "border-red-500 focus-visible:ring-red-500"
+                                    : ""
+                            }
+                        />
+                        {fieldState.error && (
+                            <span className="text-sm font-medium text-red-500">
+                                {fieldState.error.message}
+                            </span>
+                        )}
+                    </div>
+                )}
+            />
+
+            {/* Email */}
+            <Controller
+                name="email"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                    <div
+                        className="flex flex-col gap-2"
+                        data-invalid={fieldState.invalid}
+                    >
+                        <Label htmlFor={field.name} className="font-semibold">
+                            Email
+                        </Label>
+                        <Input
+                            {...field}
+                            id={field.name}
+                            type="email"
+                            aria-invalid={fieldState.invalid}
+                            placeholder="example@gmail.com"
+                            className={
+                                fieldState.invalid
+                                    ? "border-red-500 focus-visible:ring-red-500"
+                                    : ""
+                            }
+                        />
+                        {fieldState.error && (
+                            <span className="text-sm font-medium text-red-500">
+                                {fieldState.error.message}
+                            </span>
+                        )}
+                    </div>
+                )}
+            />
+
+            {/* Địa chỉ nhận hàng */}
+            <Controller
+                name="shipping_address"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                    <div
+                        className="flex flex-col gap-2"
+                        data-invalid={fieldState.invalid}
+                    >
+                        <Label htmlFor={field.name} className="font-semibold">
+                            Địa chỉ nhận hàng
+                        </Label>
+                        <Input
+                            {...field}
+                            id={field.name}
+                            aria-invalid={fieldState.invalid}
+                            placeholder="Số nhà, tên đường, phường/xã..."
+                            className={
+                                fieldState.invalid
+                                    ? "border-red-500 focus-visible:ring-red-500"
+                                    : ""
+                            }
+                        />
+                        {fieldState.error && (
+                            <span className="text-sm font-medium text-red-500">
+                                {fieldState.error.message}
+                            </span>
+                        )}
+                    </div>
+                )}
+            />
+
+            {/* Ghi chú */}
+            <Controller
+                name="note"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                    <div
+                        className="flex flex-col gap-2"
+                        data-invalid={fieldState.invalid}
+                    >
+                        <Label htmlFor={field.name} className="font-semibold">
+                            Ghi chú (Tùy chọn)
+                        </Label>
+                        <Textarea
+                            {...field}
+                            id={field.name}
+                            aria-invalid={fieldState.invalid}
+                            placeholder="Ví dụ: Giao giờ hành chính..."
+                            className={`resize-none ${fieldState.invalid ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                        />
+                        {fieldState.error && (
+                            <span className="text-sm font-medium text-red-500">
+                                {fieldState.error.message}
+                            </span>
+                        )}
+                    </div>
+                )}
+            />
+        </div>
+    );
+}
+
+export default FormInfo;

@@ -8,11 +8,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 type Props = {
-    isScale?: boolean;
     href?: string;
 };
 
-function Logo({ isScale = false, href = "/" }: Props) {
+function Logo({ href = "/" }: Props) {
     const [logo, setLogo] = useState("");
 
     const fetchLogo = async () => {
@@ -28,13 +27,13 @@ function Logo({ isScale = false, href = "/" }: Props) {
     if (!logo) return;
 
     return (
-        <Link href={href} className="block h-18 w-30">
+        <Link href={href} className="block h-12 w-20">
             <Image
                 src={resolveMediaSrc(logo)}
                 alt="ZHEN"
                 width={500}
                 height={500}
-                className={`h-full w-full object-contain transition duration-700 ${isScale ? "scale-120" : ""}`}
+                className={`h-full w-full object-contain transition duration-700`}
             />
         </Link>
     );

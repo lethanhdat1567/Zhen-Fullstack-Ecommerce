@@ -9,11 +9,11 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { HttpError } from "@/lib/http/errors";
 import { changePasswordSchema } from "@/app/admin/profile/components/ChangePassword/schema";
-import { adminService } from "@/services/adminService";
 import { useAuthStore } from "@/store/useAuthStore";
+import { userService } from "@/services/userService";
 
 function ChangePasswordForm({ onCancel }: { onCancel: any }) {
-    const admin = useAuthStore((state) => state.admin);
+    const admin = useAuthStore((state) => state.user);
     const form = useForm<z.infer<typeof changePasswordSchema>>({
         resolver: zodResolver(changePasswordSchema),
         defaultValues: {
@@ -26,7 +26,7 @@ function ChangePasswordForm({ onCancel }: { onCancel: any }) {
         try {
             if (!admin?.id) return;
 
-            await adminService.changePassword(admin?.id, data);
+            await userService.changePassword(admin?.id, data);
             toast.success("Cập nhật mật khẩu thành công");
             form.reset();
             onCancel();

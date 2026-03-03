@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-type Admin = {
+type User = {
     id: string;
     username: string;
     email: string;
@@ -10,13 +10,13 @@ type Admin = {
 };
 
 type AuthState = {
-    admin: Admin | null;
+    user: User | null;
     accessToken: string | null;
     refreshToken: string | null;
     expiresIn: number | null;
 
     setAuth: (data: {
-        admin: Admin;
+        user: User;
         accessToken: string;
         refreshToken: string;
         expiresIn: number;
@@ -30,14 +30,14 @@ type AuthState = {
 export const useAuthStore = create<AuthState>()(
     persist(
         (set) => ({
-            admin: null,
+            user: null,
             accessToken: null,
             refreshToken: null,
             expiresIn: null,
 
-            setAuth: ({ admin, accessToken, refreshToken, expiresIn }) =>
+            setAuth: ({ user, accessToken, refreshToken, expiresIn }) =>
                 set({
-                    admin,
+                    user,
                     accessToken,
                     refreshToken,
                     expiresIn,
@@ -52,7 +52,7 @@ export const useAuthStore = create<AuthState>()(
 
             clearAuth: () =>
                 set({
-                    admin: null,
+                    user: null,
                     accessToken: null,
                     refreshToken: null,
                     expiresIn: null,

@@ -53,10 +53,12 @@ async function request<T>(
 
     if (!res.ok) {
         if (res.status === 401) {
-            if (typeof window !== "undefined") {
-                window.location.href = "/logout";
-            } else {
-                redirect("/logout" as any);
+            if (data?.data?.code === "UNAUTHORIZED") {
+                if (typeof window !== "undefined") {
+                    window.location.href = "/logout";
+                } else {
+                    redirect("/logout" as any);
+                }
             }
         }
 

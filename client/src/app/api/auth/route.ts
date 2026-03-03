@@ -4,10 +4,10 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { accessToken, expiresIn } = body;
+        const { accessToken, role, expiresIn } = body;
 
         // Kiểm tra dữ liệu đầu vào
-        if (!accessToken) {
+        if (!accessToken || !role) {
             return NextResponse.json(
                 { error: "accessToken or role not found" },
                 { status: 400 },
@@ -30,6 +30,13 @@ export async function POST(request: NextRequest) {
         response.cookies.set({
             name: "access_token",
             value: accessToken,
+            ...cookieOptions,
+        });
+
+        // 2. Set cookie cho role
+        response.cookies.set({
+            name: "role",
+            value: role,
             ...cookieOptions,
         });
 

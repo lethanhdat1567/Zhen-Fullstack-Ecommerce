@@ -24,9 +24,11 @@ const REFRESH_EXPIRES_IN = envConfig.refreshExpires as StringValue;
 
 export class AuthService {
     // ================= REGISTER =================
+    // ================= REGISTER =================
     static async register(data: RegisterInput) {
         const { username, email, password, full_name } = data;
 
+        // 1. Kiểm tra tồn tại
         const exists = await prisma.users.findFirst({
             where: { OR: [{ username }, { email }] },
         });
@@ -35,9 +37,10 @@ export class AuthService {
             throw new AppError("Username or email already exists", 409);
         }
 
+        // 2. Hash mật khẩu và tạo User
         const password_hash = await hashPassword(password);
 
-        const admin = await prisma.users.create({
+        const newUser = await prisma.users.create({
             data: {
                 username,
                 email,
@@ -46,16 +49,44 @@ export class AuthService {
                 role: "user",
                 status: "active",
             },
-            select: {
-                id: true,
-                username: true,
-                email: true,
-                role: true,
-                created_at: true,
+        });
+
+        const payload = {
+            userId: newUser.id,
+            role: newUser.role,
+        };
+
+        const accessToken = signAccessToken(payload);
+        const refreshToken = signRefreshToken(payload);
+
+        await prisma.user_tokens.create({
+            data: {
+                user_id: newUser.id,
+                token: refreshToken,
+                type: "refresh",
+                expired_at: new Date(Date.now() + ms(REFRESH_EXPIRES_IN)),
             },
         });
 
-        return admin;
+        // Cập nhật last login lần đầu tiên
+        await prisma.users.update({
+            where: { id: newUser.id },
+            data: { last_login_at: new Date() },
+        });
+
+        // 4. Trả về format giống hệt hàm Login
+        return {
+            user: {
+                id: newUser.id,
+                username: newUser.username,
+                email: newUser.email,
+                role: newUser.role,
+                avatar: newUser.avatar || null,
+            },
+            accessToken,
+            refreshToken,
+            expiresIn: ms(ACCESS_EXPIRES_IN),
+        };
     }
 
     // ================= LOGIN =================

@@ -16,12 +16,12 @@ router.get("/:id", asyncHandler(orderController.getOrderDetail));
 // Routes cho Admin
 router.get(
     "/admin/all",
-    // checkRole("admin"),
+    checkRole("admin"),
     asyncHandler(orderController.getAllOrders),
 );
 router.patch(
     "/admin/status/:id",
-    // checkRole("admin"),
+    checkRole("admin"),
     asyncHandler(orderController.updateStatus),
 );
 

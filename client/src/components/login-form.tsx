@@ -40,22 +40,26 @@ export function LoginForm({
                 username: identifier,
                 password,
             });
-            console.log(res);
 
             await authService.loginFormNextClientToNextServer({
                 accessToken: res.data.accessToken,
+                role: res.data.user.role,
                 expiresIn: res.data.expiresIn,
             });
 
             await setAuth({
-                admin: res.data.admin,
+                user: res.data.user,
                 accessToken: res.data.accessToken,
                 refreshToken: res.data.refreshToken,
                 expiresIn: res.data.expiresIn,
             });
 
             toast.success("Đăng nhập thành công");
-            router.push("/admin/dashboard");
+            if (res.data.user.role === "admin") {
+                router.push("/admin/dashboard");
+            } else {
+                router.push("/");
+            }
         } catch (err: any) {
             if (err instanceof HttpError) {
                 if (err.status === 401) {

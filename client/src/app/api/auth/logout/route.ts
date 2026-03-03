@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
         // Sử dụng delete() để xóa cookie
         // Next.js sẽ tự động set expire date về quá khứ cho bạn
         response.cookies.delete("access_token");
+        response.cookies.delete("role");
 
         return response;
     } catch (err) {

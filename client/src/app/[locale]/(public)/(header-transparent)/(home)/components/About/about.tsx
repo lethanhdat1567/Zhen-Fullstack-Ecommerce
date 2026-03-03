@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { images } from "@/assets/images";
 import AboutData from "./components/AboutData/AboutData";
+import { images } from "@/assets/images";
 
 function About() {
     return (

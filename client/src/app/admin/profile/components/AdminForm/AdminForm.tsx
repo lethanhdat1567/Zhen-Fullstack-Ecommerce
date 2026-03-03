@@ -9,15 +9,14 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
-import { adminService } from "@/services/adminService";
 import UploadThumbnail from "@/app/admin/components/UploadThumbnail/UploadThumbnail";
 import { HttpError } from "@/lib/http/errors";
 import { toast } from "sonner";
-import { uploadService } from "@/services/uploadService";
 import { Loader2 } from "lucide-react";
+import { userService } from "@/services/userService";
 
 function AdminForm() {
-    const admin = useAuthStore((state) => state.admin);
+    const admin = useAuthStore((state) => state.user);
 
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(false);
@@ -37,7 +36,7 @@ function AdminForm() {
 
         try {
             setLoading(true);
-            await adminService.update(admin.id, data);
+            await userService.update(admin.id, data);
             toast.success("Cập nhật thành công");
         } catch (error) {
             console.log(error);
@@ -57,7 +56,7 @@ function AdminForm() {
         try {
             setFetching(true);
 
-            const res = await adminService.detail(admin.id);
+            const res = await userService.detail(admin.id);
 
             form.reset({
                 full_name: res.full_name,

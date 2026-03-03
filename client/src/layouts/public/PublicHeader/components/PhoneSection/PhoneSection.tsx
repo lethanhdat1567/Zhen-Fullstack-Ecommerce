@@ -25,7 +25,7 @@ function PhoneSection() {
 
     return (
         <div className="hidden items-center gap-1 text-sm font-semibold text-(--primary-color) md:flex">
-            <Phone size={16} />+{phoneNumber}
+            Hotline: <Phone size={16} />+{phoneNumber}
         </div>
     );
 }

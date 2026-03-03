@@ -2,8 +2,7 @@ import { createActionsColumn } from "@/app/admin/components/ActionColumn/ActionC
 import { createSelectColumn } from "@/app/admin/components/CreateSelectColumn/CreateSelectColumn";
 import { SortableHeader } from "@/app/admin/components/SortableHeader/SortableHeader";
 import TableThumbnail from "@/app/admin/components/TableThumbnail/TableThumbnail";
-import ToggleStatus from "@/app/admin/components/ToggleStatus/ToggleStatus";
-import { adminService } from "@/services/adminService";
+import { userService } from "@/services/userService";
 import { formatDateVN } from "@/utils/formatDate";
 import { toast } from "sonner";
 
@@ -118,7 +117,7 @@ const adminColumns = ({ router, onRefreshs }: Props) => [
     // Actions
     createActionsColumn<Admin>({
         onDelete: async (row) => {
-            await adminService.delete(row.id);
+            await userService.delete(row.id);
             toast.success("Xóa admin thành công!");
             onRefreshs();
         },

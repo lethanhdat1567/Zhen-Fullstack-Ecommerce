@@ -5,7 +5,7 @@ import Title from "@/app/admin/components/Title/Title";
 import adminColumns from "@/app/admin/users/columns";
 import { DataTable } from "@/components/DataTable/data-table";
 import { Button } from "@/components/ui/button";
-import { Admin, adminService } from "@/services/adminService";
+import { User, userService } from "@/services/userService";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -14,7 +14,7 @@ import { toast } from "sonner";
 
 function AdminUser() {
     const router = useRouter();
-    const [users, setUsers] = useState<Admin[]>([]);
+    const [users, setUsers] = useState<User[]>([]);
     const [pagination, setPagination] = useState({
         pageIndex: 0,
         pageSize: 7,
@@ -25,7 +25,7 @@ function AdminUser() {
 
     const fetchServices = async () => {
         try {
-            const res = await adminService.list({
+            const res = await userService.list({
                 page: pagination.pageIndex + 1,
                 limit: pagination.pageSize,
                 search: search,
@@ -44,7 +44,7 @@ function AdminUser() {
         const ids = rows.map((item: any) => item.original.id);
 
         try {
-            await adminService.bulkDelete(ids);
+            await userService.bulkDelete(ids);
             toast.success("Xóa thành công!");
             fetchServices();
         } catch (error) {

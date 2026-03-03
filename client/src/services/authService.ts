@@ -26,7 +26,7 @@ export type AuthResponse<T> = {
 };
 
 export type LoginResponse = {
-    admin: {
+    user: {
         id: string;
         username: string;
         email: string;
@@ -54,6 +54,7 @@ export const authService = {
 
     async loginFormNextClientToNextServer(data: {
         accessToken: string;
+        role: string;
         expiresIn: number;
     }) {
         return http.post<{ message: string }>("/api/auth", data, {
