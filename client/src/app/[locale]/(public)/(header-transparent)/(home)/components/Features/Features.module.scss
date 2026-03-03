@@ -1,0 +1,12 @@
+.wrapper {
+    position: relative;
+    &::before {
+        content: url("../../../../../../../assets/images/store/bg_spa.png");
+        position: absolute;
+        right: 10px;
+        top: 0;
+        z-index: 0;
+        opacity: 0.2;
+        filter: brightness(0) invert(1);
+    }
+}

@@ -1,0 +1,258 @@
+{
+    "Home": {
+        "Hero": {
+            "title": "Zhen Diététique – Dinh Dưỡng Trị Liệu",
+            "desc": "Giải pháp dinh dưỡng tự nhiên giúp kiểm soát cân nặng và cải thiện sức khỏe từ gốc.",
+            "btnText": "Đặt lịch tư vấn",
+            "scrollText": "Khám phá thêm"
+        },
+        "About": {
+            "title": "Giải pháp dinh dưỡng tập trung vào nguyên nhân gốc rễ",
+            "desc": "Zhen Diététique mang đến chương trình dinh dưỡng trị liệu tự nhiên, được cá nhân hóa theo tình trạng sức khỏe, lối sống và mục tiêu của từng người. Phương pháp tập trung thanh lọc cơ thể, cân bằng hệ tiêu hóa, hỗ trợ kiểm soát cân nặng và cải thiện các vấn đề như stress, rối loạn tiêu hóa, tiểu đường, tim mạch và lão hóa. Chương trình không thay thế điều trị y khoa mà đóng vai trò hỗ trợ toàn diện, giúp bạn lấy lại năng lượng, sự cân bằng thể chất và tinh thần.",
+            "desc2": "Zhen Diététique mang đến chương trình dinh dưỡng trị liệu tự nhiên, được cá nhân hóa theo tình trạng sức khỏe, lối sống và mục tiêu của từng người. Phương pháp tập trung thanh lọc cơ thể, cân bằng hệ tiêu hóa, hỗ trợ kiểm soát cân nặng và cải thiện các vấn đề như stress, rối loạn tiêu hóa, tiểu đường, tim mạch và lão hóa. Chương trình không thay thế điều trị y khoa mà đóng vai trò hỗ trợ toàn diện, giúp bạn lấy lại năng lượng, sự cân bằng thể chất và tinh thần.",
+            "btnText": "Xem chi tiết chương trình",
+            "counterText": "21 Năm",
+            "counterDesc": "Kinh nghiệm chuyên sâu."
+        },
+        "Features": {
+            "contentFeatures": [
+                {
+                    "title": "Chương trình cá nhân hóa",
+                    "subTitle": "Thiết kế riêng cho từng cá nhân",
+                    "content": "Chương trình được xây dựng dựa trên tình trạng sức khỏe hiện tại, lối sống, chế độ sinh hoạt và mục tiêu cụ thể của bạn, đảm bảo tính phù hợp và khả thi trong quá trình thực hiện."
+                },
+                {
+                    "title": "Tập trung vào nguyên nhân gốc rễ",
+                    "subTitle": "Không chỉ xử lý triệu chứng",
+                    "content": "Phân tích và điều chỉnh từ nguyên nhân nền tảng của vấn đề sức khỏe, thay vì chỉ cải thiện biểu hiện bên ngoài, giúp mang lại kết quả ổn định và duy trì lâu dài."
+                },
+                {
+                    "title": "Hỗ trợ toàn diện",
+                    "subTitle": "Cân bằng thể chất và tinh thần",
+                    "content": "Kết hợp điều chỉnh dinh dưỡng với định hướng lối sống khoa học nhằm cải thiện tiêu hóa, tăng cường năng lượng, ổn định tinh thần và nâng cao chất lượng cuộc sống tổng thể."
+                }
+            ]
+        },
+        "Products": {
+            "title": "Sản phẩm & Giải pháp dinh dưỡng",
+            "desc": "Khám phá các chương trình và sản phẩm hỗ trợ sức khỏe được lựa chọn và xây dựng phù hợp với từng nhu cầu."
+        },
+        "Service": {
+            "title": "Giải pháp dinh dưỡng cá nhân hóa",
+            "desc": "Lộ trình được thiết kế riêng nhằm hỗ trợ phục hồi và duy trì sức khỏe bền vững."
+        },
+        "News": {
+            "title": "Tin tức & Cập nhật",
+            "desc": "Cập nhật những thông tin mới nhất về dinh dưỡng, sức khỏe và các chương trình khuyến mãi từ Zhen Diététique."
+        }
+    },
+    "Introduce": {
+        "IntroduceSpa": {
+            "title": "Giới thiệu về Zhen Diététique",
+            "desc": "Zhen Diététique là thương hiệu dinh dưỡng trị liệu tự nhiên, được thành lập bởi Dược sĩ & Chuyên gia Dinh dưỡng SADION Thuy Phi. Với hơn 21 năm kinh nghiệm, chúng tôi cam kết mang đến giải pháp dinh dưỡng cá nhân hóa, tập trung vào nguyên nhân gốc rễ của các vấn đề sức khỏe. ",
+            "desc2": "Chương trình của chúng tôi không chỉ giúp kiểm soát cân nặng mà còn hỗ trợ cải thiện sức khỏe tổng thể, tăng năng lượng và nâng cao chất lượng cuộc sống. Zhen Diététique đồng hành cùng bạn trên hành trình chăm sóc sức khỏe từ gốc, giúp bạn đạt được sự cân bằng thể chất và tinh thần bền vững.",
+            "counterText": "21 Năm",
+            "counterDesc": "Bền vững & hiệu quả."
+        },
+        "IntroduceHistory": {
+            "title": "Lịch sử hình thành và phát triển",
+            "items": [
+                {
+                    "year": "2004",
+                    "content": "An Nam Spa ra đời tại 26-28 Đông Du, Quận 1, là tòa nhà độc lập gồm 9 tầng phục vụ khách hàng."
+                },
+                {
+                    "year": "2005",
+                    "content": "Hoàn thiện hệ thống phòng trị liệu cao cấp và đào tạo đội ngũ kỹ thuật viên theo tiêu chuẩn quốc tế."
+                },
+                {
+                    "year": "2006",
+                    "content": "Ra mắt các liệu trình massage trị liệu chuyên sâu kết hợp thảo dược thiên nhiên."
+                },
+                {
+                    "year": "2007",
+                    "content": "Mở rộng khu vực chăm sóc da và ứng dụng công nghệ làm đẹp hiện đại."
+                },
+                {
+                    "year": "2008",
+                    "content": "Đón tiếp hơn 10.000 lượt khách và trở thành điểm đến spa uy tín tại trung tâm TP.HCM."
+                },
+                {
+                    "year": "2009",
+                    "content": "Nâng cấp không gian theo phong cách Đông Dương sang trọng và thư giãn."
+                },
+                {
+                    "year": "2010",
+                    "content": "Ra mắt dịch vụ spa trọn gói VIP với phòng riêng và liệu trình chăm sóc toàn diện."
+                }
+            ]
+        },
+        "IntroduceConcept": {
+            "title": "Triết lý điều trị",
+            "desc": "Zhen Diététique tập trung cải thiện sức khỏe từ nguyên nhân gốc rễ thông qua dinh dưỡng trị liệu tự nhiên. Mỗi chương trình được cá nhân hóa theo thể trạng, giúp kiểm soát cân nặng, tăng năng lượng và nâng cao chất lượng cuộc sống.",
+            "items": [
+                {
+                    "id": 1,
+                    "title": "Khứu giác",
+                    "description": "Hương tinh dầu thiên nhiên lan tỏa nhẹ nhàng, giúp thư giãn tâm trí và tạo cảm giác dễ chịu ngay từ khoảnh khắc đầu tiên."
+                },
+                {
+                    "id": 2,
+                    "title": "Thị giác",
+                    "description": "Không gian tối giản kết hợp ánh sáng dịu nhẹ mang đến sự cân bằng, giúp tâm trí bước vào trạng thái tĩnh lặng và thư thái."
+                },
+                {
+                    "id": 3,
+                    "title": "Vị giác",
+                    "description": "Thức uống thảo mộc thanh mát được lựa chọn kỹ lưỡng, hỗ trợ thanh lọc cơ thể và nuôi dưỡng sức khỏe từ bên trong."
+                },
+                {
+                    "id": 4,
+                    "title": "Xúc giác",
+                    "description": "Các liệu trình chăm sóc được thực hiện nhẹ nhàng, giúp cơ thể thả lỏng, tái tạo năng lượng và phục hồi sinh lực tự nhiên."
+                },
+                {
+                    "id": 5,
+                    "title": "Thính giác",
+                    "description": "Âm nhạc trị liệu êm dịu hòa quyện trong không gian, giúp xoa dịu căng thẳng và nâng cao chất lượng nghỉ ngơi."
+                }
+            ],
+            "carousel": [
+                {
+                    "id": 5,
+                    "title": "Đội ngũ chuyên viên",
+                    "subtitle": "Kỹ thuật chuẩn trị liệu",
+                    "description": "Đội ngũ kỹ thuật viên được đào tạo bài bản, giàu kinh nghiệm và luôn cập nhật phương pháp mới nhằm mang lại hiệu quả trị liệu tối ưu cho khách hàng."
+                },
+                {
+                    "id": 6,
+                    "title": "Liệu trình cá nhân hóa",
+                    "subtitle": "Thiết kế riêng cho bạn",
+                    "description": "Mỗi khách hàng được tư vấn và xây dựng liệu trình riêng dựa trên tình trạng cơ thể và nhu cầu cụ thể để đạt hiệu quả tốt nhất."
+                },
+                {
+                    "id": 7,
+                    "title": "Không gian thư giãn",
+                    "subtitle": "Chuẩn spa trị liệu",
+                    "description": "Không gian yên tĩnh, ấm cúng kết hợp hương thơm tinh dầu và âm nhạc nhẹ nhàng giúp cơ thể và tâm trí được thư giãn trọn vẹn."
+                },
+                {
+                    "id": 8,
+                    "title": "Chăm sóc bền vững",
+                    "subtitle": "Giá trị lâu dài",
+                    "description": "Sen Spa hướng đến giải pháp chăm sóc sức khỏe lâu dài thay vì hiệu quả tức thời, giúp duy trì trạng thái cân bằng và tái tạo năng lượng."
+                }
+            ]
+        },
+        "IntroduceFacilities": {
+            "title": "Cơ sở vật chất",
+            "desc": "Zhen Diététique được trang bị cơ sở vật chất hiện đại và trang thiết bị tiên tiến để đảm bảo mang đến trải nghiệm tốt nhất cho khách hàng."
+        },
+        "IntroduceAward": {
+            "title": "Thành tích",
+            "desc": "Sen Spa nhiều năm liền được vinh danh là Spa được yêu thích nhất tại thành phố Hồ Chí Minh",
+            "items": [
+                {
+                    "id": 1,
+                    "title": "Top 5 Spa đạt chuẩn – TP.HCM 100 điều thú vị lần I (2009)"
+                },
+                {
+                    "id": 2,
+                    "title": "Top 5 Spa đạt chuẩn – TP.HCM 100 điều thú vị lần II (2012)"
+                },
+                {
+                    "id": 4,
+                    "title": "The Guide Awards (2012)"
+                },
+                {
+                    "id": 5,
+                    "title": "The Guide Awards (2012)"
+                },
+                {
+                    "id": 6,
+                    "title": "The Guide Awards (2012)"
+                },
+                {
+                    "id": 7,
+                    "title": "The Guide Awards (2012)"
+                },
+                {
+                    "id": 8,
+                    "title": "The Guide Awards (2012)"
+                }
+            ]
+        }
+    },
+    "Service": {
+        "title": "Dịch vụ spa",
+        "ServiceDetail": {
+            "title": "Giới thiệu dịch vụ",
+            "related": "Dịch vụ liên quan"
+        }
+    },
+    "Product": {
+        "title": "Sản phẩm của spa",
+        "emptyProduct": "Không có sản phẩm nào",
+
+        "ProductDetail": {
+            "title": "Mô tả của sản phẩm"
+        }
+    },
+    "CardRelated": {
+        "title": "Những sản phẩm liên quan"
+    },
+    "Recruitment": {
+        "badge": "Môi trường",
+        "title": "Làm việc",
+        "highlight": "Tại Sen Spa",
+        "desc": "Chính sách nhân sự của Sen Spa được xây dựng nhằm đưa nguồn nhân lực trở thành lợi thế cạnh tranh cốt lõi. Từ tuyển dụng, đào tạo – phát triển, lương thưởng – phúc lợi đến môi trường làm việc và văn hóa doanh nghiệp, tất cả đều hướng đến việc thu hút nhân tài, phát triển nghề nghiệp và gắn bó lâu dài.",
+        "contentRecruitment": [
+            {
+                "title": "Phát triển doanh nghiệp",
+                "content": "Việc tuyển dụng phải thỏa mãn mục tiêu, yêu cầu chiến lược phát triển kinh doanh ngắn và dài hạn của công ty, được thực hiện theo từng thời điểm cụ thể và theo kế hoạch hàng năm."
+            },
+            {
+                "title": "Phát triển doanh nghiệp",
+                "content": "Việc tuyển dụng phải thỏa mãn mục tiêu, yêu cầu chiến lược phát triển kinh doanh ngắn và dài hạn của công ty, được thực hiện theo từng thời điểm cụ thể và theo kế hoạch hàng năm."
+            },
+            {
+                "title": "Phát triển doanh nghiệp",
+                "content": "Việc tuyển dụng phải thỏa mãn mục tiêu, yêu cầu chiến lược phát triển kinh doanh ngắn và dài hạn của công ty, được thực hiện theo từng thời điểm cụ thể và theo kế hoạch hàng năm."
+            },
+            {
+                "title": "Phát triển doanh nghiệp",
+                "content": "Việc tuyển dụng phải thỏa mãn mục tiêu, yêu cầu chiến lược phát triển kinh doanh ngắn và dài hạn của công ty, được thực hiện theo từng thời điểm cụ thể và theo kế hoạch hàng năm."
+            }
+        ],
+        "subTitle": "Cơ hội nghề nghiệp khi đến với Spa",
+        "active": "Đang tuyển",
+        "inactive": "Hết hạn"
+    },
+    "Media": {
+        "title": "Hình ảnh và video",
+        "emptyMedia": "Không có thông tin nào"
+    },
+    "Post": {
+        "title": "Bài viết nổi bật",
+        "emptyPost": "Không có tin tức nào"
+    },
+    "Contact": {
+        "title": "Liên hệ với chúng tôi",
+        "formTitle": "Đặt lịch tư vấn",
+        "formDesc": "Vui lòng để lại thông tin, chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.",
+        "formUsername": "Họ và tên",
+        "formPhone": "Số điện thoại",
+        "formContent": "Nội dung tư vấn",
+        "submitTextDone": "Gửi thông tin",
+        "sending": "Đang gửi"
+    },
+    "Footer": {
+        "vat": "Zhen Diététique",
+        "desc": "123 Nguyễn Văn Nghi, Phường 7, Quận Gò Vấp, TP. Hồ Chí Minh",
+        "copyright": "Chăm sóc sức khỏe từ nền tảng tự nhiên"
+    },
+    "Site": {
+        "breadcrumb": "Trang chủ",
+        "emptyService": "Không có dịch vụ nào"
+    }
+}

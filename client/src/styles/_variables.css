@@ -1,0 +1,9 @@
+:root {
+    /* Colors */
+    --primary-color: #237227;
+    --text-color: #0f172a;
+    --background-color: #ffffff;
+
+    /* Layout */
+    --header-height: 80px;
+}

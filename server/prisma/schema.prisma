@@ -1,0 +1,526 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+/* =========================
+   LANGUAGES
+========================= */
+
+model languages {
+  id          String   @id @default(uuid()) @db.Char(36)
+  code        String   @unique
+  name        String
+  is_default  Boolean  @default(false)
+  status      String   @default("active")
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  service_translations           service_translations[]
+  service_category_translations  service_category_translations[]
+  product_category_translations  product_category_translations[]
+  product_translations           product_translations[]
+  post_category_translations     post_category_translations[]
+  post_translations              post_translations[]
+  media_category_translations    media_category_translations[]
+  media_album_translations       media_album_translations[]
+  popup_translations       popup_translations[]
+  recruitment_translations recruitment_translations[]
+
+}
+
+/* =========================
+   SERVICES
+========================= */
+
+model services {
+  id          String   @id @default(uuid()) @db.Char(36)
+  sku         String   @unique
+  price       Decimal? @db.Decimal(12, 2)
+  thumbnail   String?
+  status      ServiceStatus @default(active)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  deleted_at  DateTime?
+
+  category_id String   @db.Char(36)
+
+  // relations
+  category     service_categories @relation(fields: [category_id], references: [id], onDelete: Restrict)
+  translations service_translations[]
+  galleries    service_galleries[]
+
+  @@index([deleted_at])
+  @@index([category_id])
+}
+
+enum ServiceStatus {
+  active
+  inactive
+}
+
+model service_translations {
+  id          String   @id @default(uuid()) @db.Char(36)
+  service_id  String   @db.Char(36)
+  language_id String   @db.Char(36)
+
+  title       String
+  slug        String
+ description String? @db.LongText
+ content     String? @db.LongText
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  service   services  @relation(fields: [service_id], references: [id], onDelete: Cascade)
+  language  languages @relation(fields: [language_id], references: [id])
+
+  @@unique([service_id, language_id])
+}
+
+/* =========================
+   SERVICE GALLERIES
+========================= */
+
+model service_galleries {
+  id          String   @id @default(uuid()) @db.Char(36)
+  service_id  String   @db.Char(36)
+  image       String
+  sort_order  Int      @default(0)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  service services @relation(fields: [service_id], references: [id], onDelete: Cascade)
+}
+
+
+model service_categories {
+  id         String   @id @default(uuid()) @db.Char(36)
+  status     String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  translations service_category_translations[]
+  services     services[] 
+}
+
+model service_category_translations {
+  id          String   @id @default(uuid()) @db.Char(36)
+  category_id String   @db.Char(36)
+  language_id String   @db.Char(36)
+
+  name        String
+  slug        String
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  category service_categories @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  language languages          @relation(fields: [language_id], references: [id])
+
+  @@unique([category_id, language_id])
+}
+
+/* =========================
+   PRODUCTS
+========================= */
+
+model product_categories {
+  id          String   @id @default(uuid()) @db.Char(36)
+  status      String   @default("active")
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  translations product_category_translations[]
+  products     products[]
+}
+
+model product_category_translations {
+  id          String   @id @default(uuid()) @db.Char(36)
+  category_id String   @db.Char(36)
+  language_id String   @db.Char(36)
+
+  name        String
+  slug        String
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  category product_categories @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  language languages          @relation(fields: [language_id], references: [id])
+
+  @@unique([category_id, language_id])
+}
+
+model products {
+  id           String   @id @default(uuid()) @db.Char(36)
+  category_id  String   @db.Char(36)
+
+  price        Decimal  @db.Decimal(12, 2)
+  sale_price   Decimal? @db.Decimal(12, 2)
+  stock        Int      @default(0)
+  thumbnail    String?
+  status       String   @default("draft")
+
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  category     product_categories @relation(fields: [category_id], references: [id])
+  translations product_translations[]
+  galleries    product_galleries[]
+}
+
+model product_translations {
+  id          String   @id @default(uuid()) @db.Char(36)
+  product_id  String   @db.Char(36)
+  language_id String   @db.Char(36)
+
+  title       String
+  slug        String
+  description String? @db.LongText
+  content     String? @db.LongText
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  product  products  @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  language languages @relation(fields: [language_id], references: [id])
+
+  @@unique([product_id, language_id])
+}
+
+model product_galleries {
+  id          String   @id @default(uuid()) @db.Char(36)
+  product_id  String   @db.Char(36)
+  image       String
+  sort_order  Int      @default(0)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  product products @relation(fields: [product_id], references: [id], onDelete: Cascade)
+}
+
+/* =========================
+   POSTS
+========================= */
+
+model post_categories {
+  id          String   @id @default(uuid()) @db.Char(36)
+  status      String   @default("active")
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  translations post_category_translations[]
+  posts        posts[]
+}
+
+model post_category_translations {
+  id          String   @id @default(uuid()) @db.Char(36)
+  category_id String   @db.Char(36)
+  language_id String   @db.Char(36)
+
+  name        String
+  slug        String
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  category post_categories @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  language languages       @relation(fields: [language_id], references: [id])
+
+  @@unique([category_id, language_id])
+
+}
+
+model posts {
+  id          String   @id @default(uuid()) @db.Char(36)
+  category_id String   @db.Char(36)
+  author_id   String?  @db.Char(36)
+
+  status      String   @default("active")
+  thumbnail   String?
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  category    post_categories @relation(fields: [category_id], references: [id])
+  translations post_translations[]
+}
+
+model post_translations {
+  id          String   @id @default(uuid()) @db.Char(36)
+  post_id     String   @db.Char(36)
+  language_id String   @db.Char(36)
+
+  title       String
+  slug        String
+  description String? @db.LongText
+  content     String? @db.LongText
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  post     posts     @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  language languages @relation(fields: [language_id], references: [id])
+
+  @@unique([post_id, language_id])
+}
+
+/* =========================
+   ADMINS
+========================= */
+
+model admins {
+  id             String   @id @default(uuid()) @db.Char(36)
+  username       String   @unique
+  email          String   @unique
+  password_hash  String
+  full_name      String?
+  avatar         String?
+  role           String   @default("admin")
+  status         String   @default("active")
+  last_login_at  DateTime?
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  tokens  admin_tokens[] 
+}
+
+/* =========================
+   ADMIN TOKENS (AUTH)
+========================= */
+
+model admin_tokens {
+  id          String   @id @default(uuid()) @db.Char(36)
+  admin_id    String   @db.Char(36)
+
+  token       String   @db.Text
+  type        String
+  // refresh | reset_password
+
+  expired_at  DateTime
+  created_at  DateTime @default(now())
+
+  admin admins @relation(fields: [admin_id], references: [id], onDelete: Cascade)
+
+  @@index([admin_id])
+  @@index([type])
+}
+
+// Media
+
+model media_categories {
+  id          String   @id @default(uuid()) @db.Char(36)
+  status      String   @default("active")
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  translations media_category_translations[]
+  albums       media_albums[]
+}
+
+model media_category_translations {
+  id          String   @id @default(uuid()) @db.Char(36)
+
+  category_id String   @db.Char(36)
+  language_id String   @db.Char(36)
+
+  name        String
+  slug        String
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  category media_categories @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  language languages        @relation(fields: [language_id], references: [id])
+
+  @@unique([category_id, language_id])
+}
+
+model media_albums {
+  id          String   @id @default(uuid()) @db.Char(36)
+
+  category_id String   @db.Char(36)
+  status      String   @default("draft")
+  thumbnail String?  @db.Text  
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  category media_categories @relation(fields: [category_id], references: [id], onDelete: Cascade)
+
+  translations media_album_translations[]
+  items        media_items[]
+}
+
+model media_album_translations {
+  id          String   @id @default(uuid()) @db.Char(36)
+
+  album_id    String   @db.Char(36)
+  language_id String   @db.Char(36)
+
+  title       String
+  slug        String
+  description String? @db.LongText
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  album    media_albums @relation(fields: [album_id], references: [id], onDelete: Cascade)
+  language languages    @relation(fields: [language_id], references: [id])
+
+  @@unique([album_id, language_id])
+}
+
+model media_items {
+  id          String   @id @default(uuid()) @db.Char(36)
+
+  album_id    String   @db.Char(36)
+  type        String   // image | video
+  file_url    String
+  sort_order  Int      @default(0)
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  album media_albums @relation(fields: [album_id], references: [id], onDelete: Cascade)
+}
+
+/* =========================
+   CONTACTS
+========================= */
+
+model contacts {
+  id           String   @id @default(uuid()) @db.Char(36)
+
+  fullname     String
+  phone_number String?
+  email        String
+  content      String   @db.LongText
+
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+}
+
+model popups {
+  id          String   @id @default(uuid()) @db.Char(36)
+
+  thumbnail   String?
+  status      String   @default("active") // active | inactive
+  sort_order  Int      @default(0)
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  translations popup_translations[]
+
+  @@index([status])
+  @@index([sort_order])
+}
+
+model popup_translations {
+  id          String   @id @default(uuid()) @db.Char(36)
+
+  popup_id    String   @db.Char(36)
+  language_id String   @db.Char(36)
+
+  title       String
+  content     String   @db.LongText
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  popup    popups   @relation(fields: [popup_id], references: [id], onDelete: Cascade)
+  language languages @relation(fields: [language_id], references: [id])
+
+  @@unique([popup_id, language_id])
+  @@index([language_id])
+}
+
+model site_settings {
+  id                       String   @id @default(uuid()) @db.Char(36)
+
+  phone_number             String?
+  email                    String?
+  address                  String?
+  open_time                String?
+
+  logo                     String?
+  google_map_embed         String?  @db.LongText
+
+  facebook_url             String?
+  instagram_url            String?
+  tiktok_url               String?
+  youtube_url              String?
+
+  meta_title_default       String?
+  meta_description_default String?  @db.LongText
+
+  created_at               DateTime @default(now())
+  updated_at               DateTime @updatedAt
+}
+
+model hero_banners {
+  id          String   @id @default(uuid()) @db.Char(36)
+
+  thumbnail   String   // đường dẫn ảnh
+  sort_order  Int      @default(0)
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@index([sort_order])
+}
+
+model navs {
+  id          String   @id @default(uuid()) @db.Char(36)
+
+  name        String
+  code        String   @unique
+  status      String   @default("active") // active | inactive
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
+
+enum RecruitmentStatus {
+  active
+  inactive
+}
+
+model recruitments {
+  id          String   @id @default(uuid()) @db.Char(36)
+
+  address     String?  @db.Text
+  quantity    Int      @default(1)
+  status      RecruitmentStatus @default(active)
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  translations recruitment_translations[]
+
+  @@index([status])
+}
+
+model recruitment_translations {
+  id              String   @id @default(uuid()) @db.Char(36)
+
+  recruitment_id  String   @db.Char(36)
+  language_id     String   @db.Char(36)
+
+  title           String   // Vị trí tuyển dụng (đa ngôn ngữ)
+
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  recruitment recruitments @relation(fields: [recruitment_id], references: [id], onDelete: Cascade)
+  language    languages    @relation(fields: [language_id], references: [id])
+
+  @@unique([recruitment_id, language_id])
+  @@index([language_id])
+}

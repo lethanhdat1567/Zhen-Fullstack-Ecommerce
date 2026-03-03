@@ -1,0 +1,241 @@
+{
+    "Home": {
+        "Hero": {
+            "title": "Zhen Diététique – Thérapie Nutritionnelle",
+            "desc": "Solutions nutritionnelles naturelles pour contrôler le poids et améliorer la santé à la racine.",
+            "btnText": "Prendre rendez-vous",
+            "scrollText": "Découvrir plus"
+        },
+        "About": {
+            "title": "Solutions nutritionnelles axées sur les causes profondes",
+            "desc": "Zhen Diététique propose des programmes de thérapie nutritionnelle naturelle, personnalisés selon l'état de santé, le mode de vie et les objectifs de chacun. La méthode se concentre sur la détoxification du corps, l'équilibre du système digestif, le contrôle du poids et l'amélioration de troubles tels que le stress, les problèmes digestifs, le diabète, les maladies cardiovasculaires et le vieillissement. Ce programme ne remplace pas un traitement médical mais joue un rôle de soutien complet, vous aidant à retrouver énergie, équilibre physique et mental.",
+            "desc2": "Zhen Diététique propose des programmes de thérapie nutritionnelle naturelle, personnalisés selon l'état de santé, le mode de vie et les objectifs de chacun. La méthode se concentre sur la détoxification du corps, l'équilibre du système digestif, le contrôle du poids et l'amélioration de troubles tels que le stress, les problèmes digestifs, le diabète, les maladies cardiovasculaires et le vieillissement. Ce programme ne remplace pas un traitement médical mais joue un rôle de soutien complet, vous aidant à retrouver énergie, équilibre physique et mental.",
+            "btnText": "Détails du programme",
+            "counterText": "21 Ans",
+            "counterDesc": "D'expertise approfondie."
+        },
+        "Features": {
+            "contentFeatures": [
+                {
+                    "title": "Programmes personnalisés",
+                    "subTitle": "Conçus pour chaque individu",
+                    "content": "Programmes élaborés en fonction de votre état de santé actuel, de votre mode de vie et de vos objectifs spécifiques, garantissant pertinence et faisabilité."
+                },
+                {
+                    "title": "Focus sur la cause profonde",
+                    "subTitle": "Pas seulement les symptômes",
+                    "content": "Analyse et ajustement à partir des causes sous-jacentes des problèmes de santé, plutôt que de simples améliorations superficielles, pour des résultats durables."
+                },
+                {
+                    "title": "Accompagnement global",
+                    "subTitle": "Équilibre physique et mental",
+                    "content": "Combinaison d'ajustements nutritionnels et d'une orientation vers un mode de vie sain pour améliorer la digestion, l'énergie et la qualité de vie globale."
+                }
+            ]
+        },
+        "Products": {
+            "title": "Produits & Solutions Nutritionnelles",
+            "desc": "Découvrez nos programmes et produits de santé sélectionnés et conçus pour répondre à chaque besoin."
+        },
+        "Service": {
+            "title": "Solutions nutritionnelles sur mesure",
+            "desc": "Un parcours conçu spécifiquement pour soutenir la récupération et maintenir une santé durable."
+        },
+        "News": {
+            "title": "Actualités & Mises à jour",
+            "desc": "Retrouvez les dernières informations sur la nutrition, la santé et les promotions de Zhen Diététique."
+        }
+    },
+    "Introduce": {
+        "IntroduceSpa": {
+            "title": "À propos de Zhen Diététique",
+            "desc": "Zhen Diététique est une marque de thérapie nutritionnelle naturelle, fondée par la Pharmacienne & Nutritionniste SADION Thuy Phi. Avec plus de 21 ans d'expérience, nous nous engageons à fournir des solutions personnalisées axées sur la racine des problèmes de santé.",
+            "desc2": "Nos programmes aident non seulement à contrôler le poids, mais soutiennent également l'amélioration de la santé globale et le bien-être durable. Zhen Diététique vous accompagne dans votre démarche de soin naturel pour atteindre un équilibre physique et mental optimal.",
+            "counterText": "21 Ans",
+            "counterDesc": "Durabilité & Efficacité."
+        },
+        "IntroduceHistory": {
+            "title": "Histoire et Développement",
+            "items": [
+                {
+                    "year": "2004",
+                    "content": "Naissance d'An Nam Spa au 26-28 Dong Du, District 1, un bâtiment indépendant de 9 étages au service des clients."
+                },
+                {
+                    "year": "2005",
+                    "content": "Finalisation du système de salles de soins haut de gamme et formation de l'équipe technique selon les standards internationaux."
+                },
+                {
+                    "year": "2006",
+                    "content": "Lancement de cures de massages thérapeutiques profonds combinés aux herbes naturelles."
+                },
+                {
+                    "year": "2007",
+                    "content": "Extension de la zone de soins de la peau et application de technologies esthétiques modernes."
+                },
+                {
+                    "year": "2008",
+                    "content": "Accueil de plus de 10 000 clients, devenant une destination spa de prestige au centre de HCMV."
+                },
+                {
+                    "year": "2009",
+                    "content": "Modernisation de l'espace dans un style Indochine luxueux et relaxant."
+                },
+                {
+                    "year": "2010",
+                    "content": "Lancement des services Spa VIP avec salons privés et protocoles de soins complets."
+                }
+            ]
+        },
+        "IntroduceConcept": {
+            "title": "Philosophie de traitement",
+            "desc": "Zhen Diététique se concentre sur l'amélioration de la santé dès la racine via la nutrition. Chaque programme est adapté à la morphologie pour contrôler le poids et revitaliser le corps.",
+            "items": [
+                {
+                    "id": 1,
+                    "title": "Odorat",
+                    "description": "Parfums d'huiles essentielles naturelles pour apaiser l'esprit dès le premier instant."
+                },
+                {
+                    "id": 2,
+                    "title": "Vue",
+                    "description": "Espace minimaliste et lumière tamisée pour amener l'esprit vers un état de sérénité."
+                },
+                {
+                    "id": 3,
+                    "title": "Goût",
+                    "description": "Infusions d'herbes fraîches sélectionnées pour purifier le corps de l'intérieur."
+                },
+                {
+                    "id": 4,
+                    "title": "Toucher",
+                    "description": "Soins prodigués avec délicatesse pour relâcher les tensions et restaurer la vitalité naturelle."
+                },
+                {
+                    "id": 5,
+                    "title": "Ouïe",
+                    "description": "Musique thérapeutique douce pour apaiser le stress et améliorer la qualité du repos."
+                }
+            ],
+            "carousel": [
+                {
+                    "id": 5,
+                    "title": "Équipe de spécialistes",
+                    "subtitle": "Techniques thérapeutiques standards",
+                    "description": "Techniciens formés et expérimentés, actualisant constamment les méthodes pour une efficacité optimale."
+                },
+                {
+                    "id": 6,
+                    "title": "Cures personnalisées",
+                    "subtitle": "Conçues pour vous",
+                    "description": "Chaque client bénéficie d'un suivi sur mesure basé sur ses besoins spécifiques et sa condition physique."
+                },
+                {
+                    "id": 7,
+                    "title": "Espace de détente",
+                    "subtitle": "Standard Spa Thérapeutique",
+                    "description": "Ambiance calme et chaleureuse pour une relaxation totale du corps et de l'esprit."
+                },
+                {
+                    "id": 8,
+                    "title": "Soin durable",
+                    "subtitle": "Valeur à long terme",
+                    "description": "Nous privilégions les solutions de santé durables plutôt que les effets immédiats éphémères."
+                }
+            ]
+        },
+        "IntroduceFacilities": {
+            "title": "Installations",
+            "desc": "Zhen Diététique dispose d'équipements modernes et de technologies de pointe pour garantir la meilleure expérience client."
+        },
+        "IntroduceAward": {
+            "title": "Distinctions",
+            "desc": "Sen Spa a été honoré durant plusieurs années comme le Spa préféré de Hô Chi Minh-Ville.",
+            "items": [
+                {
+                    "id": 1,
+                    "title": "Top 5 Spas Standards – HCMC 100 Choses Intéressantes (2009)"
+                },
+                {
+                    "id": 2,
+                    "title": "Top 5 Spas Standards – HCMC 100 Choses Intéressantes (2012)"
+                },
+                {
+                    "id": 4,
+                    "title": "The Guide Awards (2012)"
+                }
+            ]
+        }
+    },
+    "Service": {
+        "title": "Services Spa",
+        "ServiceDetail": {
+            "title": "Présentation du service",
+            "related": "Services connexes"
+        }
+    },
+    "Product": {
+        "title": "Nos Produits",
+        "emptyProduct": "Aucun produit disponible",
+        "ProductDetail": {
+            "title": "Description du produit"
+        }
+    },
+    "CardRelated": {
+        "title": "Produits similaires"
+    },
+    "Recruitment": {
+        "badge": "Environnement",
+        "title": "Carrière",
+        "highlight": "Chez Sen Spa",
+        "desc": "Notre politique RH vise à faire du capital humain un avantage compétitif majeur, favorisant le développement professionnel et l'engagement à long terme.",
+        "contentRecruitment": [
+            {
+                "title": "Développement de l'entreprise",
+                "content": "Le recrutement doit répondre aux objectifs et aux exigences des stratégies de développement commercial à court et à long terme de l'entreprise, exécutées à des moments précis et selon les plans annuels."
+            },
+            {
+                "title": "Développement de l'entreprise",
+                "content": "Le recrutement doit répondre aux objectifs et aux exigences des stratégies de développement commercial à court et à long terme de l'entreprise, exécutées à des moments précis et selon les plans annuels."
+            },
+            {
+                "title": "Développement de l'entreprise",
+                "content": "Le recrutement doit répondre aux objectifs et aux exigences des stratégies de développement commercial à court et à long terme de l'entreprise, exécutées à des moments précis et selon les plans annuels."
+            },
+            {
+                "title": "Développement de l'entreprise",
+                "content": "Le recrutement doit répondre aux objectifs et aux exigences des stratégies de développement commercial à court et à long terme de l'entreprise, exécutées à des moments précis et selon les plans annuels."
+            }
+        ],
+        "subTitle": "Opportunités de carrière au Spa",
+        "active": "Recrutement en cours",
+        "inactive": "Expiré"
+    },
+    "Media": {
+        "title": "Photos & Vidéos",
+        "emptyMedia": "Aucune information disponible"
+    },
+    "Post": {
+        "title": "Articles à la une",
+        "emptyPost": "Aucune actualité pour le moment"
+    },
+    "Contact": {
+        "title": "Contactez-nous",
+        "formTitle": "Demander une consultation",
+        "formDesc": "Laissez vos coordonnées, nous vous recontacterons dans les plus brefs délais.",
+        "formUsername": "Nom et prénom",
+        "formPhone": "Numéro de téléphone",
+        "formContent": "Sujet de consultation",
+        "submitTextDone": "Envoyer",
+        "sending": "Envoi en cours..."
+    },
+    "Footer": {
+        "vat": "Zhen Diététique",
+        "desc": "123 Nguyen Van Nghi, Quartier 7, District Go Vap, Hô Chi Minh-Ville",
+        "copyright": "Prendre soin de votre santé sur des bases naturelles"
+    },
+    "Site": {
+        "breadcrumb": "Accueil",
+        "emptyService": "Aucun service disponible"
+    }
+}

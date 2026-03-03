@@ -1,0 +1,204 @@
+# 📘 Backend Project Documentation
+
+## 1. Tổng quan
+
+Dự án backend được xây dựng theo kiến trúc **Node.js + TypeScript + Express + Prisma (MySQL)**, hướng service-first, tách rõ trách nhiệm giữa **Controller – Service – Model (Prisma)**.
+
+Mục tiêu:
+
+* Dễ mở rộng
+* Dễ test
+* Controller mỏng, không try/catch
+* Business logic tập trung ở Service
+
+---
+
+## 2. Công nghệ sử dụng
+
+* **Node.js + TypeScript**
+* **Express**
+* **Prisma ORM (MySQL)**
+* **JWT (Access / Refresh Token)**
+* **bcrypt** (hash password)
+* **Zod** (validate request – nếu cần)
+
+---
+
+## 3. Cấu trúc thư mục chính
+
+```
+src/
+├── app.ts / index.ts        # Khởi tạo express app
+├── routes/                  # Định nghĩa routes
+│   └── auth.routes.ts
+├── controllers/             # Nhận request, trả response
+│   └── auth.controller.ts
+├── services/                # Business logic
+│   └── auth.service.ts
+├── middlewares/
+│   ├── auth.middleware.ts   # Xác thực JWT
+│   ├── response.middleware.ts
+│   ├── asyncHandler.ts
+│   ├── notFound.ts
+│   └── errorHandler.ts
+├── lib/
+│   └── prisma.ts            # Prisma singleton
+├── utils/
+│   ├── jwt.ts
+│   ├── password.ts
+│   └── appError.ts
+└── prisma/
+    └── schema.prisma
+```
+
+---
+
+## 4. Nguyên tắc kiến trúc
+
+### 4.1 Controller
+
+* **Không try/catch**
+* Không xử lý business logic
+* Chỉ:
+
+  * Lấy dữ liệu từ `req`
+  * Gọi service
+  * Trả `res.success()`
+
+### 4.2 Service
+
+* Chứa toàn bộ business logic
+* Throw `AppError` nếu có lỗi
+* Làm việc trực tiếp với Prisma
+
+### 4.3 Middleware
+
+* Xử lý cross-cutting concerns:
+
+  * Auth
+  * Error
+  * Response format
+
+---
+
+## 5. Auth Flow (Admin)
+
+### 5.1 Register
+
+* Check trùng username / email
+* Hash password
+* Tạo admin mới (status: active)
+
+### 5.2 Login
+
+* Login bằng `username` **hoặc** `email`
+* Kiểm tra password
+* Tạo:
+
+  * Access Token (ngắn hạn)
+  * Refresh Token (lưu DB)
+* Mỗi admin chỉ có **1 refresh token hợp lệ**
+
+### 5.3 Refresh Token
+
+* Kiểm tra token trong DB
+* Verify chữ ký JWT
+* Cấp access token mới
+
+### 5.4 Logout
+
+* Xoá refresh token trong DB
+
+---
+
+## 6. Quên mật khẩu (Reset Password)
+
+Flow chuẩn bảo mật – 3 bước:
+
+### Bước 1: Yêu cầu reset mật khẩu
+
+`POST /auth/forgot-password`
+
+* Nhập email
+* Không leak thông tin user tồn tại hay không
+* Tạo token reset (15 phút)
+* Gửi email cho owner
+
+### Bước 2: Verify token
+
+`GET /auth/reset-password/verify?token=xxx`
+
+* Check token tồn tại & chưa hết hạn
+* Trả về `{ valid: true }`
+
+### Bước 3: Đặt mật khẩu mới
+
+`POST /auth/reset-password`
+
+* Token + password mới
+* Hash password
+* Update admin
+* Xoá token reset
+
+---
+
+## 7. Database (Prisma – rút gọn)
+
+### admins
+
+* id (uuid)
+* username
+* email
+* password_hash
+* role
+* status
+* last_login_at
+
+### admin_tokens
+
+* id
+* admin_id
+* token
+* type: `refresh | reset_password`
+* expired_at
+
+---
+
+## 8. Error Handling
+
+### AppError
+
+* Throw trong service
+* Có `message + statusCode`
+
+### errorHandler
+
+* Bắt toàn bộ lỗi
+* Trả response thống nhất
+
+---
+
+## 9. Nguyên tắc mở rộng sau này
+
+* Thêm RBAC: `role + permission`
+* Thêm multi-device session: bỏ xoá refresh token cũ
+* Thêm audit log
+* Thêm rate limit auth
+
+---
+
+## 10. Cách tiếp tục làm việc sau khi quay lại
+
+Chỉ cần nói:
+
+> "Mở lại backend project hôm qua, tiếp tục làm …"
+
+Hệ thống sẽ tiếp tục đúng:
+
+* Kiến trúc
+* Convention
+* Auth flow
+
+---
+
+✅ Docs này là **nguồn sự thật** cho toàn bộ backend hiện tại.

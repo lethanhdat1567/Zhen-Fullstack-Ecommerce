@@ -1,0 +1,257 @@
+{
+    "Home": {
+        "Hero": {
+            "title": "Zhen Diététique – Therapeutic Nutrition",
+            "desc": "Natural nutritional solutions to help manage weight and improve health from the root.",
+            "btnText": "Book a consultation",
+            "scrollText": "Discover more"
+        },
+        "About": {
+            "title": "Nutritional solutions focusing on root causes",
+            "desc": "Zhen Diététique provides natural therapeutic nutrition programs, personalized according to individual health status, lifestyle, and goals. Our method focuses on detoxifying the body, balancing the digestive system, supporting weight management, and improving issues such as stress, digestive disorders, diabetes, cardiovascular health, and aging. The program does not replace medical treatment but serves as comprehensive support, helping you regain energy and physical and mental balance.",
+            "desc2": "Zhen Diététique provides natural therapeutic nutrition programs, personalized according to individual health status, lifestyle, and goals. Our method focuses on detoxifying the body, balancing the digestive system, supporting weight management, and improving issues such as stress, digestive disorders, diabetes, cardiovascular health, and aging. The program does not replace medical treatment but serves as comprehensive support, helping you regain energy and physical and mental balance.",
+            "btnText": "See program details",
+            "counterText": "21 Years",
+            "counterDesc": "Of professional experience."
+        },
+        "Features": {
+            "contentFeatures": [
+                {
+                    "title": "Personalized Programs",
+                    "subTitle": "Tailored to each individual",
+                    "content": "The program is built based on your current health status, lifestyle, daily habits, and specific goals, ensuring suitability and feasibility throughout the process."
+                },
+                {
+                    "title": "Focus on Root Causes",
+                    "subTitle": "Not just treating symptoms",
+                    "content": "Analyzing and adjusting from the fundamental causes of health issues, rather than just improving external symptoms, to deliver stable and long-term results."
+                },
+                {
+                    "title": "Comprehensive Support",
+                    "subTitle": "Balancing body and mind",
+                    "content": "Combining nutritional adjustments with scientific lifestyle guidance to improve digestion, boost energy, stabilize mood, and enhance overall quality of life."
+                }
+            ]
+        },
+        "Products": {
+            "title": "Products & Nutritional Solutions",
+            "desc": "Explore our health programs and products carefully selected and built for every need."
+        },
+        "Service": {
+            "title": "Personalized Nutritional Solutions",
+            "desc": "A roadmap designed specifically to support sustainable recovery and health maintenance."
+        },
+        "News": {
+            "title": "News & Updates",
+            "desc": "Stay updated with the latest information on nutrition, health, and promotions from Zhen Diététique."
+        }
+    },
+    "Introduce": {
+        "IntroduceSpa": {
+            "title": "About Zhen Diététique",
+            "desc": "Zhen Diététique is a natural therapeutic nutrition brand founded by Pharmacist & Nutritionist SADION Thuy Phi. With over 21 years of experience, we are committed to providing personalized nutritional solutions focusing on the root causes of health issues.",
+            "desc2": "Our programs not only help manage weight but also support overall health improvement, increased energy, and enhanced quality of life. Zhen Diététique accompanies you on a journey to care for your health from the roots, helping you achieve sustainable physical and mental balance.",
+            "counterText": "21 Years",
+            "counterDesc": "Sustainable & effective."
+        },
+        "IntroduceHistory": {
+            "title": "History of formation and development",
+            "items": [
+                {
+                    "year": "2004",
+                    "content": "An Nam Spa was established at 26-28 Dong Du, District 1, as an independent 9-story building serving customers."
+                },
+                {
+                    "year": "2005",
+                    "content": "Completed the high-end therapy room system and trained technicians to international standards."
+                },
+                {
+                    "year": "2006",
+                    "content": "Launched specialized therapeutic massage treatments combined with natural herbs."
+                },
+                {
+                    "year": "2007",
+                    "content": "Expanded the skincare area and applied modern beauty technology."
+                },
+                {
+                    "year": "2008",
+                    "content": "Welcomed over 10,000 visitors and became a reputable spa destination in the center of Ho Chi Minh City."
+                },
+                {
+                    "year": "2009",
+                    "content": "Upgraded the space with a luxurious and relaxing Indochine style."
+                },
+                {
+                    "year": "2010",
+                    "content": "Launched all-inclusive VIP spa services with private rooms and comprehensive care treatments."
+                }
+            ]
+        },
+        "IntroduceConcept": {
+            "title": "Therapeutic Philosophy",
+            "desc": "Zhen Diététique focuses on improving health from the root causes through natural therapeutic nutrition. Each program is personalized according to your physical condition, helping to manage weight, increase energy, and improve quality of life.",
+            "items": [
+                {
+                    "id": 1,
+                    "title": "Olfactory",
+                    "description": "The gentle scent of natural essential oils relaxes the mind and creates a pleasant feeling from the very first moment."
+                },
+                {
+                    "id": 2,
+                    "title": "Visual",
+                    "description": "A minimalist space combined with soft lighting brings balance, helping the mind enter a state of stillness and relaxation."
+                },
+                {
+                    "id": 3,
+                    "title": "Gustatory",
+                    "description": "Refreshing herbal drinks, carefully selected, help detoxify the body and nourish health from within."
+                },
+                {
+                    "id": 4,
+                    "title": "Tactile",
+                    "description": "Care treatments are performed gently, helping the body release tension, regenerate energy, and restore natural vitality."
+                },
+                {
+                    "id": 5,
+                    "title": "Auditory",
+                    "description": "Soothing therapeutic music blends into the space, helping to alleviate stress and enhance the quality of rest."
+                }
+            ],
+            "carousel": [
+                {
+                    "id": 5,
+                    "title": "Expert Team",
+                    "subtitle": "Professional therapy standards",
+                    "description": "Our team of technicians is well-trained, experienced, and constantly updated on new methods to provide optimal therapeutic results for customers."
+                },
+                {
+                    "id": 6,
+                    "title": "Personalized Treatment",
+                    "subtitle": "Designed just for you",
+                    "description": "Each customer is consulted and built a private treatment plan based on their body condition and specific needs to achieve the best results."
+                },
+                {
+                    "id": 7,
+                    "title": "Relaxing Space",
+                    "subtitle": "Therapeutic spa standards",
+                    "description": "A quiet, cozy space combined with the scent of essential oils and soft music helps the body and mind fully relax."
+                },
+                {
+                    "id": 8,
+                    "title": "Sustainable Care",
+                    "subtitle": "Long-term value",
+                    "description": "Sen Spa aims for long-term health care solutions rather than immediate effects, helping to maintain balance and regenerate energy."
+                }
+            ]
+        },
+        "IntroduceFacilities": {
+            "title": "Facilities",
+            "desc": "Zhen Diététique is equipped with modern facilities and advanced equipment to ensure the best experience for our customers."
+        },
+        "IntroduceAward": {
+            "title": "Achievements",
+            "desc": "Sen Spa has been named the most favorite Spa in Ho Chi Minh City for many consecutive years.",
+            "items": [
+                {
+                    "id": 1,
+                    "title": "Top 5 Standard Spas – HCMC 100 Interesting Things Part I (2009)"
+                },
+                {
+                    "id": 2,
+                    "title": "Top 5 Standard Spas – HCMC 100 Interesting Things Part II (2012)"
+                },
+                {
+                    "id": 4,
+                    "title": "The Guide Awards (2012)"
+                },
+                {
+                    "id": 5,
+                    "title": "The Guide Awards (2012)"
+                },
+                {
+                    "id": 6,
+                    "title": "The Guide Awards (2012)"
+                },
+                {
+                    "id": 7,
+                    "title": "The Guide Awards (2012)"
+                },
+                {
+                    "id": 8,
+                    "title": "The Guide Awards (2012)"
+                }
+            ]
+        }
+    },
+    "Service": {
+        "title": "Spa Services",
+        "ServiceDetail": {
+            "title": "Service Introduction",
+            "related": "Related Services"
+        }
+    },
+    "Product": {
+        "title": "Spa Products",
+        "emptyProduct": "No products available",
+        "ProductDetail": {
+            "title": "Product Description"
+        }
+    },
+    "CardRelated": {
+        "title": "Related Products"
+    },
+    "Recruitment": {
+        "badge": "Environment",
+        "title": "Working",
+        "highlight": "At Sen Spa",
+        "desc": "Sen Spa's human resources policy is built to make human capital a core competitive advantage. From recruitment, training & development, salary & benefits, to the working environment and corporate culture, all are aimed at attracting talent, developing careers, and ensuring long-term commitment.",
+        "contentRecruitment": [
+            {
+                "title": "Business Development",
+                "content": "Recruitment must satisfy the goals and requirements of the company's short and long-term business development strategies, executed at specific times and according to annual plans."
+            },
+            {
+                "title": "Business Development",
+                "content": "Recruitment must satisfy the goals and requirements of the company's short and long-term business development strategies, executed at specific times and according to annual plans."
+            },
+            {
+                "title": "Business Development",
+                "content": "Recruitment must satisfy the goals and requirements of the company's short and long-term business development strategies, executed at specific times and according to annual plans."
+            },
+            {
+                "title": "Business Development",
+                "content": "Recruitment must satisfy the goals and requirements of the company's short and long-term business development strategies, executed at specific times and according to annual plans."
+            }
+        ],
+        "subTitle": "Career opportunities at the Spa",
+        "active": "Hiring",
+        "inactive": "Expired"
+    },
+    "Media": {
+        "title": "Media & Video",
+        "emptyMedia": "No information available"
+    },
+    "Post": {
+        "title": "Featured Posts",
+        "emptyPost": "No news available"
+    },
+    "Contact": {
+        "title": "Contact us",
+        "formTitle": "Book a consultation",
+        "formDesc": "Please leave your information, and we will contact you as soon as possible.",
+        "formUsername": "Full Name",
+        "formPhone": "Phone Number",
+        "formContent": "Consultation Content",
+        "submitTextDone": "Send Information",
+        "sending": "Sending"
+    },
+    "Footer": {
+        "vat": "Zhen Diététique",
+        "desc": "123 Nguyen Van Nghi, Ward 7, Go Vap District, Ho Chi Minh City",
+        "copyright": "Caring for health from a natural foundation"
+    },
+    "Site": {
+        "breadcrumb": "Home",
+        "emptyService": "No services available"
+    }
+}
