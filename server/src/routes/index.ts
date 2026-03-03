@@ -16,10 +16,12 @@ import popupRouter from "./popup.route";
 import siteRouter from "./site-setting.route";
 import heroRouter from "./hero-banner.route";
 import navRouter from "./nav.route";
-import adminRouter from "./admin.route";
+import userRouter from "./user.route";
 import dashboardRouter from "./dashboard.routes";
 import cloudinaryRoute from "./cloudinary.route";
 import recruitmentRouter from "./recruitment.route";
+import cartRouter from "./cart.route";
+import checkoutRouter from "./order.route";
 
 const router = express.Router();
 
@@ -40,10 +42,12 @@ router.use("/popups", popupRouter);
 router.use("/site-setting", siteRouter);
 router.use("/hero-banners", heroRouter);
 router.use("/navs", navRouter);
-router.use("/admins", adminRouter);
+router.use("/users", userRouter);
 router.use("/dashboard", dashboardRouter);
 router.use("/cloudinary", cloudinaryRoute);
 router.use("/recruitments", recruitmentRouter);
+router.use("/cart", cartRouter);
+router.use("/orders", checkoutRouter);
 
 // Health route
 router.get("/health", (req, res) => {

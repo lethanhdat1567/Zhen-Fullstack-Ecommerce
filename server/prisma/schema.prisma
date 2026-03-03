@@ -171,6 +171,8 @@ model products {
   category     product_categories @relation(fields: [category_id], references: [id])
   translations product_translations[]
   galleries    product_galleries[]
+  cart_items   cart_items[]
+  order_items order_items[]
 }
 
 model product_translations {
@@ -270,48 +272,103 @@ model post_translations {
 }
 
 /* =========================
-   ADMINS
+   USERS
 ========================= */
 
-model admins {
-  id             String   @id @default(uuid()) @db.Char(36)
-  username       String   @unique
-  email          String   @unique
-  password_hash  String
-  full_name      String?
-  avatar         String?
-  role           String   @default("admin")
-  status         String   @default("active")
-  last_login_at  DateTime?
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
+model users {
+  id            String    @id @default(uuid()) @db.Char(36)
+  username      String    @unique
+  email         String    @unique
+  password_hash String
+  full_name     String?
+  avatar        String?
+  
+  // Dùng Enum hoặc String để phân quyền
+  role          String    @default("user") // "admin", "user"
+  status        String    @default("active")
+  
+  last_login_at DateTime?
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
 
-  tokens  admin_tokens[] 
+  tokens        user_tokens[] 
+  cart_items    cart_items[]
+  orders  orders[]
 }
 
-/* =========================
-   ADMIN TOKENS (AUTH)
-========================= */
+model user_tokens {
+  id         String   @id @default(uuid()) @db.Char(36)
+  user_id    String   @db.Char(36)
+  token      String   @db.Text
+  type       String   // "refresh", "reset_password"
+  expired_at DateTime
+  created_at DateTime @default(now())
 
-model admin_tokens {
-  id          String   @id @default(uuid()) @db.Char(36)
-  admin_id    String   @db.Char(36)
+  user       users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-  token       String   @db.Text
-  type        String
-  // refresh | reset_password
-
-  expired_at  DateTime
-  created_at  DateTime @default(now())
-
-  admin admins @relation(fields: [admin_id], references: [id], onDelete: Cascade)
-
-  @@index([admin_id])
+  @@index([user_id])
   @@index([type])
 }
 
-// Media
+/* =========================
+   CART
+========================= */
 
+model cart_items {
+  id         String   @id @default(uuid()) @db.Char(36)
+  user_id    String   @db.Char(36)
+  product_id String   @db.Char(36)
+  quantity   Int      @default(1)
+  
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user       users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  product    products @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([product_id])
+}
+
+/* =========================
+   Orders
+========================= */
+model orders {
+  id               String   @id @default(uuid()) @db.Char(36)
+  user_id          String   @db.Char(36)
+  
+  // --- THÔNG TIN NGƯỜI NHẬN (Cần bổ sung) ---
+  full_name        String   // Tên người nhận hàng
+  email            String?  // Email nhận thông báo đơn hàng
+  phone_number     String   // Số điện thoại nhận hàng
+  shipping_address String   @db.Text
+  note             String?  @db.Text // Ghi chú của khách (ví dụ: Giao giờ hành chính)
+  // ------------------------------------------
+
+  total_amount     Decimal  @db.Decimal(15, 2)
+  status           String   @default("pending") 
+  payment_method   String   
+  payment_status   String   @default("unpaid")
+  
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  order_items      order_items[]
+  user             users    @relation(fields: [user_id], references: [id])
+}
+
+model order_items {
+  id           String   @id @default(uuid()) @db.Char(36)
+  order_id     String   @db.Char(36)
+  product_id   String   @db.Char(36)
+  quantity     Int
+  price        Decimal  @db.Decimal(15, 2) // GIÁ TẠI THỜI ĐIỂM MUA
+
+  order        orders   @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  product      products @relation(fields: [product_id], references: [id])
+}
+
+// Media
 model media_categories {
   id          String   @id @default(uuid()) @db.Char(36)
   status      String   @default("active")

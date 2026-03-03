@@ -12,7 +12,7 @@ if (!fs.existsSync(backupFolder)) {
 }
 
 export const backupDatabaseCron = () => {
-    cron.schedule("*0 2 * * *", () => {
+    cron.schedule("0 2 * * *", () => {
         console.log("📦 Starting database backup...");
 
         const date = new Date().toISOString().replace(/[:.]/g, "-");

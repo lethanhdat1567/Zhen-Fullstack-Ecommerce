@@ -7,7 +7,7 @@ import { deleteMultipleFiles } from "@/utils/media";
 const uploadsPath = path.join(process.cwd(), "uploads", "images");
 
 export const cleanUploadsCron = () => {
-    cron.schedule("*0 3 * * *", async () => {
+    cron.schedule("0 3 * * *", async () => {
         console.log("🧹 Start cleaning uploads/images...");
 
         try {
@@ -30,7 +30,7 @@ export const cleanUploadsCron = () => {
                 products,
                 productGalleries,
                 posts,
-                admins,
+                users,
                 mediaAlbums,
                 mediaItems,
                 popups,
@@ -42,7 +42,7 @@ export const cleanUploadsCron = () => {
                 prisma.products.findMany({ select: { thumbnail: true } }),
                 prisma.product_galleries.findMany({ select: { image: true } }),
                 prisma.posts.findMany({ select: { thumbnail: true } }),
-                prisma.admins.findMany({ select: { avatar: true } }),
+                prisma.users.findMany({ select: { avatar: true } }),
                 prisma.media_albums.findMany({ select: { thumbnail: true } }),
                 prisma.media_items.findMany({ select: { file_url: true } }),
                 prisma.popups.findMany({ select: { thumbnail: true } }),
@@ -56,7 +56,7 @@ export const cleanUploadsCron = () => {
                 ...products.map((i) => i.thumbnail),
                 ...productGalleries.map((i) => i.image),
                 ...posts.map((i) => i.thumbnail),
-                ...admins.map((i) => i.avatar),
+                ...users.map((i) => i.avatar),
                 ...mediaAlbums.map((i) => i.thumbnail),
                 ...mediaItems.map((i) => i.file_url),
                 ...popups.map((i) => i.thumbnail),

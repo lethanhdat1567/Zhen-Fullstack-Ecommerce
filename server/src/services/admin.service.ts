@@ -40,13 +40,13 @@ export const adminService = {
         const password_hash = await bcrypt.hash(data.password, 10);
 
         try {
-            const admin = await prisma.admins.create({
+            const admin = await prisma.users.create({
                 data: {
                     username: data.username,
                     email: data.email,
                     password_hash,
                     full_name: data.full_name,
-                    role: data.role ?? "admin",
+                    role: data.role ?? "user",
                 },
                 select: {
                     id: true,
@@ -84,7 +84,7 @@ export const adminService = {
               }
             : {};
 
-        return paginate(prisma.admins, params ?? ({} as any), {
+        return paginate(prisma.users, params ?? ({} as any), {
             where,
             orderBy: { created_at: "desc" },
             select: {
@@ -106,7 +106,7 @@ export const adminService = {
     ========================= */
 
     async findById(id: string) {
-        return prisma.admins.findUnique({
+        return prisma.users.findUnique({
             where: { id },
             select: {
                 id: true,
@@ -127,7 +127,7 @@ export const adminService = {
     ========================= */
 
     async update(id: string, data: UpdateAdminDTO) {
-        return prisma.admins.update({
+        return prisma.users.update({
             where: { id },
             data,
             select: {
@@ -152,7 +152,7 @@ export const adminService = {
             throw new AppError("Thiếu thông tin mật khẩu.", 400);
         }
 
-        const admin = await prisma.admins.findUnique({
+        const admin = await prisma.users.findUnique({
             where: { id },
         });
 
@@ -171,7 +171,7 @@ export const adminService = {
 
         const newHash = await bcrypt.hash(data.new_password, 10);
 
-        await prisma.admins.update({
+        await prisma.users.update({
             where: { id },
             data: { password_hash: newHash },
         });
@@ -184,7 +184,7 @@ export const adminService = {
     ========================= */
 
     async delete(id: string) {
-        return prisma.admins.delete({
+        return prisma.users.delete({
             where: { id },
         });
     },
@@ -194,7 +194,7 @@ export const adminService = {
             throw new AppError("Danh sách ID không hợp lệ.", 400);
         }
 
-        const result = await prisma.admins.deleteMany({
+        const result = await prisma.users.deleteMany({
             where: {
                 id: { in: ids },
             },

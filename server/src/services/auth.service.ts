@@ -27,7 +27,7 @@ export class AuthService {
     static async register(data: RegisterInput) {
         const { username, email, password, full_name } = data;
 
-        const exists = await prisma.admins.findFirst({
+        const exists = await prisma.users.findFirst({
             where: { OR: [{ username }, { email }] },
         });
 
@@ -37,13 +37,13 @@ export class AuthService {
 
         const password_hash = await hashPassword(password);
 
-        const admin = await prisma.admins.create({
+        const admin = await prisma.users.create({
             data: {
                 username,
                 email,
                 password_hash,
                 full_name,
-                role: "admin",
+                role: "user",
                 status: "active",
             },
             select: {
@@ -60,38 +60,38 @@ export class AuthService {
 
     // ================= LOGIN =================
     static async login(username: string, password: string) {
-        const admin = await prisma.admins.findFirst({
+        const user = await prisma.users.findFirst({
             where: {
                 OR: [{ username }, { email: username }],
                 status: "active",
             },
         });
 
-        if (!admin) {
+        if (!user) {
             throw new AppError("Invalid credentials", 401);
         }
 
-        const ok = await comparePassword(password, admin.password_hash);
+        const ok = await comparePassword(password, user.password_hash);
         if (!ok) {
             throw new AppError("Invalid credentials", 401);
         }
 
         const payload = {
-            adminId: admin.id,
-            role: admin.role,
+            userId: user.id,
+            role: user.role,
         };
 
         const accessToken = signAccessToken(payload);
         const refreshToken = signRefreshToken(payload);
 
-        // 1 admin = 1 refresh session
-        await prisma.admin_tokens.deleteMany({
-            where: { admin_id: admin.id, type: "refresh" },
+        // Remove old and add new refresh token
+        await prisma.user_tokens.deleteMany({
+            where: { user_id: user.id, type: "refresh" },
         });
 
-        await prisma.admin_tokens.create({
+        await prisma.user_tokens.create({
             data: {
-                admin_id: admin.id,
+                user_id: user.id,
                 token: refreshToken,
                 type: "refresh",
                 expired_at: new Date(Date.now() + ms(REFRESH_EXPIRES_IN)),
@@ -99,18 +99,18 @@ export class AuthService {
         });
 
         // Update last login
-        await prisma.admins.update({
-            where: { id: admin.id },
+        await prisma.users.update({
+            where: { id: user.id },
             data: { last_login_at: new Date() },
         });
 
         return {
-            admin: {
-                id: admin.id,
-                username: admin.username,
-                email: admin.email,
-                role: admin.role,
-                avatar: admin.avatar,
+            user: {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                role: user.role,
+                avatar: user.avatar,
             },
             accessToken,
             refreshToken,
@@ -120,7 +120,7 @@ export class AuthService {
 
     // ================= REFRESH =================
     static async refresh(refreshToken: string) {
-        const tokenInDb = await prisma.admin_tokens.findFirst({
+        const tokenInDb = await prisma.user_tokens.findFirst({
             where: {
                 token: refreshToken,
                 type: "refresh",
@@ -135,7 +135,7 @@ export class AuthService {
         const payload = verifyRefreshToken(refreshToken);
 
         const newAccessToken = signAccessToken({
-            adminId: payload.adminId,
+            userId: payload.userId,
             role: payload.role,
         });
 
@@ -147,7 +147,7 @@ export class AuthService {
 
     // ================= LOGOUT =================
     static async logout(refreshToken: string) {
-        await prisma.admin_tokens.deleteMany({
+        await prisma.user_tokens.deleteMany({
             where: { token: refreshToken, type: "refresh" },
         });
 
@@ -156,7 +156,7 @@ export class AuthService {
 
     // ================= RESET PASSWORD =================
     static async requestResetPassword(email: string) {
-        const admin = await prisma.admins.findUnique({
+        const admin = await prisma.users.findUnique({
             where: { email },
         });
 
@@ -165,18 +165,18 @@ export class AuthService {
 
         const token = crypto.randomUUID();
 
-        await prisma.admin_tokens.deleteMany({
+        await prisma.user_tokens.deleteMany({
             where: {
-                admin_id: admin.id,
+                user_id: admin.id,
                 type: "reset_password",
             },
         });
 
-        const expiredAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
+        const expiredAt = new Date(Date.now() + 15 * 60 * 1000);
 
-        await prisma.admin_tokens.create({
+        await prisma.user_tokens.create({
             data: {
-                admin_id: admin.id,
+                user_id: admin.id,
                 token,
                 type: "reset_password",
                 expired_at: expiredAt,
@@ -202,7 +202,7 @@ export class AuthService {
     }
 
     static async verifyResetToken(token: string) {
-        const tokenRecord = await prisma.admin_tokens.findFirst({
+        const tokenRecord = await prisma.user_tokens.findFirst({
             where: {
                 token,
                 type: "reset_password",
@@ -219,7 +219,7 @@ export class AuthService {
     }
 
     static async resetPassword(token: string, newPassword: string) {
-        const tokenRecord = await prisma.admin_tokens.findFirst({
+        const tokenRecord = await prisma.user_tokens.findFirst({
             where: {
                 token,
                 type: "reset_password",
@@ -233,12 +233,12 @@ export class AuthService {
 
         const password_hash = await hashPassword(newPassword);
 
-        await prisma.admins.update({
-            where: { id: tokenRecord.admin_id },
+        await prisma.users.update({
+            where: { id: tokenRecord.user_id },
             data: { password_hash },
         });
 
-        await prisma.admin_tokens.delete({
+        await prisma.user_tokens.delete({
             where: { id: tokenRecord.id },
         });
 

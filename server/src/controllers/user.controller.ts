@@ -1,7 +1,7 @@
 import { adminService } from "@/services/admin.service";
 import { Request, Response } from "express";
 
-export const adminController = {
+export const userController = {
     async create(req: Request, res: Response) {
         const result = await adminService.create(req.body);
         return res.success(result, 201);

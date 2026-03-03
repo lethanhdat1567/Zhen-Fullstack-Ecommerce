@@ -5,7 +5,7 @@ const accessSecret = envConfig.accessSecret as any;
 const refreshSecret = envConfig.refreshSecret as any;
 
 export type JwtPayload = {
-    adminId: string;
+    userId: string;
     role: string;
 };
 
