@@ -18,6 +18,8 @@ import Logo from "@/components/Logo/Logo";
 import { authService } from "@/services/authService";
 import { HttpError } from "@/lib/http/errors";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useCartStore } from "@/store/useCartStore";
+import { cartService } from "@/services/cartService";
 
 export function RegisterForm({
     className,
@@ -34,6 +36,7 @@ export function RegisterForm({
 
     const setAuth = useAuthStore((state) => state.setAuth);
     const router = useRouter();
+    const cartItems = useCartStore((state) => state.items);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
@@ -70,6 +73,7 @@ export function RegisterForm({
             if (res.data.user.role === "admin") {
                 router.push("/admin/dashboard");
             } else {
+                await cartService.mergeCart(cartItems);
                 router.push("/");
             }
         } catch (err: any) {

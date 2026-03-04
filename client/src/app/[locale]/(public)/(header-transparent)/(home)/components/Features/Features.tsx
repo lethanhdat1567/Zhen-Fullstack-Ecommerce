@@ -19,7 +19,6 @@ function Features() {
         ...f,
         thumbnail: contentFeatures[index],
     }));
-    console.log(features);
 
     const item = features[activeIndex];
 

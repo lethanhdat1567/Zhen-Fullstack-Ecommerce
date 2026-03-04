@@ -1,6 +1,8 @@
 "use client";
 
+import CartInfo from "@/app/[locale]/(public)/(single)/checkout/components/CartInfo/CartInfo";
 import FormInfo from "@/app/[locale]/(public)/(single)/checkout/components/FormInfo/FormInfo";
+import PayMethod from "@/app/[locale]/(public)/(single)/checkout/components/PayMethod/PayMethod";
 import { checkoutSchema } from "@/app/[locale]/(public)/(single)/checkout/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -33,11 +35,11 @@ function CheckoutPage() {
                         </h2>
                         <FormInfo form={form} />
                     </div>
-                    <div>Van Chuyen</div>
+                    <PayMethod />
                 </div>
             </div>
-            <div className="col-span-4 h-full border-l bg-neutral-100">
-                Don hang
+            <div className="col-span-4 h-full border-l bg-neutral-100 pr-20 pl-10">
+                <CartInfo />
             </div>
         </div>
     );

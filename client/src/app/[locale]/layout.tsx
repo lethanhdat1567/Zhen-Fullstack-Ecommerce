@@ -4,6 +4,7 @@ import { Montserrat } from "next/font/google";
 import LandingModal from "@/app/[locale]/(public)/components/LandingModal/LandingModal";
 import QuickContact from "@/app/[locale]/(public)/components/QuickContact/QuickContact";
 import { ReactLenis } from "lenis/react";
+import { CartProvider } from "@/components/CartProvider/CartProvider";
 
 const montserrat = Montserrat({
     subsets: ["latin"],
@@ -30,11 +31,13 @@ export default async function LocaleLayout({
     return (
         <NextIntlClientProvider locale={locale} messages={messages}>
             <ReactLenis root>
-                <div className={` ${montserrat.className}`}>
-                    {children}
-                    <QuickContact />
-                </div>
-                <LandingModal />
+                <CartProvider>
+                    <div className={` ${montserrat.className}`}>
+                        {children}
+                        <QuickContact />
+                    </div>
+                    <LandingModal />
+                </CartProvider>
             </ReactLenis>
         </NextIntlClientProvider>
     );

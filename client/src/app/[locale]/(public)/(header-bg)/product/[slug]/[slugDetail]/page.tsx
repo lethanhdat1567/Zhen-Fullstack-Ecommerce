@@ -32,8 +32,6 @@ export default async function ProductDetailPage({ params }: Props) {
         limit: 6,
     });
 
-    console.log(relatedProduct);
-
     loading = false;
 
     if (!slugDetail) {
@@ -61,7 +59,7 @@ export default async function ProductDetailPage({ params }: Props) {
                     </div>
                 ) : (
                     <>
-                        <DetailItem item={getProductDetail} />
+                        <DetailItem item={getProductDetail} type="product" />
                         <ProductIntroduction product={getProductDetail} />
                     </>
                 )}

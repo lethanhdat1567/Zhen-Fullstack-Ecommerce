@@ -1,4 +1,4 @@
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 import {
     ChevronDown,
@@ -16,9 +16,29 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { authService } from "@/services/authService";
+import { useCartStore } from "@/store/useCartStore";
 
 function UserSection() {
+    const router = useRouter();
     const user = useAuthStore((state) => state.user);
+    const refreshToken = useAuthStore((state) => state.refreshToken);
+    const clearAuth = useAuthStore((state) => state.clearAuth);
+    const clearCart = useCartStore((state) => state.clearCart);
+
+    async function handleLogout() {
+        try {
+            await authService.logoutFromClientToServer({
+                refreshToken: refreshToken || "",
+            });
+        } catch (error) {
+            console.log(error);
+        } finally {
+            clearAuth();
+            clearCart();
+            router.push("/login");
+        }
+    }
 
     if (user)
         return (
@@ -82,7 +102,10 @@ function UserSection() {
                     )}
 
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="text-destructive focus:text-destructive focus:bg-destructive/10 cursor-pointer">
+                    <DropdownMenuItem
+                        className="text-destructive focus:text-destructive focus:bg-destructive/10 cursor-pointer"
+                        onClick={handleLogout}
+                    >
                         <LogOut className="mr-2 h-4 w-4" />
                         <span>Đăng xuất</span>
                     </DropdownMenuItem>

@@ -5,9 +5,11 @@ import { Router } from "express";
 
 const router = Router();
 
+router.post("/sync", asyncHandler(cartController.getCartInfo));
 router.use(authMiddleware);
 
 router.get("/", asyncHandler(cartController.getCart));
+router.post("/merge", asyncHandler(cartController.mergeCart));
 router.post("/add", asyncHandler(cartController.addToCart));
 router.patch("/update-quantity", asyncHandler(cartController.updateQuantity));
 router.delete("/:id", asyncHandler(cartController.removeItem));

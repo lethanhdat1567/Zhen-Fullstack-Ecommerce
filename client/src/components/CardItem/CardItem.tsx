@@ -1,8 +1,11 @@
 import { images } from "@/assets/images";
 import { Link } from "@/i18n/navigation";
 import Button from "@/components/Button/button";
+
+import { Button as ShadUIBtn } from "@/components/ui/button";
 import Image from "next/image";
 import { resolveMediaSrc } from "@/lib/image";
+import { Heart, ShoppingBag } from "lucide-react";
 
 type Props = {
     item: any;
@@ -10,24 +13,30 @@ type Props = {
     basePath: string;
 };
 function CardItem({ item, slug, basePath }: Props) {
-    console.log(item);
-
     return (
         <div className="group relative overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
             {/* Image */}
-            <div className="relative aspect-[4/3] w-full sm:aspect-[3/2]">
+            <div className="relative aspect-4/3 w-full sm:aspect-3/2">
                 <Image
                     src={resolveMediaSrc(item.thumbnail)}
                     alt={item.title}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
+
+                <ShadUIBtn
+                    variant={"outline"}
+                    size={"icon-lg"}
+                    className="invisible absolute top-4 right-4 rounded-full opacity-0 transition duration-1000 group-hover:visible group-hover:opacity-100"
+                >
+                    <Heart />
+                </ShadUIBtn>
             </div>
 
             {/* Content */}
             <div className="px-4 py-5 text-center sm:px-6 sm:py-6">
                 {/* Title */}
-                <div className="min-h-[48px]">
+                <div className="min-h-12">
                     <h3 className="line-clamp-2 text-base font-semibold sm:text-lg lg:text-[20px]">
                         <Link href={`/${basePath}/${slug}/${item.slug}`}>
                             {item.title}
@@ -41,7 +50,7 @@ function CardItem({ item, slug, basePath }: Props) {
                     height={16}
                     width={73}
                     alt=""
-                    className="mx-auto my-4 sm:my-5"
+                    className="mx-auto my-3"
                 />
 
                 {/* Price Section */}

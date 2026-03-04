@@ -76,6 +76,51 @@ class CartService {
         };
     }
 
+    async mergeCart(
+        user_id: string,
+        items: { product_id: string; quantity: number }[],
+        lang?: string,
+    ) {
+        return await prisma.$transaction(async (tx) => {
+            for (const item of items) {
+                // 1. Lấy thông tin sản phẩm và stock mới nhất
+                const product = await tx.products.findUnique({
+                    where: { id: item.product_id },
+                    select: { stock: true, id: true },
+                });
+
+                if (!product) continue;
+
+                // 2. Kiểm tra xem item đã có trong giỏ của User chưa
+                const existingItem = await tx.cart_items.findFirst({
+                    where: { user_id, product_id: item.product_id },
+                });
+
+                const newTotalQuantity = existingItem
+                    ? existingItem.quantity + item.quantity
+                    : item.quantity;
+
+                const finalQuantity = Math.min(newTotalQuantity, product.stock);
+
+                if (existingItem) {
+                    await tx.cart_items.update({
+                        where: { id: existingItem.id },
+                        data: { quantity: finalQuantity },
+                    });
+                } else if (finalQuantity > 0) {
+                    await tx.cart_items.create({
+                        data: {
+                            user_id,
+                            product_id: item.product_id,
+                            quantity: finalQuantity,
+                        },
+                    });
+                }
+            }
+
+            return await this.getCart(user_id, lang);
+        });
+    }
     async addToCart(user_id: string, data: AddToCartDTO) {
         const { product_id, quantity } = data;
 
@@ -132,6 +177,74 @@ class CartService {
             where: { id: cart_item_id },
             data: { quantity },
         });
+    }
+
+    async hydrateCartItems(
+        items: { id?: string; product_id: string; quantity: number }[],
+        lang?: string,
+    ) {
+        if (!items.length) return { items: [], totalAmount: 0 };
+
+        const productIds = items.map((i) => i.product_id);
+
+        // 1. Lấy thông tin các sản phẩm từ DB
+        const products = await prisma.products.findMany({
+            where: { id: { in: productIds } },
+            select: {
+                id: true,
+                price: true,
+                sale_price: true,
+                stock: true,
+                thumbnail: true,
+                translations: {
+                    where: lang ? { language: { code: lang } } : {},
+                    select: {
+                        title: true,
+                        slug: true,
+                    },
+                },
+            },
+        });
+
+        // 2. Map lại dữ liệu
+        const formattedItems = items
+            .map((item) => {
+                const product = products.find((p) => p.id === item.product_id);
+
+                // Nếu sản phẩm không tồn tại trong DB, loại bỏ item này
+                if (!product) return null;
+
+                const { translations, ...productData } = product;
+
+                return {
+                    id: item.id || null, // Trả lại cart_item_id nếu có
+                    product_id: item.product_id,
+                    quantity: item.quantity,
+                    product: {
+                        ...productData,
+                        ...(lang
+                            ? {
+                                  title: translations[0]?.title || null,
+                                  slug: translations[0]?.slug || null,
+                              }
+                            : { translations }),
+                    },
+                };
+            })
+            .filter(Boolean); // Loại bỏ null
+
+        // 3. Tính toán tổng tiền
+        const totalAmount = formattedItems.reduce((sum, item: any) => {
+            const finalPrice = Number(
+                item.product.sale_price || item.product.price || 0,
+            );
+            return sum + finalPrice * item.quantity;
+        }, 0);
+
+        return {
+            items: formattedItems,
+            totalAmount,
+        };
     }
 
     async removeItem(user_id: string, id: string) {

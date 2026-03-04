@@ -14,6 +14,7 @@ type AuthState = {
     accessToken: string | null;
     refreshToken: string | null;
     expiresIn: number | null;
+    isInitialized: boolean;
 
     setAuth: (data: {
         user: User;
@@ -23,7 +24,7 @@ type AuthState = {
     }) => void;
 
     updateToken: (data: { accessToken: string; expiresIn: number }) => void;
-
+    setInitialized: (status: boolean) => void;
     clearAuth: () => void;
 };
 
@@ -34,6 +35,7 @@ export const useAuthStore = create<AuthState>()(
             accessToken: null,
             refreshToken: null,
             expiresIn: null,
+            isInitialized: false,
 
             setAuth: ({ user, accessToken, refreshToken, expiresIn }) =>
                 set({
@@ -42,7 +44,7 @@ export const useAuthStore = create<AuthState>()(
                     refreshToken,
                     expiresIn,
                 }),
-
+            setInitialized: (status) => set({ isInitialized: status }),
             updateToken: ({ accessToken, expiresIn }) =>
                 set((state) => ({
                     ...state,
@@ -60,6 +62,9 @@ export const useAuthStore = create<AuthState>()(
         }),
         {
             name: "auth-storage",
+            onRehydrateStorage: (state) => {
+                return () => state?.setInitialized(true);
+            },
         },
     ),
 );

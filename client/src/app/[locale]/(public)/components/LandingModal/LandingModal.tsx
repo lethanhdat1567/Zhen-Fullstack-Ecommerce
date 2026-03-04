@@ -5,8 +5,6 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Popup, popupService } from "@/services/popupService";
 import { useEffect, useState } from "react";
 
-const STORAGE_KEY = "landing_popup_shown";
-
 function LandingModal() {
     const [showModal, setShowModal] = useState(false);
     const [modals, setModals] = useState<Popup[]>([]);
@@ -42,7 +40,7 @@ function LandingModal() {
     return (
         <Dialog open={showModal} onOpenChange={setShowModal}>
             <DialogContent
-                className="max-h-[90vh] min-w-[60vw]! overflow-y-auto"
+                className="z-999 max-h-[90vh] min-w-[60vw]! overflow-y-auto"
                 data-lenis-prevent
             >
                 <DialogTitle className="hidden">

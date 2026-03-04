@@ -18,6 +18,8 @@ import { HttpError } from "@/lib/http/errors";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { cartService } from "@/services/cartService";
+import { useCartStore } from "@/store/useCartStore";
 
 export function LoginForm({
     className,
@@ -29,6 +31,7 @@ export function LoginForm({
     const [error, setError] = useState<string | null>(null);
     const setAuth = useAuthStore((state) => state.setAuth);
     const router = useRouter();
+    const cartItems = useCartStore((state) => state.items);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -55,9 +58,11 @@ export function LoginForm({
             });
 
             toast.success("Đăng nhập thành công");
+
             if (res.data.user.role === "admin") {
                 router.push("/admin/dashboard");
             } else {
+                await cartService.mergeCart(cartItems);
                 router.push("/");
             }
         } catch (err: any) {

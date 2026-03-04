@@ -6,7 +6,7 @@ function PublicLayout({ children }: { children: React.ReactNode }) {
         <div
         // className="flex h-screen flex-col overflow-x-hidden overflow-y-auto bg-(--background-color) text-(--text-color)"
         >
-            <PublicHeader isBg />
+            <PublicHeader />
             <div className="mt-25 flex-1">{children}</div>
             <PublicFooter />
         </div>

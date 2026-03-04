@@ -21,6 +21,42 @@ class CartController {
         return res.success(result);
     }
 
+    async mergeCart(req: AuthRequest, res: Response) {
+        const { items } = req.body;
+
+        // Kiểm tra đầu vào cơ bản
+        if (!items || !Array.isArray(items)) {
+            const currentCart = await cartService.getCart(req.user!.userId);
+            return res.success(currentCart);
+        }
+
+        // Gọi service xử lý logic gộp và check stock
+        const result = await cartService.mergeCart(
+            req.user!.userId,
+            items,
+            req.query.lang as string | undefined,
+        );
+
+        return res.success(result);
+    }
+
+    // Controller xử lý cho cả 2
+    async getCartInfo(req: AuthRequest, res: Response) {
+        const { items } = req.body;
+        const { lang } = req.query;
+
+        if (!items || !Array.isArray(items)) {
+            return res.success({ items: [], totalAmount: 0 });
+        }
+
+        const result = await cartService.hydrateCartItems(
+            items,
+            lang as string | undefined,
+        );
+
+        return res.success(result);
+    }
+
     async updateQuantity(req: AuthRequest, res: Response) {
         const { cart_item_id, quantity } = req.body;
         const result = await cartService.updateQuantity(
