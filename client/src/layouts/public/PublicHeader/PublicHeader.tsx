@@ -4,6 +4,7 @@ import Logo from "@/components/Logo/Logo";
 import { Separator } from "@/components/ui/separator";
 import CartHeader from "@/layouts/public/PublicHeader/components/CartHeader/CartHeader";
 import LanguageSwitcher from "@/layouts/public/PublicHeader/components/LanguageSwitcher/LanguageSwitcher";
+import LikeBtn from "@/layouts/public/PublicHeader/components/LikeBtn/LikeBtn";
 import Navbar from "@/layouts/public/PublicHeader/components/Navbar/Navbar";
 import PhoneSection from "@/layouts/public/PublicHeader/components/PhoneSection/PhoneSection";
 import SearchSection from "@/layouts/public/PublicHeader/components/SearchSection/SearchSection";
@@ -39,6 +40,7 @@ function PublicHeader() {
                         <SearchSection />
                         <div className="flex items-center gap-4">
                             <UserSection />
+                            <LikeBtn />
                             <CartHeader />
                             <LanguageSwitcher />
                         </div>

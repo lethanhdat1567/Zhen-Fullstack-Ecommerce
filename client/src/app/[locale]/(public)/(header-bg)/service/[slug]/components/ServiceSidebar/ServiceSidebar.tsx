@@ -32,7 +32,7 @@ async function ServiceSidebar({ slug }: IProps) {
                         return (
                             <li key={item.id}>
                                 <Link
-                                    href={`/services/${item.slug}`}
+                                    href={`/service/${item.slug}`}
                                     className={`flex items-center gap-2.5 px-3.75 py-5 text-[15px] hover:text-(--primary-color) ${
                                         isActive
                                             ? "font-semibold text-(--primary-color)"

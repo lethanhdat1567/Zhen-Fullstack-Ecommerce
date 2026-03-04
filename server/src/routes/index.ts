@@ -22,6 +22,7 @@ import cloudinaryRoute from "./cloudinary.route";
 import recruitmentRouter from "./recruitment.route";
 import cartRouter from "./cart.route";
 import checkoutRouter from "./order.route";
+import likeRouter from "./favorite.route";
 
 const router = express.Router();
 
@@ -48,6 +49,7 @@ router.use("/cloudinary", cloudinaryRoute);
 router.use("/recruitments", recruitmentRouter);
 router.use("/cart", cartRouter);
 router.use("/orders", checkoutRouter);
+router.use("/favorites", likeRouter);
 
 // Health route
 router.get("/health", (req, res) => {

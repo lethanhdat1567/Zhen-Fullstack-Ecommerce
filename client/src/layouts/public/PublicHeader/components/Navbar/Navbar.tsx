@@ -22,7 +22,7 @@ function Navbar({ onClick }: { onClick?: () => void }) {
             const allowedCodes = [
                 "home", // Thêm home nếu bạn muốn hiển thị
                 "introduce",
-                "services",
+                "service",
                 "product",
                 "news", // Mới bổ sung
                 "media", // Mới bổ sung
@@ -34,7 +34,7 @@ function Navbar({ onClick }: { onClick?: () => void }) {
             const orderMap: Record<string, number> = {
                 home: 0,
                 introduce: 1,
-                services: 2,
+                service: 2,
                 product: 3,
                 news: 4,
                 media: 5,
@@ -71,7 +71,7 @@ function Navbar({ onClick }: { onClick?: () => void }) {
                     ...nav,
                     name: navNameMap[locale]?.[nav.code] || nav.name,
                     children:
-                        nav.code === "services"
+                        nav.code === "service"
                             ? serviceCategories
                             : nav.code === "product"
                               ? productCategories
@@ -114,8 +114,8 @@ function Navbar({ onClick }: { onClick?: () => void }) {
                 // Kiểm tra xem code có cần lấy slug của thằng con đầu tiên không
                 const needSlug = [
                     "product",
-                    "services",
-                    "news", // Đổi từ "post" thành "news" cho khớp code
+                    "service",
+                    "news",
                     "media",
                 ].includes(navItem.code);
 

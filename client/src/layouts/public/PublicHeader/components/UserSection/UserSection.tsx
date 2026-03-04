@@ -18,6 +18,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { authService } from "@/services/authService";
 import { useCartStore } from "@/store/useCartStore";
+import { useFavoriteStore } from "@/store/useFavoriteStore";
 
 function UserSection() {
     const router = useRouter();
@@ -25,6 +26,7 @@ function UserSection() {
     const refreshToken = useAuthStore((state) => state.refreshToken);
     const clearAuth = useAuthStore((state) => state.clearAuth);
     const clearCart = useCartStore((state) => state.clearCart);
+    const clearFavoriate = useFavoriteStore((state) => state.clearFavorites);
 
     async function handleLogout() {
         try {
@@ -36,6 +38,7 @@ function UserSection() {
         } finally {
             clearAuth();
             clearCart();
+            clearFavoriate();
             router.push("/login");
         }
     }

@@ -20,6 +20,7 @@ import { HttpError } from "@/lib/http/errors";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useCartStore } from "@/store/useCartStore";
 import { cartService } from "@/services/cartService";
+import { useFavoriteStore } from "@/store/useFavoriteStore";
 
 export function RegisterForm({
     className,
@@ -36,7 +37,9 @@ export function RegisterForm({
 
     const setAuth = useAuthStore((state) => state.setAuth);
     const router = useRouter();
+
     const cartItems = useCartStore((state) => state.items);
+    const syncFavoriate = useFavoriteStore((state) => state.syncLocalFavorites);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
@@ -74,6 +77,7 @@ export function RegisterForm({
                 router.push("/admin/dashboard");
             } else {
                 await cartService.mergeCart(cartItems);
+                syncFavoriate();
                 router.push("/");
             }
         } catch (err: any) {

@@ -28,7 +28,6 @@ function CartPage() {
     const fetchCarts = async () => {
         try {
             const res = await cartService.syncCart(cartItems, locale);
-            console.log(res);
 
             setCarts(res.items);
             setTotal(res.totalAmount);

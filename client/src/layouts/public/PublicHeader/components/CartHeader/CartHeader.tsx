@@ -30,8 +30,6 @@ function CartHeader() {
         fetchCarts();
     }, [cartItems]);
 
-    console.log(cartItems);
-
     return (
         <div className="group/cart relative">
             <Link href="/cart" className="relative">

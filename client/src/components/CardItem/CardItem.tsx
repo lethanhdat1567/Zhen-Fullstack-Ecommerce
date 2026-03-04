@@ -2,10 +2,9 @@ import { images } from "@/assets/images";
 import { Link } from "@/i18n/navigation";
 import Button from "@/components/Button/button";
 
-import { Button as ShadUIBtn } from "@/components/ui/button";
 import Image from "next/image";
 import { resolveMediaSrc } from "@/lib/image";
-import { Heart, ShoppingBag } from "lucide-react";
+import LikeBtn from "@/components/CardItem/LikeBtn";
 
 type Props = {
     item: any;
@@ -24,13 +23,7 @@ function CardItem({ item, slug, basePath }: Props) {
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
 
-                <ShadUIBtn
-                    variant={"outline"}
-                    size={"icon-lg"}
-                    className="invisible absolute top-4 right-4 rounded-full opacity-0 transition duration-1000 group-hover:visible group-hover:opacity-100"
-                >
-                    <Heart />
-                </ShadUIBtn>
+                <LikeBtn type={basePath} item={item as any} />
             </div>
 
             {/* Content */}

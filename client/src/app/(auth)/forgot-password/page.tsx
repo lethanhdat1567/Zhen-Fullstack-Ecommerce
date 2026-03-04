@@ -12,7 +12,6 @@ import {
     FieldDescription,
 } from "@/components/ui/field";
 
-import Logo from "@/components/Logo/Logo";
 import { authService } from "@/services/authService";
 
 function ForgotPassword() {

@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { cartService } from "@/services/cartService";
 import { useCartStore } from "@/store/useCartStore";
+import { useFavoriteStore } from "@/store/useFavoriteStore";
 
 export function LoginForm({
     className,
@@ -31,7 +32,9 @@ export function LoginForm({
     const [error, setError] = useState<string | null>(null);
     const setAuth = useAuthStore((state) => state.setAuth);
     const router = useRouter();
+
     const cartItems = useCartStore((state) => state.items);
+    const syncFavoriate = useFavoriteStore((state) => state.syncLocalFavorites);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -63,6 +66,7 @@ export function LoginForm({
                 router.push("/admin/dashboard");
             } else {
                 await cartService.mergeCart(cartItems);
+                await syncFavoriate();
                 router.push("/");
             }
         } catch (err: any) {

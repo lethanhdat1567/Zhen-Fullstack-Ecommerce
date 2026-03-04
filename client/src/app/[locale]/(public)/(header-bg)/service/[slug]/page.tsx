@@ -1,6 +1,6 @@
-import ServiceItemLoading from "@/app/[locale]/(public)/(header-bg)/services/[slug]/components/ServiceItemLoading/ServiceItemLoading";
-import ServiceSidebar from "@/app/[locale]/(public)/(header-bg)/services/[slug]/components/ServiceSidebar/ServiceSidebar";
-import { ServiceSlug } from "@/app/[locale]/(public)/(header-bg)/services/[slug]/data";
+import ServiceItemLoading from "@/app/[locale]/(public)/(header-bg)/service/[slug]/components/ServiceItemLoading/ServiceItemLoading";
+import ServiceSidebar from "@/app/[locale]/(public)/(header-bg)/service/[slug]/components/ServiceSidebar/ServiceSidebar";
+import { ServiceSlug } from "@/app/[locale]/(public)/(header-bg)/service/[slug]/data";
 
 import AutoBanner from "@/components/Auto/AutoBanner";
 import CardItem from "@/components/CardItem/CardItem";
@@ -45,7 +45,7 @@ export default async function ServicePage({ params }: Props) {
                     breadcrumbData={[
                         {
                             title: serviceCategory.name,
-                            href: `services/${slug}`,
+                            href: `service/${slug}`,
                         },
                     ]}
                 />
@@ -77,7 +77,7 @@ export default async function ServicePage({ params }: Props) {
                                     delay={index / 10}
                                 >
                                     <CardItem
-                                        basePath="services"
+                                        basePath="service"
                                         item={service}
                                         slug={slug}
                                     />

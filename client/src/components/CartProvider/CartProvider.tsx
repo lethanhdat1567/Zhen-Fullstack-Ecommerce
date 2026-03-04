@@ -3,12 +3,14 @@
 import { cartService } from "@/services/cartService";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useCartStore } from "@/store/useCartStore";
+import { useFavoriteStore } from "@/store/useFavoriteStore";
 import { useLocale } from "next-intl";
 import { useEffect, useRef } from "react";
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     const { items, setCart } = useCartStore();
     const { user, isInitialized } = useAuthStore();
+    const fetchFavorite = useFavoriteStore((state) => state.fetchFavorites);
     const hasFetched = useRef(false);
     const locale = useLocale();
 
@@ -43,6 +45,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
                         hasFetched.current = true;
                     }
                 }
+                await fetchFavorite();
             } catch (error) {
                 console.error("Lỗi khởi tạo giỏ hàng:", error);
             }

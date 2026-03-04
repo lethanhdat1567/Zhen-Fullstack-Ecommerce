@@ -32,6 +32,22 @@ model languages {
 
 }
 
+model user_favorites {
+  id          String   @id @default(uuid()) @db.Char(36)
+  user_id     String   @db.Char(36)
+  product_id  String?  @db.Char(36)
+  service_id  String?  @db.Char(36)
+  created_at  DateTime @default(now())
+
+  user     users     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  product  products? @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  service  services? @relation(fields: [service_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, product_id])
+  @@unique([user_id, service_id])
+  @@index([user_id])
+}
+
 /* =========================
    SERVICES
 ========================= */
@@ -52,6 +68,7 @@ model services {
   category     service_categories @relation(fields: [category_id], references: [id], onDelete: Restrict)
   translations service_translations[]
   galleries    service_galleries[]
+  favorites    user_favorites[]
 
   @@index([deleted_at])
   @@index([category_id])
@@ -173,6 +190,7 @@ model products {
   galleries    product_galleries[]
   cart_items   cart_items[]
   order_items order_items[]
+  favorites    user_favorites[]
 }
 
 model product_translations {
@@ -294,6 +312,7 @@ model users {
   tokens        user_tokens[] 
   cart_items    cart_items[]
   orders  orders[]
+  favorites    user_favorites[]
 }
 
 model user_tokens {

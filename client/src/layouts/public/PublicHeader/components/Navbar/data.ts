@@ -2,7 +2,7 @@ const navNameMap: Record<string, Record<string, string>> = {
     vi: {
         home: "Trang chủ",
         introduce: "Giới thiệu",
-        services: "Dịch vụ",
+        service: "Dịch vụ",
         product: "Sản phẩm",
         news: "Tin tức",
         media: "Media",
@@ -12,7 +12,7 @@ const navNameMap: Record<string, Record<string, string>> = {
     en: {
         home: "Home",
         introduce: "About Us",
-        services: "Services",
+        service: "Services",
         product: "Products",
         news: "News",
         media: "Media",
@@ -22,7 +22,7 @@ const navNameMap: Record<string, Record<string, string>> = {
     fr: {
         home: "Accueil",
         introduce: "Présentation",
-        services: "Services",
+        service: "Services",
         product: "Produits",
         news: "Actualités",
         media: "Médias",
