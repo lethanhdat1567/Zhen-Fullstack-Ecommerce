@@ -3,11 +3,9 @@ import PublicHeader from "@/layouts/public/PublicHeader/PublicHeader";
 
 function PublicLayout({ children }: { children: React.ReactNode }) {
     return (
-        <div
-        // className="flex h-screen flex-col overflow-x-hidden overflow-y-auto bg-(--background-color) text-(--text-color)"
-        >
+        <div>
             <PublicHeader />
-            <div className="mt-25 flex-1">{children}</div>
+            <div className="mt-34 flex-1">{children}</div>
             <PublicFooter />
         </div>
     );

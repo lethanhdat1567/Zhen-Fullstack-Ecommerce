@@ -43,7 +43,7 @@ export default function Swiper() {
         return <div className="h-screen bg-neutral-400" />;
 
     return (
-        <div className="relative mt-[136px] h-[70vh] w-full sm:h-[85vh] lg:h-[calc(100vh-136px)]">
+        <div className="relative mt-34 h-[70vh] w-full sm:h-[85vh] lg:h-[calc(100vh-136px)]">
             {/* Swiper */}
             <SwiperCore
                 modules={[Autoplay]}

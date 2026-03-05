@@ -28,6 +28,7 @@ function CartPage() {
     const fetchCarts = async () => {
         try {
             const res = await cartService.syncCart(cartItems, locale);
+            console.log(res);
 
             setCarts(res.items);
             setTotal(res.totalAmount);
@@ -42,7 +43,7 @@ function CartPage() {
     }, [cartItems]);
 
     return (
-        <div className="mb-20">
+        <div className="mb-20 pt-4">
             <AutoBanner
                 breadcrumbData={[
                     {
@@ -50,6 +51,7 @@ function CartPage() {
                         href: "/cart",
                     },
                 ]}
+                hideBanner
             />
             {cartItems.length <= 0 ? (
                 <div className="flex flex-col items-center justify-center px-4 py-20 text-center">
@@ -82,9 +84,6 @@ function CartPage() {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="w-12.5">
-                                    <Checkbox />
-                                </TableHead>
                                 <TableHead>Thông tin sản phẩm</TableHead>
                                 <TableHead>Đơn giá</TableHead>
                                 <TableHead>Số lượng</TableHead>
@@ -95,7 +94,7 @@ function CartPage() {
                         </TableHeader>
                         <TableBody>
                             {carts.map((cart) => (
-                                <CartRow key={cart.id} cart={cart} />
+                                <CartRow key={cart.product_id} cart={cart} />
                             ))}
                         </TableBody>
                     </Table>
@@ -106,9 +105,11 @@ function CartPage() {
                                 {cartUtils.formatCurrency(total)}
                             </p>
                         </div>
-                        <Button className="mt-4 w-full rounded-sm bg-(--primary-color) py-6!">
-                            Thanh toán
-                        </Button>
+                        <Link href="/checkout" className="mt-4 w-full">
+                            <Button className="w-full rounded-sm bg-(--primary-color) py-6!">
+                                Thanh toán
+                            </Button>
+                        </Link>
                     </div>
                 </div>
             )}

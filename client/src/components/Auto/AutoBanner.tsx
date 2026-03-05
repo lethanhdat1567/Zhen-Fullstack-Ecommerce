@@ -9,20 +9,23 @@ type Props = {
         title: string;
         href: string;
     }[];
+    hideBanner?: boolean;
 };
 
-function AutoBanner({ breadcrumbData = [] }: Props) {
+function AutoBanner({ breadcrumbData = [], hideBanner = false }: Props) {
     return (
         <div className="mb-10 w-full">
-            <div className="relative h-100 w-screen">
-                <Image
-                    src={images.DSC5622}
-                    alt="ZHEN"
-                    height={420}
-                    priority
-                    className="h-full w-full object-cover"
-                />
-            </div>
+            {!hideBanner && (
+                <div className="relative h-100 w-screen">
+                    <Image
+                        src={images.DSC5622}
+                        alt="ZHEN"
+                        height={420}
+                        priority
+                        className="h-full w-full object-cover"
+                    />
+                </div>
+            )}
 
             <BreadcrumbBanner breadcrumbData={breadcrumbData} />
         </div>

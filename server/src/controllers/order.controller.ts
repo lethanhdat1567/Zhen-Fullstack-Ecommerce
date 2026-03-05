@@ -5,8 +5,8 @@ import { Response } from "express";
 class OrderController {
     async checkout(req: AuthRequest, res: Response) {
         const result = await orderService.createOrder(
-            req.user!.userId,
             req.body,
+            req?.user?.userId,
         );
         return res.success(result);
     }

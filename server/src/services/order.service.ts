@@ -1,5 +1,7 @@
+import paymentController from "@/controllers/payment.controller";
 import { prisma } from "@/lib/prisma";
 import { AppError } from "@/utils/appError";
+import { dateFormat, ProductCode, VnpLocale } from "vnpay";
 
 export interface CheckoutDTO {
     full_name: string;
@@ -37,7 +39,7 @@ class OrderService {
         };
     }
 
-    async createOrder(user_id: string, data: CheckoutDTO) {
+    async createOrder(data: CheckoutDTO, userId?: string) {
         const { items, payment_method, ...orderInfo } = data;
 
         return await prisma.$transaction(async (tx) => {
@@ -87,7 +89,7 @@ class OrderService {
             const order = await tx.orders.create({
                 data: {
                     ...orderInfo,
-                    user_id,
+                    user_id: userId,
                     payment_method,
                     total_amount: totalAmount,
                     status: "pending",
@@ -97,21 +99,30 @@ class OrderService {
                 include: { order_items: true },
             });
 
-            // --- BƯỚC 4: DỌN GIỎ HÀNG ---
-            const cartItemIds = items
-                .filter((i) => i.cart_item_id)
-                .map((i) => i.cart_item_id!);
-            if (cartItemIds.length > 0) {
-                await tx.cart_items.deleteMany({
-                    where: { id: { in: cartItemIds }, user_id },
-                });
+            if (userId) {
+                const cartItemIds = items
+                    .filter((i) => i.cart_item_id)
+                    .map((i) => i.cart_item_id!);
+                if (cartItemIds.length > 0) {
+                    await tx.cart_items.deleteMany({
+                        where: { id: { in: cartItemIds }, user_id: userId },
+                    });
+                }
             }
-
             // --- BƯỚC 5: TRẢ VỀ DỮ LIỆU KÈM PAYMENT URL (NẾU CÓ) ---
             let paymentUrl = null;
             if (payment_method === "vnpay") {
-                // Đây là nơi bạn gọi hàm tạo link VNPAY (Ví dụ vnpayService.createPaymentUrl)
-                paymentUrl = `https://vnpay.vn/pay?order_id=${order.id}&amount=${totalAmount}`;
+                paymentUrl = await paymentController.vnpay.buildPaymentUrl({
+                    vnp_Amount: totalAmount,
+                    vnp_IpAddr: "127.0.0.1",
+                    vnp_TxnRef: order.id,
+                    vnp_OrderInfo: `Thanh toán đơn hàng ${order.id}`,
+                    vnp_OrderType: ProductCode.Other,
+                    vnp_ReturnUrl:
+                        "http://localhost:8000/api/payment/check-payment-vnpay",
+                    vnp_Locale: VnpLocale.VN,
+                    vnp_CreateDate: dateFormat(new Date()),
+                });
             }
 
             return {

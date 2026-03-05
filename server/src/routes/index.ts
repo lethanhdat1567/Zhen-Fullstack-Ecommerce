@@ -23,6 +23,7 @@ import recruitmentRouter from "./recruitment.route";
 import cartRouter from "./cart.route";
 import checkoutRouter from "./order.route";
 import likeRouter from "./favorite.route";
+import paymentRouter from "./payment.route";
 
 const router = express.Router();
 
@@ -50,6 +51,7 @@ router.use("/recruitments", recruitmentRouter);
 router.use("/cart", cartRouter);
 router.use("/orders", checkoutRouter);
 router.use("/favorites", likeRouter);
+router.use("/payment", paymentRouter);
 
 // Health route
 router.get("/health", (req, res) => {

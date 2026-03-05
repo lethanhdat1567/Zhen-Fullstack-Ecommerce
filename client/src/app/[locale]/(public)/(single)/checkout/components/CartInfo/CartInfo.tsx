@@ -2,24 +2,33 @@ import CartInfoItem from "@/app/[locale]/(public)/(single)/checkout/components/C
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Link } from "@/i18n/navigation";
+import { CartItem } from "@/services/cartService";
+import { cartUtils } from "@/utils/cartUtils";
 import { ChevronLeft } from "lucide-react";
 
-function CartInfo() {
+type Props = { carts: CartItem[]; total: number };
+
+function CartInfo({ carts, total }: Props) {
     return (
         <div>
             <h2 className="mb-4 py-4 text-lg font-semibold">
-                Đơn hàng (3 sản phẩm)
+                Đơn hàng ({carts.length} sản phẩm)
             </h2>
             <div className="flex flex-col gap-4">
-                <CartInfoItem />
-                <CartInfoItem />
-                <CartInfoItem />
-                <CartInfoItem />
+                {carts.map((item) => (
+                    <CartInfoItem
+                        price={item.product.sale_price || item.product.price}
+                        quantity={item.quantity}
+                        thumbnail={item.product.thumbnail}
+                        title={item.product.title}
+                        key={item.id}
+                    />
+                ))}
             </div>
             <div className="mt-10 flex flex-col gap-4 text-sm font-medium">
                 <div className="flex items-center justify-between">
                     <p>Tạm tính:</p>
-                    <p>450.000₫</p>
+                    <p>{cartUtils.formatCurrency(total)}</p>
                 </div>
                 <div className="flex items-center justify-between">
                     <p>Phí vận chuyển:</p>
@@ -29,7 +38,7 @@ function CartInfo() {
                 <div className="flex items-center justify-between">
                     <p className="text-lg">Tổng cộng</p>
                     <p className="text-lg font-semibold text-(--primary-color)">
-                        490.000₫
+                        {cartUtils.formatCurrency(total)}
                     </p>
                 </div>
             </div>
@@ -40,7 +49,11 @@ function CartInfo() {
                 >
                     <ChevronLeft size={16} /> Quay về giỏ hàng
                 </Link>
-                <Button className="bg-(--primary-color)" size={"lg"}>
+                <Button
+                    className="bg-(--primary-color)"
+                    size={"lg"}
+                    type="submit"
+                >
                     Đặt hàng
                 </Button>
             </div>

@@ -1,9 +1,9 @@
 import * as z from "zod";
 
 const checkoutItemSchema = z.object({
-    product_id: z.string().min(1, "Product ID là bắt buộc"),
-    quantity: z.number().int().min(1, "Số lượng phải ít nhất là 1"),
-    cart_item_id: z.string().uuid("ID giỏ hàng không hợp lệ").optional(),
+    product_id: z.string().min(1),
+    quantity: z.number().int().min(1),
+    cart_item_id: z.string().uuid().nullable().optional(),
 });
 
 export const checkoutSchema = z.object({
@@ -38,7 +38,7 @@ export const checkoutSchema = z.object({
         .optional()
         .or(z.literal("")),
 
-    items: z.array(checkoutItemSchema).min(1, "Giỏ hàng không được để trống"),
+    items: z.array(checkoutItemSchema),
 });
 
 // Type inference để dùng với TypeScript (nếu cần)

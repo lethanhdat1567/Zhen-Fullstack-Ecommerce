@@ -6,10 +6,10 @@ import { Router } from "express";
 
 const router = Router();
 
+router.post("/checkout", asyncHandler(orderController.checkout));
 router.use(authMiddleware);
 
 // Routes cho User
-router.post("/checkout", asyncHandler(orderController.checkout));
 router.get("/history", asyncHandler(orderController.getMyOrders));
 router.get("/:id", asyncHandler(orderController.getOrderDetail));
 

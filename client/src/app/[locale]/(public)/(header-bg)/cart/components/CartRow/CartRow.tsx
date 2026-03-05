@@ -1,10 +1,8 @@
 import CartItem from "@/app/[locale]/(public)/(header-bg)/cart/components/CartRow/CartItem";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import CartRowQuantity from "@/app/[locale]/(public)/(header-bg)/cart/components/CartRow/CartRowQuantity";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { CartItem as CartType } from "@/services/cartService";
 import { cartUtils } from "@/utils/cartUtils";
-import { Minus, Plus } from "lucide-react";
 
 type Props = {
     cart: CartType;
@@ -13,11 +11,8 @@ type Props = {
 function CartRow({ cart }: Props) {
     return (
         <TableRow>
-            <TableCell>
-                <Checkbox />
-            </TableCell>
             <TableCell className="font-medium">
-                <CartItem />
+                <CartItem item={cart} />
             </TableCell>
             <TableCell>
                 {cartUtils.formatCurrency(
@@ -25,17 +20,7 @@ function CartRow({ cart }: Props) {
                 )}
             </TableCell>
             <TableCell>
-                <div className="flex items-center">
-                    <Button variant={"outline"}>
-                        <Plus />
-                    </Button>
-                    <span className="flex h-9 w-10 items-center justify-center border-t border-b">
-                        {cart.quantity}
-                    </span>
-                    <Button variant={"outline"}>
-                        <Minus />
-                    </Button>
-                </div>
+                <CartRowQuantity item={cart} />
             </TableCell>
             <TableCell className="text-right font-medium">
                 {cartUtils.formatCurrency(cartUtils.getItemSubtotal(cart))}

@@ -354,7 +354,7 @@ model cart_items {
 ========================= */
 model orders {
   id               String   @id @default(uuid()) @db.Char(36)
-  user_id          String   @db.Char(36)
+  user_id          String?  @db.Char(36)
   
   // --- THÔNG TIN NGƯỜI NHẬN (Cần bổ sung) ---
   full_name        String   // Tên người nhận hàng
@@ -373,7 +373,7 @@ model orders {
   updated_at       DateTime @updatedAt
 
   order_items      order_items[]
-  user             users    @relation(fields: [user_id], references: [id])
+   user             users?   @relation(fields: [user_id], references: [id])
 }
 
 model order_items {

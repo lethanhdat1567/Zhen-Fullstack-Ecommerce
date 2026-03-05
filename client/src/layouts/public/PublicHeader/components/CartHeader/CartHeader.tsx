@@ -74,7 +74,7 @@ function CartHeader() {
                         </div>
                         <div className="w-full p-2">
                             <Button className="w-full rounded-full bg-(--primary-color) py-5!">
-                                Thanh toán
+                                Thanh toán tất cả
                             </Button>
                         </div>
                     </>
