@@ -1,5 +1,6 @@
 import paymentController from "@/controllers/payment.controller";
 import { prisma } from "@/lib/prisma";
+import { paginate } from "@/services/pagination.service";
 import { AppError } from "@/utils/appError";
 import { dateFormat, ProductCode, VnpLocale } from "vnpay";
 
@@ -132,9 +133,49 @@ class OrderService {
         });
     }
 
-    async getOrdersByUser(user_id: string, lang?: string) {
+    async getOrdersByUser(
+        user_id: string,
+        lang?: string,
+        status?: string,
+        search?: string,
+    ) {
         const orders = await prisma.orders.findMany({
-            where: { user_id },
+            where: {
+                user_id,
+                // Filter theo status nếu có truyền vào
+                ...(status && status !== "all" ? { status: status } : {}),
+
+                // Filter theo search (Mã đơn hàng HOẶC Tên sản phẩm)
+                ...(search
+                    ? {
+                          OR: [
+                              { id: { contains: search } },
+                              {
+                                  order_items: {
+                                      some: {
+                                          product: {
+                                              translations: {
+                                                  some: {
+                                                      title: {
+                                                          contains: search,
+                                                      },
+                                                      ...(lang
+                                                          ? {
+                                                                language: {
+                                                                    code: lang,
+                                                                },
+                                                            }
+                                                          : {}),
+                                                  },
+                                              },
+                                          },
+                                      },
+                                  },
+                              },
+                          ],
+                      }
+                    : {}),
+            },
             include: {
                 order_items: {
                     include: {
@@ -202,14 +243,61 @@ class OrderService {
         };
     }
 
-    async getAllOrders() {
-        return prisma.orders.findMany({
-            include: {
-                user: { select: { full_name: true, email: true } },
-                _count: { select: { order_items: true } },
+    async getAdminOrders(query: any) {
+        const { status, search } = query;
+
+        const where: any = {};
+
+        if (status) {
+            where.status = status;
+        }
+
+        if (search) {
+            where.OR = [
+                {
+                    full_name: {
+                        contains: search,
+                    },
+                },
+                {
+                    email: {
+                        contains: search,
+                    },
+                },
+                {
+                    phone_number: {
+                        contains: search,
+                    },
+                },
+                {
+                    id: {
+                        contains: search,
+                    },
+                },
+            ];
+        }
+
+        const include = {
+            user: {
+                select: {
+                    full_name: true,
+                    email: true,
+                },
             },
-            orderBy: { created_at: "desc" },
+            _count: {
+                select: {
+                    order_items: true,
+                },
+            },
+        };
+
+        const result = await paginate(prisma.orders, query, {
+            where,
+            include,
+            orderBy: [{ created_at: "desc" }],
         });
+
+        return result;
     }
 
     async updateStatus(id: string, status: string) {
@@ -236,6 +324,35 @@ class OrderService {
                 data: { status },
             });
         });
+    }
+    async destroy(id: string) {
+        const order = await prisma.orders.findUnique({
+            where: { id },
+        });
+
+        if (!order) throw new AppError("Order not found", 404);
+
+        await prisma.orders.delete({
+            where: { id },
+        });
+
+        return { id };
+    }
+
+    async bulkDestroy(ids: string[]) {
+        if (!ids || ids.length === 0) {
+            throw new AppError("Order ids are required", 400);
+        }
+
+        const result = await prisma.orders.deleteMany({
+            where: {
+                id: {
+                    in: ids,
+                },
+            },
+        });
+
+        return result;
     }
 }
 

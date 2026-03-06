@@ -25,4 +25,8 @@ router.patch(
     asyncHandler(orderController.updateStatus),
 );
 
+router.delete("/admin/:id", orderController.destroy);
+
+router.delete("/admin/bulk", orderController.bulkDestroy);
+
 export default router;

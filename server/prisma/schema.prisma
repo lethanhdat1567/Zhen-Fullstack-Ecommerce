@@ -54,7 +54,7 @@ model user_favorites {
 
 model services {
   id          String   @id @default(uuid()) @db.Char(36)
-  sku         String   @unique
+  capacity  Int      @default(2)
   price       Decimal? @db.Decimal(12, 2)
   thumbnail   String?
   status      ServiceStatus @default(active)
@@ -64,11 +64,12 @@ model services {
 
   category_id String   @db.Char(36)
 
-  // relations
   category     service_categories @relation(fields: [category_id], references: [id], onDelete: Restrict)
   translations service_translations[]
   galleries    service_galleries[]
   favorites    user_favorites[]
+  bookings      bookings[]
+  availability  service_availability[]
 
   @@index([deleted_at])
   @@index([category_id])
@@ -97,6 +98,54 @@ model service_translations {
 
   @@unique([service_id, language_id])
 }
+
+model service_availability {
+  id              String   @id @default(uuid()) @db.Char(36)
+  service_id      String   @db.Char(36)
+  
+  date            DateTime 
+  
+  is_available    Boolean  @default(true) 
+  
+  service         services @relation(fields: [service_id], references: [id], onDelete: Cascade)
+
+  @@unique([service_id, date]) // Đảm bảo không trùng lặp cấu hình cho 1 ngày
+  @@index([date])
+} 
+
+model bookings {
+  id              String         @id @default(uuid()) @db.Char(36)
+  service_id      String         @db.Char(36)
+
+  // Thông tin khách
+  customer_name   String
+  customer_email  String
+  customer_phone  String
+
+  // Thời gian khách đặt
+  check_in        DateTime       
+  check_out       DateTime       
+  guest_count     Int            @default(1)
+  
+  total_price     Decimal        @db.Decimal(15, 2)
+  status          BookingStatus  @default(pending)
+  payment_status  String         @default("unpaid")
+  
+  note            String?        @db.Text
+  created_at      DateTime       @default(now())
+  updated_at      DateTime       @updatedAt
+
+  service         services       @relation(fields: [service_id], references: [id])
+}
+
+enum BookingStatus {
+  pending    // Chờ xác nhận/thanh toán
+  confirmed  // Đã thanh toán & giữ chỗ
+  cancelled  // Khách hủy hoặc quá hạn thanh toán
+  completed  // Đã hoàn thành chuyến đi
+}
+
+
 
 /* =========================
    SERVICE GALLERIES
@@ -600,3 +649,4 @@ model recruitment_translations {
   @@unique([recruitment_id, language_id])
   @@index([language_id])
 }
+

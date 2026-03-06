@@ -24,6 +24,7 @@ import cartRouter from "./cart.route";
 import checkoutRouter from "./order.route";
 import likeRouter from "./favorite.route";
 import paymentRouter from "./payment.route";
+import bookingRouter from "./booking.route";
 
 const router = express.Router();
 
@@ -52,6 +53,7 @@ router.use("/cart", cartRouter);
 router.use("/orders", checkoutRouter);
 router.use("/favorites", likeRouter);
 router.use("/payment", paymentRouter);
+router.use("/bookings", bookingRouter);
 
 // Health route
 router.get("/health", (req, res) => {

@@ -1,5 +1,5 @@
 import { http } from "@/lib/http/http";
-import { ApiResponse } from "@/services/mediaAlbumService";
+import { ApiResponse } from "@/services/cartService";
 
 /* =========================
     TYPES
@@ -47,6 +47,19 @@ export type CheckoutResponse = {
     paymentUrl?: string;
 };
 
+export type GetAllOrdersParams = {
+    page?: number;
+    limit?: number;
+    status?: string | null;
+    search?: string;
+};
+
+interface OrderParams {
+    status?: string;
+    search?: string;
+    lang?: string;
+}
+
 /* =========================
     SERVICE
 ========================= */
@@ -70,17 +83,33 @@ export const orderService = {
      * Lấy chi tiết đơn hàng
      */
     async getOrderDetail(orderId: string) {
-        const res = await http.get<ApiResponse<Order>>(`/orders/${orderId}`);
+        const res = await http.get<ApiResponse<any>>(`/orders/${orderId}`);
         return res.data;
     },
 
     /**
      * Lấy danh sách đơn hàng của user
      */
-    async getMyOrders(page = 1) {
-        const res = await http.get<ApiResponse<Order[]>>(
-            `/orders?page=${page}`,
-        );
+
+    async getAllOrders(params?: GetAllOrdersParams) {
+        const query = new URLSearchParams();
+
+        if (params?.page) query.append("page", String(params.page));
+        if (params?.limit) query.append("limit", String(params.limit));
+        if (params?.status) query.append("status", params.status);
+        if (params?.search) query.append("search", params.search);
+
+        const res = await http.get<
+            ApiResponse<{
+                items: Order[];
+                pagination: {
+                    page: number;
+                    limit: number;
+                    total: number;
+                    totalPages: number;
+                };
+            }>
+        >(`/orders/admin/all?${query.toString()}`);
 
         return res.data;
     },
@@ -96,6 +125,33 @@ export const orderService = {
 
         return res.data;
     },
+    async getMyOrders(params: OrderParams) {
+        // 1. Tạo đối tượng URLSearchParams
+        const query = new URLSearchParams();
+
+        // 2. Thêm các field nếu chúng có giá trị
+        if (params.status && params.status !== "all") {
+            query.append("status", params.status);
+        }
+
+        if (params.search) {
+            query.append("search", params.search);
+        }
+
+        if (params.lang) {
+            query.append("lang", params.lang);
+        }
+
+        // 3. Chuyển thành chuỗi: "status=pending&search=iphone..."
+        const queryString = query.toString();
+
+        // 4. Gọi API với chuỗi đã build (đảm bảo xử lý dấu ?)
+        const url = `/orders/history${queryString ? `?${queryString}` : ""}`;
+
+        const res = await http.get<ApiResponse<Order[]>>(url);
+
+        return res.data;
+    },
 
     /**
      * Hủy đơn hàng
@@ -103,6 +159,39 @@ export const orderService = {
     async cancelOrder(orderId: string) {
         const res = await http.post<ApiResponse<any>>(
             `/orders/${orderId}/cancel`,
+        );
+
+        return res.data;
+    },
+
+    /**
+     * ADMIN - Xóa 1 order
+     */
+    async destroy(orderId: string) {
+        const res = await http.delete<ApiResponse<{ id: string }>>(
+            `/orders/admin/${orderId}`,
+        );
+
+        return res.data;
+    },
+
+    /**
+     * ADMIN - Xóa nhiều order
+     */
+    async bulkDestroy(ids: string[]) {
+        const res = await http.delete<ApiResponse<{ count: number }>>(
+            `/orders/admin/bulk`,
+            {
+                data: { ids },
+            },
+        );
+
+        return res.data;
+    },
+    async updateStatus(orderId: string, status: string) {
+        const res = await http.patch<ApiResponse<any>>(
+            `/orders/admin/status/${orderId}`,
+            { status },
         );
 
         return res.data;

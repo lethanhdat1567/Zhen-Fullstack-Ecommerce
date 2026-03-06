@@ -15,6 +15,7 @@ import {
     AudioWaveform,
     Command,
     BriefcaseBusiness,
+    ShoppingBag,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -75,6 +76,17 @@ const data = {
                 {
                     title: "Danh sách tài khoản",
                     url: "/admin/users",
+                },
+            ],
+        },
+        {
+            title: "Quản lý đơn hàng",
+            url: "#",
+            icon: ShoppingBag,
+            items: [
+                {
+                    title: "Danh sách đơn hàng",
+                    url: "/admin/orders",
                 },
             ],
         },

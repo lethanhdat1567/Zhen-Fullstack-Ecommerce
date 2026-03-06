@@ -17,7 +17,7 @@ export interface ServiceTranslationInput {
 }
 
 export interface CreateServiceDTO {
-    sku: string;
+    capacity?: number;
     price?: number;
     thumbnail?: string;
     status?: ServiceStatus;
@@ -30,7 +30,7 @@ export interface CreateServiceDTO {
 }
 
 export interface UpdateServiceDTO {
-    sku?: string;
+    capacity?: number;
     price?: number;
     thumbnail?: string;
     status?: ServiceStatus;
@@ -95,20 +95,16 @@ class ServiceService {
 
     private transformWithLang(service: any) {
         const { translations, category, ...rest } = service;
-
         const t = translations?.[0];
         const ct = category?.translations?.[0];
-        console.log(category);
 
         return {
             ...rest,
-
             lang: t?.language?.code ?? null,
             title: t?.title ?? null,
             slug: t?.slug ?? null,
             description: t?.description ?? null,
             content: t?.content ?? null,
-
             category: category
                 ? {
                       id: category.id,
@@ -138,7 +134,7 @@ class ServiceService {
 
                 const service = await tx.services.create({
                     data: {
-                        sku: data.sku,
+                        capacity: data.capacity,
                         price: data.price,
                         thumbnail: data.thumbnail,
                         status: data.status ?? "active",
@@ -312,15 +308,6 @@ class ServiceService {
                     throw new AppError("Service not found", 404);
                 }
 
-                if (data.sku) {
-                    const duplicate = await tx.services.findFirst({
-                        where: { sku: data.sku, NOT: { id } },
-                    });
-                    if (duplicate) {
-                        throw new AppError("SKU already exists", 400);
-                    }
-                }
-
                 if (data.translations?.length) {
                     await checkSlugConflict({
                         tx,
@@ -333,7 +320,9 @@ class ServiceService {
                 const service = await tx.services.update({
                     where: { id },
                     data: {
-                        ...(data.sku !== undefined && { sku: data.sku }),
+                        ...(data.capacity !== undefined && {
+                            capacity: data.capacity,
+                        }),
                         ...(data.price !== undefined && { price: data.price }),
                         ...(data.thumbnail !== undefined && {
                             thumbnail: data.thumbnail,
