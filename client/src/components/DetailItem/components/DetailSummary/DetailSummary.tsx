@@ -1,11 +1,11 @@
 import { images } from "@/assets/images";
 import Image from "next/image";
-import { QuantitySelector } from "./components/QuantitySelector/QuantitySelector";
 import { Service } from "@/services/service";
 import { Product } from "@/services/productService";
 import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
 import AddToCartBtn from "@/components/DetailItem/components/DetailSummary/components/AddToCartBtn/AddToCartBtn";
+import { Link } from "@/i18n/navigation";
 
 type Props = {
     item: Service | Product;
@@ -36,6 +36,9 @@ function DetailSummary({ item, type }: Props) {
                     ? `${Number(item.price).toLocaleString("vi-VN")}  Đ++`
                     : "Miễn phí"}
             </p>
+            {type === "service" && (
+                <p>Số lượng: {(item as Service).capacity}</p>
+            )}
 
             {/* Description */}
             <div className="mb-5">
@@ -45,7 +48,14 @@ function DetailSummary({ item, type }: Props) {
             </div>
 
             {/* Quantity + Button */}
-            <AddToCartBtn item={item as Product} />
+            {type === "product" && <AddToCartBtn item={item as Product} />}
+            {type === "service" && (
+                <Link href={`/booking?id=${item.id}`}>
+                    <button className="relative inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-tl-3xl rounded-br-3xl bg-(--primary-color) px-6 text-sm font-medium text-white transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:bg-gray-400 sm:w-auto md:h-12.5 md:px-6.75 md:text-base">
+                        Đặt phòng
+                    </button>
+                </Link>
+            )}
 
             {/* Meta */}
             <div className="flex flex-col text-sm md:text-base">

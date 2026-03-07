@@ -70,7 +70,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                     </div>
                 ) : (
                     <div>
-                        <DetailItem item={getServiceDetail} />
+                        <DetailItem item={getServiceDetail} type="service" />
                         <ServiceIntroduction service={getServiceDetail} />
                     </div>
                 )}

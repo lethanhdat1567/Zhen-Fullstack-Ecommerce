@@ -9,7 +9,9 @@ import {
 
 type Props = {
     value: string;
-    onChange: (value: string) => void;
+    onChange: (
+        value: "pending" | "confirmed" | "completed" | "cancelled",
+    ) => void;
 };
 
 const STATUS_OPTIONS = [
@@ -19,13 +21,13 @@ const STATUS_OPTIONS = [
         color: "bg-yellow-100 text-yellow-700",
     },
     {
-        value: "processing",
-        label: "Đang xử lý",
+        value: "confirmed",
+        label: "Đã xác nhận",
         color: "bg-blue-100 text-blue-700",
     },
     {
         value: "completed",
-        label: "Đã giao hàng",
+        label: "Đã xử lý thành công",
         color: "bg-green-100 text-green-700",
     },
     {

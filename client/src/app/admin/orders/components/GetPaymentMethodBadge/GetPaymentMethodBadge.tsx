@@ -12,6 +12,10 @@ export function GetPaymentStatusBadge({ status }: { status: string }) {
             label: "Chưa thanh toán",
             className: "bg-red-100 text-red-700",
         },
+        failed: {
+            label: "Thanh toán thất bại",
+            className: "bg-red-100 text-red-700",
+        },
     };
 
     const item = map[status];

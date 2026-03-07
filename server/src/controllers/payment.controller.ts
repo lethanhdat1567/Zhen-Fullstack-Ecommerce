@@ -42,7 +42,7 @@ class PaymentController {
     checkPaymentVnpay = async (req: Request, res: Response) => {
         try {
             const verify = this.vnpay.verifyReturnUrl(req.query as any);
-
+            const type = req.query.type;
             if (!verify.isVerified) {
                 // Nếu sai chữ ký, đẩy về trang lỗi của FE
                 return res.redirect(
@@ -55,24 +55,39 @@ class PaymentController {
 
             // --- LOGIC CẬP NHẬT DATABASE ---
             if (responseCode === "00") {
-                await prisma.orders.update({
-                    where: { id: orderId },
-                    data: { payment_status: "paid" },
-                });
+                if (type === "product") {
+                    await prisma.orders.update({
+                        where: { id: orderId },
+                        data: { payment_status: "paid" },
+                    });
+                } else if (type === "booking") {
+                    await prisma.bookings.update({
+                        where: { id: orderId },
+                        data: { payment_status: "paid" },
+                    });
+                }
 
                 // Thanh toán thành công -> Đẩy về trang Success của FE
                 return res.redirect(
-                    `http://localhost:3000/order/confirmation?orderId=${orderId}&status=success`,
+                    `http://localhost:3000/order/confirmation?orderId=${orderId}&status=success&type=${type}`,
                 );
             } else {
-                await prisma.orders.update({
-                    where: { id: orderId },
-                    data: { payment_status: "failed" },
-                });
+                if (type === "product") {
+                    await prisma.orders.update({
+                        where: { id: orderId },
+                        data: { payment_status: "failed" },
+                    });
+                }
+                if (type === "booking") {
+                    await prisma.bookings.update({
+                        where: { id: orderId },
+                        data: { payment_status: "failed" },
+                    });
+                }
 
                 // Thanh toán lỗi (User hủy hoặc thẻ lỗi) -> Đẩy về trang Fail của FE
                 return res.redirect(
-                    `http://localhost:3000/order/confirmation?orderId=${orderId}&status=error`,
+                    `http://localhost:3000/order/confirmation?orderId=${orderId}&status=error&type=${type}`,
                 );
             }
         } catch (error) {

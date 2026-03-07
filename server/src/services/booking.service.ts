@@ -1,6 +1,9 @@
+import paymentController from "@/controllers/payment.controller";
 import { prisma } from "@/lib/prisma";
 import { paginate } from "@/services/pagination.service";
 import { AppError } from "@/utils/appError";
+import { dateFormat, ProductCode, VnpLocale } from "vnpay";
+import { differenceInDays, startOfDay } from "date-fns";
 
 export interface UpdateBookingDTO {
     customer_name?: string;
@@ -17,9 +20,10 @@ export interface CreateBookingDTO {
     customer_email: string;
     customer_phone: string;
     guests: number;
-    check_in: string; // "2026-03-10"
-    check_out: string; // "2026-03-12"
+    check_in: Date;
+    check_out: Date;
     note?: string;
+    payment_method: "cod" | "vnpay";
 }
 
 class BookingService {
@@ -103,11 +107,10 @@ class BookingService {
     }
 
     async createBooking(data: CreateBookingDTO) {
-        const { service_id, check_in, check_out, guests } = data;
-        const start = new Date(check_in);
-        const end = new Date(check_out);
+        const { service_id, check_in, check_out, guests, payment_method } =
+            data;
 
-        if (start >= end)
+        if (check_in >= check_out)
             throw new AppError("Ngày trả phòng phải sau ngày nhận phòng", 400);
 
         return await prisma.$transaction(async (tx) => {
@@ -118,19 +121,10 @@ class BookingService {
 
             if (!service) throw new AppError("Dịch vụ không tồn tại", 404);
 
-            // 2. Check sức chứa (Capacity)
-            if (guests > service.capacity) {
-                throw new AppError(
-                    `Phòng này chỉ chứa tối đa ${service.capacity} người`,
-                    400,
-                );
-            }
-
-            // 3. Check xem ngày này có bị Admin khóa thủ công (Availability) không
             const isBlocked = await tx.service_availability.findFirst({
                 where: {
                     service_id,
-                    date: { gte: start, lt: end },
+                    date: { gte: check_in, lt: check_out },
                     is_available: false,
                 },
             });
@@ -141,12 +135,22 @@ class BookingService {
                     400,
                 );
 
-            // 4. Tính tổng tiền (Price * số đêm)
-            const diffDays = Math.ceil(
-                Math.abs(end.getTime() - start.getTime()) /
-                    (1000 * 60 * 60 * 24),
-            );
-            const totalPrice = Number(service.price) * diffDays;
+            const dateIn = startOfDay(new Date(check_in));
+            const dateOut = startOfDay(new Date(check_out));
+
+            // 2. Tính số đêm (Chênh lệch ngày)
+            let nights = differenceInDays(dateOut, dateIn);
+
+            // 3. Ràng buộc logic: Ít nhất phải ở 1 đêm nếu ngày giống nhau hoặc lỗi UI
+            if (nights <= 0) nights = 1;
+
+            // 4. Tính tổng tiền (Sử dụng đơn giá từ Database, không dùng từ Client gửi lên)
+            const totalPrice = Number(service.price) * nights;
+
+            let paymentStatus = "unpaid";
+            if (payment_method === "vnpay") {
+                paymentStatus = "pending";
+            }
 
             // 5. Tạo đơn hàng
             const booking = await tx.bookings.create({
@@ -156,16 +160,36 @@ class BookingService {
                     customer_email: data.customer_email,
                     customer_phone: data.customer_phone,
                     guest_count: guests,
-                    check_in: start,
-                    check_out: end,
+                    check_in: check_in,
+                    check_out: check_out,
                     total_price: totalPrice,
                     status: "pending",
+                    payment_status: paymentStatus,
+                    payment_method: payment_method,
                     note: data.note,
                 },
                 include: { service: true },
             });
 
-            return booking;
+            let paymentUrl = null;
+            if (payment_method === "vnpay") {
+                paymentUrl = await paymentController.vnpay.buildPaymentUrl({
+                    vnp_Amount: totalPrice,
+                    vnp_IpAddr: "127.0.0.1",
+                    vnp_TxnRef: booking.id,
+                    vnp_OrderInfo: `Thanh toán đơn hàng ${booking.id}`,
+                    vnp_OrderType: ProductCode.Other,
+                    vnp_ReturnUrl:
+                        "http://localhost:8000/api/payment/check-payment-vnpay?type=booking",
+                    vnp_Locale: VnpLocale.VN,
+                    vnp_CreateDate: dateFormat(new Date()),
+                });
+            }
+
+            return {
+                ...booking,
+                payment_url: paymentUrl,
+            };
         });
     }
 

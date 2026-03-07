@@ -91,6 +91,21 @@ const data = {
             ],
         },
         {
+            title: "Quản lý đặt phòng",
+            url: "#",
+            icon: ShoppingBag,
+            items: [
+                {
+                    title: "Danh sách đặt phòng",
+                    url: "/admin/bookings",
+                },
+                {
+                    title: "Danh sách khóa phòng",
+                    url: "/admin/bookings/block",
+                },
+            ],
+        },
+        {
             title: "Quản lý dịch vụ",
             url: "#",
             icon: Briefcase,

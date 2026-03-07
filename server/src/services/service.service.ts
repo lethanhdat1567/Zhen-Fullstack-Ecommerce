@@ -19,6 +19,7 @@ export interface ServiceTranslationInput {
 export interface CreateServiceDTO {
     capacity?: number;
     price?: number;
+    sale_price?: number;
     thumbnail?: string;
     status?: ServiceStatus;
     category_id: string;
@@ -32,6 +33,7 @@ export interface CreateServiceDTO {
 export interface UpdateServiceDTO {
     capacity?: number;
     price?: number;
+    sale_price?: number;
     thumbnail?: string;
     status?: ServiceStatus;
     category_id?: string;
@@ -136,6 +138,7 @@ class ServiceService {
                     data: {
                         capacity: data.capacity,
                         price: data.price,
+                        sale_price: data.sale_price,
                         thumbnail: data.thumbnail,
                         status: data.status ?? "active",
                         category_id: data.category_id,
@@ -324,6 +327,9 @@ class ServiceService {
                             capacity: data.capacity,
                         }),
                         ...(data.price !== undefined && { price: data.price }),
+                        ...(data.sale_price !== undefined && {
+                            sale_price: data.sale_price,
+                        }),
                         ...(data.thumbnail !== undefined && {
                             thumbnail: data.thumbnail,
                         }),

@@ -25,6 +25,7 @@ import checkoutRouter from "./order.route";
 import likeRouter from "./favorite.route";
 import paymentRouter from "./payment.route";
 import bookingRouter from "./booking.route";
+import serviceAvailableRouter from "./availability.route";
 
 const router = express.Router();
 
@@ -54,6 +55,7 @@ router.use("/orders", checkoutRouter);
 router.use("/favorites", likeRouter);
 router.use("/payment", paymentRouter);
 router.use("/bookings", bookingRouter);
+router.use("/service-available", serviceAvailableRouter);
 
 // Health route
 router.get("/health", (req, res) => {

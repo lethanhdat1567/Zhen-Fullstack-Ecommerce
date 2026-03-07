@@ -34,6 +34,8 @@ export type Service = {
     content: string | null;
     sku: string;
     price: string;
+    sale_price: string;
+    capacity: number;
     category_id: string;
     thumbnail: string | null;
     status: "active" | "inactive";

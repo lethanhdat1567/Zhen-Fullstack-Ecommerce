@@ -3,35 +3,50 @@ import { AppError } from "@/utils/appError";
 
 export interface BlockDatesDTO {
     service_id: string;
-    start_date: string; // ISO string "2026-03-10"
-    end_date: string; // ISO string "2026-03-15"
+    start_date: Date;
+    end_date: Date;
 }
 
 class AvailabilityService {
     async blockDates(data: BlockDatesDTO) {
         const { service_id, start_date, end_date } = data;
+
+        // 1. Khởi tạo Date object
         const start = new Date(start_date);
         const end = new Date(end_date);
 
-        if (start >= end)
-            throw new AppError("End date must be after start date", 400);
+        // 2. CHUẨN HÓA: Đưa về 00:00:00 giờ UTC để tránh lệch ngày do múi giờ (GMT+7 chẳng hạn)
+        start.setUTCHours(0, 0, 0, 0);
+        end.setUTCHours(0, 0, 0, 0);
 
-        // Tạo mảng các ngày cần chặn
-        const datesToBlock: any[] = [];
-        let current = new Date(start);
-
-        while (current < end) {
-            datesToBlock.push({
-                service_id,
-                date: new Date(current),
-                is_available: false,
-            });
-            current.setDate(current.getDate() + 1);
+        // 3. Kiểm tra logic: Start không được lớn hơn End
+        if (start > end) {
+            throw new AppError(
+                "Ngày kết thúc không được trước ngày bắt đầu",
+                400,
+            );
         }
 
+        const datesToBlock: any[] = [];
+        const current = new Date(start);
+
+        // 4. Vòng lặp <= đảm bảo lấy cả ngày cuối (End Date)
+        // Nếu start === end, vòng lặp chạy đúng 1 lần.
+        while (current <= end) {
+            datesToBlock.push({
+                service_id,
+                date: new Date(current), // Clone object date hiện tại
+                is_available: false,
+            });
+
+            // Tăng thêm 1 ngày
+            current.setUTCDate(current.getUTCDate() + 1);
+        }
+
+        // 5. Lưu vào DB
         return await prisma.service_availability.createMany({
             data: datesToBlock,
-            skipDuplicates: true,
+            skipDuplicates: true, // Tránh lỗi nếu ngày đó đã bị block trước đó
         });
     }
 
@@ -42,13 +57,17 @@ class AvailabilityService {
         });
     }
 
-    // Hiển thị danh sách các service kèm số lượng ngày đang bị chặn
     async listSummary(lang?: string) {
-        return await prisma.services.findMany({
-            where: { deleted_at: null },
+        const services = await prisma.services.findMany({
+            where: {
+                availability: {
+                    some: {},
+                },
+            },
             select: {
                 id: true,
                 capacity: true,
+                thumbnail: true,
                 translations: lang
                     ? {
                           where: { language: { code: lang } },
@@ -63,8 +82,19 @@ class AvailabilityService {
                 },
             },
         });
-    }
 
+        if (lang) {
+            return services.map((s) => ({
+                id: s.id,
+                capacity: s.capacity,
+                thumbnail: s.thumbnail,
+                title: s.translations[0]?.title || null,
+                blocked_count: s._count.availability,
+            }));
+        }
+
+        return services;
+    }
     async unblockDate(id: string) {
         return await prisma.service_availability.delete({
             where: { id },
