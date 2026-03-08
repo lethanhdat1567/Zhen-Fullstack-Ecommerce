@@ -6,13 +6,14 @@ import { Button } from "@/components/ui/button";
 import { HttpError } from "@/lib/http/errors";
 import { availableService } from "@/services/availableService";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 function CreateBlockPage() {
     const router = useRouter();
     const [range, setRange] = useState<any>(undefined);
     const [serviceId, setServiceId] = useState("");
+    const [disables, setDisable] = useState<Date[]>([]);
 
     function handleDisable() {
         try {
@@ -35,12 +36,20 @@ function CreateBlockPage() {
         }
     }
 
+    useEffect(() => {
+        if (serviceId) {
+            availableService.getCalendar(serviceId).then((res) => {
+                setDisable(res.map((item: any) => new Date(item.date)));
+            });
+        }
+    }, [serviceId]);
+
     return (
         <div>
             <SelectService value={serviceId} onChange={setServiceId} />
             <CalendarRangeInput
                 range={range}
-                disableDates={[]}
+                disableDates={disables}
                 setRange={setRange}
             />
             <Button onClick={handleDisable}>Disable</Button>

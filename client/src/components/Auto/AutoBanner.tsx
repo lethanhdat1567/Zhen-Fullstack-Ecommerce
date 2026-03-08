@@ -2,6 +2,8 @@
 
 import { images } from "@/assets/images";
 import BreadcrumbBanner from "@/components/Auto/BreadcrumbBanner";
+import { Button } from "@/components/ui/button";
+import { TextSearch } from "lucide-react";
 import Image from "next/image";
 
 type Props = {
@@ -27,7 +29,12 @@ function AutoBanner({ breadcrumbData = [], hideBanner = false }: Props) {
                 </div>
             )}
 
-            <BreadcrumbBanner breadcrumbData={breadcrumbData} />
+            <div className="container mt-6 flex items-center justify-between">
+                <BreadcrumbBanner breadcrumbData={breadcrumbData} />
+                <Button variant={"outline"}>
+                    <TextSearch /> Tìm kiếm và chọn lọc
+                </Button>
+            </div>
         </div>
     );
 }

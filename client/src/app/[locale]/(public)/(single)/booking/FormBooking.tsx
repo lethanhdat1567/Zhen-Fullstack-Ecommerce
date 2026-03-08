@@ -1,22 +1,26 @@
 "use client";
 
-import bookingSchema from "@/app/[locale]/(public)/(header-bg)/booking/bookingSchema";
+import bookingSchema from "@/app/[locale]/(public)/(single)/booking/bookingSchema";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button"; // Giả định bạn có component Button
+import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
-import SelectService from "@/app/[locale]/(public)/(header-bg)/booking/components/SelectService/SelectService";
-import { DatePickerWithRange } from "@/app/[locale]/(public)/(header-bg)/booking/components/DateRangePicker/DateRangePicker";
+import SelectService from "@/app/[locale]/(public)/(single)/booking/components/SelectService/SelectService";
+import { DatePickerWithRange } from "@/app/[locale]/(public)/(single)/booking/components/DateRangePicker/DateRangePicker";
 import { Textarea } from "@/components/ui/textarea";
 import { HttpError } from "@/lib/http/errors";
-import SelectPaymentMethod from "@/app/[locale]/(public)/(header-bg)/booking/components/SelectPaymentMethod/SelectPaymentMethod";
+import SelectPaymentMethod from "@/app/[locale]/(public)/(single)/booking/components/SelectPaymentMethod/SelectPaymentMethod";
 import { bookingService } from "@/services/bookingService";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
+import { toast } from "sonner";
+import { useAuthStore } from "@/store/useAuthStore";
+import { userService } from "@/services/userService";
 
 function FormBooking() {
+    const user = useAuthStore((state) => state.user);
     const searchParams = useSearchParams();
     const service_id = searchParams.get("id");
 
@@ -38,6 +42,15 @@ function FormBooking() {
         if (service_id) form.setValue("service_id", service_id);
     }, [service_id]);
 
+    useEffect(() => {
+        if (user) {
+            userService.detail(user.id).then((res) => {
+                form.setValue("customer_name", res.full_name || "");
+                form.setValue("customer_email", res.email);
+            });
+        }
+    }, [user]);
+
     async function onSubmit(data: z.infer<typeof bookingSchema>) {
         try {
             const res = await bookingService.create(data);
@@ -45,11 +58,15 @@ function FormBooking() {
             if (res.payment_url) {
                 router.push(res.payment_url);
             } else {
+                router.push("/order/confirmation?type=service");
             }
+            toast.success("Dat phong thanh cong");
         } catch (error) {
             if (error instanceof HttpError) {
                 if (error.status === 400) {
-                    form.setError("note", { message: error.message });
+                    form.setError("check_in", {
+                        message: "Chúng tôi chỉ nhận đặt phòng qua đêm.",
+                    });
                 }
             }
         }

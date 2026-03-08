@@ -99,6 +99,7 @@ class OrderService {
                 },
                 include: { order_items: true },
             });
+            console.log(userId);
 
             if (userId) {
                 const cartItemIds = items

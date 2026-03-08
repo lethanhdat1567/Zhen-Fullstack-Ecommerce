@@ -1,5 +1,6 @@
-import FormBooking from "@/app/[locale]/(public)/(header-bg)/booking/FormBooking";
+import FormBooking from "@/app/[locale]/(public)/(single)/booking/FormBooking";
 import AutoBanner from "@/components/Auto/AutoBanner";
+import { Card, CardContent } from "@/components/ui/card";
 
 function BookingPage() {
     return (
@@ -14,7 +15,11 @@ function BookingPage() {
                 hideBanner
             />
             <div className="container">
-                <FormBooking />
+                <Card>
+                    <CardContent>
+                        <FormBooking />
+                    </CardContent>
+                </Card>
             </div>
         </div>
     );

@@ -8,7 +8,19 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Booking, bookingService } from "@/services/bookingService";
-import bookingColumns from "@/app/admin/orders/columns";
+import bookingColumns from "@/app/admin/bookings/columns";
+import DisableDialog from "@/app/admin/bookings/components/DisableDialog/DisableDialog";
+import { HttpError } from "@/lib/http/errors";
+import { availableService } from "@/services/availableService";
+
+type DisableData = {
+    service: {
+        id: string;
+        thumbnail: string;
+        title: string;
+    };
+    disables: Date[];
+};
 
 function AdminBooking() {
     const router = useRouter();
@@ -21,6 +33,15 @@ function AdminBooking() {
     const [totalPages, setTotalPages] = useState(0);
     const [search, setSearch] = useState("");
     const [loading, setLoading] = useState(true);
+    const [showDialog, setShowDialog] = useState(false);
+    const [disableData, setDisableData] = useState<DisableData>({
+        service: {
+            id: "",
+            thumbnail: "",
+            title: "",
+        },
+        disables: [],
+    });
 
     const fetchBooking = async () => {
         try {
@@ -54,6 +75,59 @@ function AdminBooking() {
         }
     }
 
+    function handleShowDialog(service: any, dates: Date[]) {
+        setShowDialog(true);
+        setDisableData({
+            service,
+            disables: dates,
+        });
+    }
+
+    function handleDestroyDisable(date: Date) {
+        setDisableData((prev) => ({
+            ...prev,
+            disables: prev.disables.filter((d) => d !== date),
+        }));
+    }
+
+    async function handleSubmit() {
+        try {
+            setShowDialog(false);
+            setDisableData({
+                service: {
+                    id: "",
+                    thumbnail: "",
+                    title: "",
+                },
+                disables: [],
+            });
+            const payload = {
+                service_id: disableData.service.id,
+                start_date: disableData.disables[0],
+                end_date: disableData.disables[disableData.disables.length - 1],
+            };
+
+            await availableService.blockDates(payload);
+
+            toast.success("Block dates successfully!");
+            setShowDialog(false);
+            setDisableData({
+                service: {
+                    id: "",
+                    thumbnail: "",
+                    title: "",
+                },
+                disables: [],
+            });
+            fetchBooking();
+        } catch (error) {
+            console.log(error);
+            if (error instanceof HttpError) {
+                toast.error(error.message);
+            }
+        }
+    }
+
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         fetchBooking();
@@ -84,6 +158,7 @@ function AdminBooking() {
                                 onRefreshs: () => {
                                     fetchBooking();
                                 },
+                                onShowDialog: handleShowDialog,
                             }) as any
                         }
                         data={bookings}
@@ -96,6 +171,14 @@ function AdminBooking() {
                     />
                 </div>
             )}
+
+            <DisableDialog
+                showDialog={showDialog}
+                setShowDialog={setShowDialog}
+                disables={disableData.disables}
+                onDestroyDisable={handleDestroyDisable}
+                onSubmit={handleSubmit}
+            />
         </div>
     );
 }

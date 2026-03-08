@@ -26,33 +26,29 @@ function BreadcrumbBanner({ breadcrumbData }: Props) {
     ];
 
     return (
-        <div className="container mt-6">
-            <Breadcrumb>
-                <BreadcrumbList>
-                    {fullBreadcrumb.map((item, index) => {
-                        const isLast = index === fullBreadcrumb.length - 1;
+        <Breadcrumb>
+            <BreadcrumbList>
+                {fullBreadcrumb.map((item, index) => {
+                    const isLast = index === fullBreadcrumb.length - 1;
 
-                        return (
-                            <div key={index} className="flex items-center">
-                                <BreadcrumbItem>
-                                    {isLast || !item.href ? (
-                                        <BreadcrumbPage>
-                                            {item.title}
-                                        </BreadcrumbPage>
-                                    ) : (
-                                        <Link href={item.href}>
-                                            {item.title}
-                                        </Link>
-                                    )}
-                                </BreadcrumbItem>
+                    return (
+                        <div key={index} className="flex items-center">
+                            <BreadcrumbItem>
+                                {isLast || !item.href ? (
+                                    <BreadcrumbPage>
+                                        {item.title}
+                                    </BreadcrumbPage>
+                                ) : (
+                                    <Link href={item.href}>{item.title}</Link>
+                                )}
+                            </BreadcrumbItem>
 
-                                {!isLast && <BreadcrumbSeparator />}
-                            </div>
-                        );
-                    })}
-                </BreadcrumbList>
-            </Breadcrumb>
-        </div>
+                            {!isLast && <BreadcrumbSeparator />}
+                        </div>
+                    );
+                })}
+            </BreadcrumbList>
+        </Breadcrumb>
     );
 }
 

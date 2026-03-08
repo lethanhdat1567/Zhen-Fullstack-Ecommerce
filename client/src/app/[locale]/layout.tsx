@@ -34,7 +34,7 @@ export default async function LocaleLayout({
                 <CartProvider>
                     <div className={` ${montserrat.className}`}>
                         {children}
-                        <QuickContact />
+                        {/* <QuickContact /> */}
                     </div>
                     <LandingModal />
                 </CartProvider>

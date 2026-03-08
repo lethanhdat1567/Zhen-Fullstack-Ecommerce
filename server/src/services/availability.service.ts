@@ -8,18 +8,22 @@ export interface BlockDatesDTO {
 }
 
 class AvailabilityService {
+    private normalizeDate(date: string | Date) {
+        const d = new Date(date);
+
+        return new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    }
+
     async blockDates(data: BlockDatesDTO) {
         const { service_id, start_date, end_date } = data;
 
-        // 1. Khởi tạo Date object
-        const start = new Date(start_date);
-        const end = new Date(end_date);
+        const start = this.normalizeDate(start_date);
+        const end = this.normalizeDate(end_date);
 
-        // 2. CHUẨN HÓA: Đưa về 00:00:00 giờ UTC để tránh lệch ngày do múi giờ (GMT+7 chẳng hạn)
         start.setUTCHours(0, 0, 0, 0);
         end.setUTCHours(0, 0, 0, 0);
+        console.log(start, end);
 
-        // 3. Kiểm tra logic: Start không được lớn hơn End
         if (start > end) {
             throw new AppError(
                 "Ngày kết thúc không được trước ngày bắt đầu",
@@ -30,23 +34,20 @@ class AvailabilityService {
         const datesToBlock: any[] = [];
         const current = new Date(start);
 
-        // 4. Vòng lặp <= đảm bảo lấy cả ngày cuối (End Date)
-        // Nếu start === end, vòng lặp chạy đúng 1 lần.
         while (current <= end) {
             datesToBlock.push({
                 service_id,
-                date: new Date(current), // Clone object date hiện tại
+                date: new Date(current),
                 is_available: false,
             });
 
-            // Tăng thêm 1 ngày
             current.setUTCDate(current.getUTCDate() + 1);
         }
 
         // 5. Lưu vào DB
         return await prisma.service_availability.createMany({
             data: datesToBlock,
-            skipDuplicates: true, // Tránh lỗi nếu ngày đó đã bị block trước đó
+            skipDuplicates: true,
         });
     }
 

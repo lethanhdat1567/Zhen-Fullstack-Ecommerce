@@ -122,10 +122,6 @@ export const useFavoriteStore = create<FavoriteState>()(
                             const serverItems =
                                 await favoriteService.getFavorites();
                             set({ items: serverItems || [] });
-
-                            console.log(
-                                "Synced with type-safe body successfully",
-                            );
                         } catch (error) {
                             console.error("Sync failed:", error);
                         }

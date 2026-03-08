@@ -12,6 +12,8 @@ import {
     ServiceAvailabilitySummary,
 } from "@/services/availableService";
 import serviceAvailabilityColumns from "@/app/admin/bookings/block/columns";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 function BookingBlockPage() {
     const router = useRouter();
@@ -58,6 +60,9 @@ function BookingBlockPage() {
         <div>
             <div className="flex items-center justify-between">
                 <Title title="Danh sách đơn hàng" />
+                <Link href={"/admin/bookings/block/create"}>
+                    <Button>Create</Button>
+                </Link>
             </div>
             {loading ? (
                 <LoadingTable />

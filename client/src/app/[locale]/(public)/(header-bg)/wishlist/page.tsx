@@ -13,6 +13,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "@/i18n/navigation";
 import { resolveMediaSrc } from "@/lib/image";
+import { useCartStore } from "@/store/useCartStore";
 import { useFavoriteStore } from "@/store/useFavoriteStore";
 import { cartUtils } from "@/utils/cartUtils";
 import { HeartOff, Trash2 } from "lucide-react";
@@ -21,6 +22,7 @@ import Image from "next/image";
 function FavoritePage() {
     const favoriteItems = useFavoriteStore((state) => state.items);
     const toggleFavorite = useFavoriteStore((state) => state.toggleFavorite);
+    const addItem = useCartStore((state) => state.addItem);
 
     // Lọc dữ liệu theo loại
     const products = favoriteItems.filter((item) => item.type === "product");
@@ -91,11 +93,29 @@ function FavoritePage() {
                                 )
                             ) : (
                                 <span className="text-sm font-medium text-blue-600">
-                                    Sẵn sàng
+                                    Còn phòng
                                 </span>
                             )}
                         </TableCell>
                         <TableCell className="text-right">
+                            {item.type === "product" && (
+                                <Button
+                                    onClick={async () => {
+                                        await addItem(
+                                            item.id,
+                                            1,
+                                            item.stock as number,
+                                        );
+                                    }}
+                                >
+                                    Thêm vào giỏ hàng
+                                </Button>
+                            )}
+                            {item.type === "service" && (
+                                <Link href={`/booking?id=${item.id}`}>
+                                    <Button>Đặt phòng</Button>
+                                </Link>
+                            )}
                             <Button
                                 variant="ghost"
                                 size="icon"

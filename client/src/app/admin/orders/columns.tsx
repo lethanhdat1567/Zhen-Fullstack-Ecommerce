@@ -1,122 +1,122 @@
 import { createActionsColumn } from "@/app/admin/components/ActionColumn/ActionColumn";
 import { createSelectColumn } from "@/app/admin/components/CreateSelectColumn/CreateSelectColumn";
 import { SortableHeader } from "@/app/admin/components/SortableHeader/SortableHeader";
-import { GetPaymentStatusBadge } from "@/app/admin/orders/components/GetPaymentMethodBadge/GetPaymentMethodBadge"; // Dùng chung badge với order
-import StatusSelect from "@/app/admin/orders/components/StatusSelect/StatusSelect"; // Tái sử dụng hoặc tạo StatusSelect riêng cho Booking
-import { Booking, bookingService } from "@/services/bookingService";
+import { GetPaymentStatusBadge } from "@/app/admin/orders/components/GetPaymentMethodBadge/GetPaymentMethodBadge";
+import StatusSelect from "@/app/admin/orders/components/StatusSelect/StatusSelect";
+import { orderService } from "@/services/orderService";
+import { formatDateVN } from "@/utils/formatDate";
 import { toast } from "sonner";
-import { format } from "date-fns";
+
+export type Order = {
+    id: string;
+    user_id?: string | null;
+    full_name: string;
+    email?: string | null;
+    phone_number: string;
+    shipping_address: string;
+    note?: string | null;
+    total_amount: string;
+    status: "pending" | "processing" | "done" | "cancelled";
+    payment_method: string;
+    payment_status: string;
+    created_at: string;
+    updated_at?: string;
+    _count: {
+        order_items: number;
+    };
+};
 
 type Props = { router: any; onRefreshs: () => void };
 
-const bookingColumns = ({ router, onRefreshs }: Props) => [
+const orderColumns = ({ router, onRefreshs }: Props) => [
     createSelectColumn(),
 
-    // Mã đặt phòng
+    // Order ID
     {
         accessorKey: "id",
-        header: "Mã đặt phòng",
-        cell: ({ row }: { row: any }) => (
-            <div
-                className="max-w-24 truncate font-mono text-xs"
-                title={row.original.id}
-            >
-                {row.original.id.slice(0, 8)}...
-            </div>
-        ),
-    },
-
-    // Dịch vụ (Service)
-    {
-        accessorKey: "service.title",
-        header: "Dịch vụ",
-        cell: ({ row }: { row: any }) => (
-            <div className="font-medium text-blue-600">
-                {row.original.service?.title || "N/A"}
-            </div>
-        ),
-    },
-
-    // Khách hàng
-    {
-        accessorKey: "customer_name",
-        header: ({ column }: { column: any }) => (
-            <SortableHeader column={column} title="Khách hàng" />
-        ),
-        cell: ({ row }: { row: any }) => (
-            <div className="flex flex-col">
-                <span className="font-medium">
-                    {row.original.customer_name}
-                </span>
-                <span className="text-xs text-gray-500">
-                    {row.original.customer_phone}
-                </span>
-            </div>
-        ),
-    },
-
-    // Thời gian lưu trú (Check-in - Check-out)
-    {
-        header: "Lưu trú",
+        header: "Mã đơn",
         cell: ({ row }: { row: any }) => {
-            const start = new Date(row.original.check_in);
-            const end = new Date(row.original.check_out);
+            const id = row.original.id;
+            const shortId = `${id.slice(0, 8)}...`;
+
             return (
-                <div className="space-y-1 text-xs">
-                    <div className="flex items-center">
-                        <span className="w-8 font-bold text-green-600">
-                            IN:
-                        </span>
-                        {format(start, "dd/MM/yyyy")}
-                    </div>
-                    <div className="flex items-center">
-                        <span className="w-8 font-bold text-red-600">OUT:</span>
-                        {format(end, "dd/MM/yyyy")}
-                    </div>
+                <div className="max-w-32 truncate" title={id}>
+                    {shortId}
                 </div>
             );
         },
     },
 
-    // Số khách
+    // Customer
     {
-        accessorKey: "guest_count",
-        header: "Khách",
+        accessorKey: "full_name",
+        header: ({ column }: { column: any }) => (
+            <SortableHeader column={column} title="Khách hàng" />
+        ),
         cell: ({ row }: { row: any }) => (
-            <div className="text-center font-medium">
-                {row.original.guest_count}
+            <div className="flex flex-col">
+                <span className="font-medium">{row.original.full_name}</span>
+                <span className="text-xs text-gray-500">
+                    {row.original.phone_number}
+                </span>
             </div>
         ),
     },
 
-    // Tổng tiền
+    // Email
     {
-        accessorKey: "total_price",
+        accessorKey: "email",
+        header: ({ column }: { column: any }) => (
+            <SortableHeader column={column} title="Email" />
+        ),
+        cell: ({ row }: { row: any }) => row.original.email || "-",
+    },
+
+    // Total
+    {
+        accessorKey: "total_amount",
         header: ({ column }: { column: any }) => (
             <SortableHeader column={column} title="Tổng tiền" />
         ),
         cell: ({ row }: { row: any }) => {
-            const price = Number(row.original.total_price);
+            const amount = Number(row.original.total_amount);
+
             return (
-                <span className="font-bold text-orange-600">
-                    {price.toLocaleString("vi-VN")}₫
+                <span className="font-medium">
+                    {amount.toLocaleString("vi-VN")}₫
                 </span>
             );
         },
     },
 
-    // Thanh toán
+    // Items count
     {
-        accessorKey: "payment_status",
-        header: "Thanh toán",
+        accessorKey: "_count.order_items",
+        header: "Sản phẩm",
         cell: ({ row }: { row: any }) => (
-            <div className="flex flex-col gap-1">
-                <GetPaymentStatusBadge status={row.original.payment_status} />
-            </div>
+            <span>{row.original._count?.order_items || 0}</span>
         ),
     },
 
-    // Trạng thái đơn đặt
+    // Payment method
+    {
+        accessorKey: "payment_method",
+        header: "Thanh toán",
+        cell: ({ row }: { row: any }) => (
+            <span className="uppercase">{row.original.payment_method}</span>
+        ),
+    },
+
+    // Payment Status
+    {
+        accessorKey: "paymentStatus",
+        header: "Trạng thái thanh toán",
+        cell: ({ row }: { row: any }) => (
+            <GetPaymentStatusBadge status={row.original.payment_status} />
+        ),
+    },
+
+    // Status
     {
         accessorKey: "status",
         header: "Trạng thái",
@@ -124,33 +124,37 @@ const bookingColumns = ({ router, onRefreshs }: Props) => [
             <StatusSelect
                 value={row.original.status}
                 onChange={async (value) => {
-                    try {
-                        await bookingService.update(row.original.id, {
-                            status: value,
-                        });
-                        toast.success("Cập nhật trạng thái thành công");
-                        onRefreshs();
-                    } catch (error) {
-                        toast.error("Cập nhật thất bại");
-                    }
+                    await orderService.updateStatus(row.original.id, value);
+                    toast.success("Cập nhật trạng thái thành công");
+                    onRefreshs();
                 }}
             />
         ),
     },
 
+    // Created at
+    {
+        accessorKey: "created_at",
+        header: ({ column }: { column: any }) => (
+            <SortableHeader column={column} title="Ngày đặt hàng" />
+        ),
+        cell: ({ row }: { row: any }) => (
+            <span>{formatDateVN(row.original.created_at)}</span>
+        ),
+    },
+
     // Actions
-    createActionsColumn<Booking>({
+    createActionsColumn<Order>({
         onDetail: (row) => {
-            router.push(`/admin/bookings/${row.id}`);
+            router.push(`/admin/orders/${row.id}`);
         },
+
         onDelete: async (row) => {
-            if (confirm("Bạn có chắc chắn muốn xóa lịch đặt này?")) {
-                await bookingService.delete(row.id);
-                toast.success("Xóa thành công!");
-                onRefreshs();
-            }
+            await orderService.destroy(row.id);
+            toast.success("Xóa đơn hàng thành công!");
+            onRefreshs();
         },
     }),
 ];
 
-export default bookingColumns;
+export default orderColumns;

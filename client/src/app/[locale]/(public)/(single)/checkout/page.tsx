@@ -22,6 +22,7 @@ function CheckoutPage() {
     const locale = useLocale();
     const router = useRouter();
     const routerOriginal = useRouterOriginal();
+    const clearCart = useCartStore((state) => state.clearCart);
 
     const carts = useCartStore((state) => state.items);
     const form = useForm<z.infer<typeof checkoutSchema>>({
@@ -67,6 +68,7 @@ function CheckoutPage() {
             } else {
                 router.push("/order/confirmation");
             }
+            clearCart();
         } catch (error) {
             console.log(error);
         }

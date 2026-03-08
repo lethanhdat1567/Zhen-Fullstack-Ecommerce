@@ -1,12 +1,18 @@
 import orderController from "@/controllers/order.controller";
 import { authMiddleware } from "@/middlewares/auth.middleware";
+import { optionalAuthMiddleware } from "@/middlewares/authOptional.middleware";
 import { checkRole } from "@/middlewares/checkRole.middleware";
 import { asyncHandler } from "@/utils/asyncHandler";
 import { Router } from "express";
 
 const router = Router();
 
-router.post("/checkout", asyncHandler(orderController.checkout));
+router.post(
+    "/checkout",
+    optionalAuthMiddleware,
+    asyncHandler(orderController.checkout),
+);
+
 router.use(authMiddleware);
 
 // Routes cho User

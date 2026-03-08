@@ -45,11 +45,19 @@ const bookingSchema = z
     })
     .refine(
         (data) => {
-            // Vì đã là kiểu Date nên có thể so sánh trực tiếp
-            return data.check_out > data.check_in;
+            if (!data.check_out) return true;
+
+            const checkIn = new Date(data.check_in);
+            const checkOut = new Date(data.check_out);
+
+            checkIn.setHours(0, 0, 0, 0);
+            checkOut.setHours(0, 0, 0, 0);
+
+            return checkOut >= checkIn;
         },
         {
-            message: "Ngày trả phòng phải sau ngày nhận phòng.",
+            message:
+                "Ngày trả phải cùng ngày hoặc sau ngày nhận. (Chúng tôi chỉ nhận phòng qua đêm)",
             path: ["check_out"],
         },
     );

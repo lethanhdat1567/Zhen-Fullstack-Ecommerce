@@ -34,7 +34,7 @@ function LikeBtn({ item, type }: Props) {
         <Button
             variant={"outline"}
             size={"icon-lg"}
-            className={`invisible absolute top-4 right-4 rounded-full opacity-0 transition duration-1000 group-hover:visible group-hover:opacity-100 ${isLiked ? "visible opacity-100" : ""}`}
+            className="rounded-full"
             onClick={handleToggleLike}
         >
             <Heart

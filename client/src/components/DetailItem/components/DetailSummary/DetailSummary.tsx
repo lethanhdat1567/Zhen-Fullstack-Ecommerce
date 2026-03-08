@@ -2,10 +2,9 @@ import { images } from "@/assets/images";
 import Image from "next/image";
 import { Service } from "@/services/service";
 import { Product } from "@/services/productService";
-import { Button } from "@/components/ui/button";
-import { Heart } from "lucide-react";
 import AddToCartBtn from "@/components/DetailItem/components/DetailSummary/components/AddToCartBtn/AddToCartBtn";
 import { Link } from "@/i18n/navigation";
+import LikeBtn from "@/components/DetailItem/components/DetailSummary/components/LikeBtn/LikeBtn";
 
 type Props = {
     item: Service | Product;
@@ -19,13 +18,7 @@ function DetailSummary({ item, type }: Props) {
                 <h1 className="flex-1 text-xl font-medium md:text-2xl lg:text-[25px]">
                     {item.title}
                 </h1>
-                <Button
-                    variant={"outline"}
-                    size={"icon-lg"}
-                    className="rounded-full"
-                >
-                    <Heart />
-                </Button>
+                <LikeBtn item={item as any} type={type} />
             </div>
 
             <Image src={images.lotus} height={25} width={116} alt="" />
