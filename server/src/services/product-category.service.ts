@@ -1,12 +1,8 @@
 import { prisma } from "@/lib/prisma";
-import { paginate } from "@/services/pagination.service";
+import { paginate, PaginationQuery } from "@/services/pagination.service";
 import { checkSlugConflict } from "@/services/slug.service";
 import { AppError } from "@/utils/appError";
 import { Prisma } from "@prisma/client";
-
-/* =========================
-   TYPES
-========================= */
 
 export interface ProductCategoryTranslationDTO {
     language_code: string;
@@ -25,38 +21,24 @@ export interface UpdateProductCategoryDTO {
 }
 
 export interface ListProductCategoryQuery {
-    lang?: string; // language code
+    lang?: string;
     search?: string;
     isActive?: string;
+    page?: string;
+    limit?: string;
 }
 
-/* =========================
-   SERVICE
-========================= */
-
 class ProductCategoryService {
-    /* =========================
-       HELPER
-    ========================= */
-
     private transformWithLang(category: any) {
         const { translations, ...rest } = category;
         const t = translations?.[0];
 
         return {
-            ...rest,
             name: t?.name ?? null,
             slug: t?.slug ?? null,
+            ...rest,
         };
     }
-
-    /* =========================
-       CREATE
-    ========================= */
-
-    /* =========================
-   CREATE
-========================= */
 
     async createCategory(data: CreateProductCategoryDTO) {
         try {
@@ -131,10 +113,6 @@ class ProductCategoryService {
         }
     }
 
-    /* =========================
-   UPDATE
-========================= */
-
     async updateCategory(id: string, data: UpdateProductCategoryDTO) {
         try {
             return await prisma.$transaction(async (tx) => {
@@ -207,17 +185,15 @@ class ProductCategoryService {
         }
     }
 
-    /* =========================
-       LIST
-    ========================= */
-
     async listCategories(query: ListProductCategoryQuery) {
         const { lang, search, isActive } = query;
 
+        // Status
         const where: Prisma.product_categoriesWhereInput = {
             ...(isActive !== undefined ? { status: "active" } : {}),
         };
 
+        // Search
         if (search) {
             where.translations = {
                 some: {
@@ -229,6 +205,7 @@ class ProductCategoryService {
             };
         }
 
+        // Check lange
         const include: Prisma.product_categoriesInclude = {
             translations: lang
                 ? {
@@ -239,11 +216,20 @@ class ProductCategoryService {
                 : true,
         };
 
-        const result = await paginate(prisma.product_categories, query as any, {
-            where,
-            include,
-            orderBy: { created_at: "desc" },
-        });
+        const paginationQuery: PaginationQuery = {
+            page: query.page,
+            limit: query.limit,
+        };
+
+        const result = await paginate(
+            prisma.product_categories,
+            paginationQuery,
+            {
+                where,
+                include,
+                orderBy: { created_at: "desc" },
+            },
+        );
 
         if (lang) {
             result.items = result.items.map((c: any) =>
@@ -253,10 +239,6 @@ class ProductCategoryService {
 
         return result;
     }
-
-    /* =========================
-       DETAIL
-    ========================= */
 
     async getDetail(slug: string, lang?: string) {
         const category = await prisma.product_categories.findFirst({
@@ -342,10 +324,6 @@ class ProductCategoryService {
 
         return updated;
     }
-
-    /* =========================
-       DELETE
-    ========================= */
 
     async deleteCategory(id: string) {
         try {

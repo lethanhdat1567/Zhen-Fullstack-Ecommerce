@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { paginate } from "@/services/pagination.service";
+import { ListQuery, QueryBuilder } from "@/services/queryBuilder.service";
 import { checkSlugConflict } from "@/services/slug.service";
 import { AppError } from "@/utils/appError";
 import { Prisma, ServiceStatus } from "@prisma/client";
@@ -102,17 +103,49 @@ class ServiceService {
 
         return {
             ...rest,
-            lang: t?.language?.code ?? null,
-            title: t?.title ?? null,
-            slug: t?.slug ?? null,
-            description: t?.description ?? null,
-            content: t?.content ?? null,
+            ...t,
             category: category
                 ? {
                       id: category.id,
                       name: ct?.name ?? null,
+                      slug: ct?.slug ?? null,
                   }
                 : null,
+        };
+    }
+
+    private buildInclude(lang?: string) {
+        return {
+            translations: lang
+                ? {
+                      where: {
+                          language: { code: lang },
+                      },
+                  }
+                : {
+                      include: {
+                          language: {
+                              select: { code: true },
+                          },
+                      },
+                  },
+            galleries: true,
+            category: {
+                include: {
+                    translations: lang
+                        ? {
+                              where: {
+                                  language: { code: lang },
+                              },
+                              include: {
+                                  language: {
+                                      select: { code: true },
+                                  },
+                              },
+                          }
+                        : false,
+                },
+            },
         };
     }
 
@@ -183,73 +216,22 @@ class ServiceService {
        LIST
     ========================= */
 
-    async listServices(query: ListServiceQuery) {
-        const { search, lang, categorySlug, isActive } = query;
+    async listServices(query: ListQuery) {
+        const { lang } = query;
 
-        const where: any = {
-            deleted_at: null,
-        };
+        const qb = new QueryBuilder(query)
+            .status()
+            .category()
+            .search()
+            .price()
+            .sort();
 
-        // ✅ filter active
-        if (isActive) {
-            where.status = "active";
-        }
-
-        // ✅ filter category slug
-        if (categorySlug) {
-            where.category = {
-                translations: {
-                    some: {
-                        slug: categorySlug,
-                        ...(lang && { language: { code: lang } }),
-                    },
-                },
-            };
-        }
-
-        // ✅ filter search + lang
-        if (search || lang) {
-            where.translations = {
-                some: {
-                    ...(lang && { language: { code: lang } }),
-                    ...(search && {
-                        OR: [
-                            { title: { contains: search } },
-                            { slug: { contains: search } },
-                        ],
-                    }),
-                },
-            };
-        }
+        const { where, orderBy } = qb.build();
 
         const result = await paginate(prisma.services, query, {
             where,
-            include: {
-                translations: lang
-                    ? { where: { language: { code: lang } } }
-                    : {
-                          include: {
-                              language: {
-                                  select: { code: true },
-                              },
-                          },
-                      },
-                category: {
-                    include: {
-                        translations: lang
-                            ? {
-                                  where: { language: { code: lang } },
-                                  include: {
-                                      language: {
-                                          select: { code: true },
-                                      },
-                                  },
-                              }
-                            : false,
-                    },
-                },
-            },
-            orderBy: { created_at: "desc" },
+            orderBy,
+            include: this.buildInclude(lang),
         });
 
         if (lang) {
@@ -268,7 +250,6 @@ class ServiceService {
     async getDetail(slug: string, lang?: string) {
         const service = await prisma.services.findFirst({
             where: {
-                deleted_at: null,
                 translations: {
                     some: {
                         slug,
@@ -276,19 +257,7 @@ class ServiceService {
                     },
                 },
             },
-            include: {
-                translations: lang
-                    ? { where: { language: { code: lang } } }
-                    : true,
-                galleries: { orderBy: { sort_order: "asc" } },
-                category: {
-                    include: {
-                        translations: lang
-                            ? { where: { language: { code: lang } } }
-                            : true,
-                    },
-                },
-            },
+            include: this.buildInclude(lang),
         });
 
         if (!service) return null;
@@ -439,20 +408,8 @@ class ServiceService {
 
     async getServiceById(id: string, lang?: string) {
         const service = await prisma.services.findFirst({
-            where: { id, deleted_at: null },
-            include: {
-                translations: lang
-                    ? { where: { language: { code: lang } } }
-                    : true,
-                galleries: { orderBy: { sort_order: "asc" } },
-                category: {
-                    include: {
-                        translations: lang
-                            ? { where: { language: { code: lang } } }
-                            : true,
-                    },
-                },
-            },
+            where: { id },
+            include: this.buildInclude(lang),
         });
 
         if (!service) {
@@ -490,8 +447,6 @@ class ServiceService {
         }
 
         const where: Prisma.servicesWhereInput = {
-            deleted_at: null,
-
             ...(isActive && { status: "active" }),
 
             translations: {

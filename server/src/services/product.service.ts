@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { paginate } from "@/services/pagination.service";
+import { ListQuery, QueryBuilder } from "@/services/queryBuilder.service";
 import { checkSlugConflict } from "@/services/slug.service";
 import { AppError } from "@/utils/appError";
 import { Prisma } from "@prisma/client";
@@ -12,46 +13,35 @@ export interface ProductTranslationInput {
     content?: string;
 }
 
-export interface CreateProductDTO {
-    category_id: string;
-
-    price: number;
-    sale_price?: number;
-    stock?: number;
-    thumbnail?: string;
-    status?: string;
-
-    translations: ProductTranslationInput[];
-    galleries?: {
-        file_url: string;
-        sort_order: number;
-    }[];
-}
-
-export interface UpdateProductDTO {
+interface BaseProductDTO {
     category_id?: string;
-
     price?: number;
     sale_price?: number;
     stock?: number;
     thumbnail?: string;
     status?: string;
+}
 
-    translations?: ProductTranslationInput[];
+export interface CreateProductDTO extends BaseProductDTO {
+    category_id: string;
+    price: number;
+
+    translations: ProductTranslationInput[];
+
     galleries?: {
-        id: string;
         file_url: string;
         sort_order: number;
     }[];
 }
 
-export interface ListProductQuery {
-    search?: string;
-    lang?: string;
-    page?: string;
-    limit?: string;
-    categorySlug?: string;
-    isActive?: boolean;
+export interface UpdateProductDTO extends BaseProductDTO {
+    translations?: ProductTranslationInput[];
+
+    galleries?: {
+        id?: string;
+        file_url: string;
+        sort_order: number;
+    }[];
 }
 
 export interface RelatedProductQuery {
@@ -64,50 +54,69 @@ export interface RelatedProductQuery {
     random?: boolean;
     samePriceRange?: boolean;
 }
-class ProductService {
-    /* =========================
-       HELPER
-    ========================= */
 
-    private transformWithLang(product: any) {
-        const { translations, category, category_id, ...rest } = product;
-        const t = translations?.[0];
-
-        let transformedCategory = null;
-
-        if (category) {
-            const ct = category.translations?.[0];
-
-            transformedCategory = {
-                id: category.id,
-                name: ct?.name ?? null,
-                slug: ct?.slug ?? null,
+export type ProductWithRelations = Prisma.productsGetPayload<{
+    include: {
+        translations: true;
+        galleries: true;
+        category: {
+            include: {
+                translations: true;
             };
-        }
+        };
+    };
+}>;
+
+class ProductService {
+    private transformWithLang(product: any) {
+        const { translations, category, ...rest } = product;
+
+        const t = translations?.[0];
+        const ct = category.translations?.[0];
 
         return {
             ...rest,
-            id: product.id,
-            price: product.price,
-            sale_price: product.sale_price,
-            stock: product.stock,
-            thumbnail: product.thumbnail,
-            status: product.status,
-            created_at: product.created_at,
-            updated_at: product.updated_at,
-
-            title: t?.title ?? null,
-            slug: t?.slug ?? null,
-            description: t?.description ?? null,
-            content: t?.content ?? null,
-
-            category: transformedCategory,
+            ...t,
+            category: {
+                id: category.id,
+                name: ct?.name ?? null,
+                slug: ct?.slug ?? null,
+            },
         };
     }
 
-    /* =========================
-       CREATE
-    ========================= */
+    private buildTranslationInclude(lang?: string) {
+        const include: Prisma.productsInclude = {
+            translations: lang
+                ? {
+                      where: {
+                          language: { code: lang },
+                      },
+                  }
+                : {
+                      include: {
+                          language: {
+                              select: { code: true },
+                          },
+                      },
+                  },
+            // galleries: true,
+
+            category: {
+                include: {
+                    translations: lang
+                        ? {
+                              where: {
+                                  language: { code: lang },
+                              },
+                          }
+                        : true,
+                },
+            },
+        };
+
+        return include;
+    }
 
     async createProduct(data: CreateProductDTO) {
         const {
@@ -201,80 +210,27 @@ class ProductService {
         }
     }
 
-    /* =========================
-       LIST
-    ========================= */
+    async listProducts(query: ListQuery) {
+        const { lang } = query;
 
-    async listProducts(query: ListProductQuery) {
-        const { search, lang, categorySlug, isActive } = query;
+        const qb = new QueryBuilder(query)
+            .status()
+            .category()
+            .search()
+            .price()
+            .sort()
+            .build();
 
-        const where: Prisma.productsWhereInput = {
-            ...(isActive && { status: "active" }),
-
-            ...(categorySlug && {
-                category: {
-                    translations: {
-                        some: {
-                            slug: categorySlug,
-                            ...(lang && {
-                                language: { code: lang },
-                            }),
-                        },
-                    },
-                },
-            }),
-
-            ...(lang && {
-                translations: {
-                    some: {
-                        language: { code: lang },
-                        ...(search && {
-                            OR: [
-                                { title: { contains: search } },
-                                { slug: { contains: search } },
-                            ],
-                        }),
-                    },
-                },
-            }),
-        };
-
-        const include: Prisma.productsInclude = {
-            translations: lang
-                ? {
-                      where: {
-                          language: { code: lang },
-                      },
-                  }
-                : {
-                      include: {
-                          language: {
-                              select: { code: true },
-                          },
-                      },
-                  },
-
-            category: {
-                include: {
-                    translations: lang
-                        ? {
-                              where: {
-                                  language: { code: lang },
-                              },
-                          }
-                        : true,
-                },
-            },
-        };
+        const include = this.buildTranslationInclude(lang);
 
         const result = await paginate(prisma.products, query as any, {
-            where,
+            where: qb.where,
+            orderBy: qb.orderBy,
             include,
-            orderBy: { created_at: "desc" },
         });
 
         if (lang) {
-            result.items = result.items.map((p: any) =>
+            result.items = result.items.map((p: ProductWithRelations) =>
                 this.transformWithLang(p),
             );
         }
@@ -282,11 +238,9 @@ class ProductService {
         return result;
     }
 
-    /* =========================
-       DETAIL
-    ========================= */
+    async getDetailBySlug(slug: string, lang?: string) {
+        const include = this.buildTranslationInclude(lang);
 
-    async getDetail(slug: string, lang?: string) {
         const product = await prisma.products.findFirst({
             where: {
                 translations: {
@@ -300,29 +254,7 @@ class ProductService {
                     },
                 },
             },
-            include: {
-                translations: lang
-                    ? {
-                          where: {
-                              language: {
-                                  code: lang,
-                              },
-                          },
-                      }
-                    : true,
-                galleries: true,
-                category: {
-                    include: {
-                        translations: lang
-                            ? {
-                                  where: {
-                                      language: { code: lang },
-                                  },
-                              }
-                            : true,
-                    },
-                },
-            },
+            include,
         });
 
         if (!product) return null;
@@ -337,37 +269,7 @@ class ProductService {
     async getById(id: string, lang?: string) {
         const product = await prisma.products.findUnique({
             where: { id },
-            include: {
-                translations: lang
-                    ? {
-                          where: {
-                              language: {
-                                  code: lang,
-                              },
-                          },
-                      }
-                    : {
-                          include: {
-                              language: {
-                                  select: {
-                                      code: true,
-                                  },
-                              },
-                          },
-                      },
-                galleries: true,
-                category: {
-                    include: {
-                        translations: lang
-                            ? {
-                                  where: {
-                                      language: { code: lang },
-                                  },
-                              }
-                            : true,
-                    },
-                },
-            },
+            include: this.buildTranslationInclude(lang),
         });
 
         if (!product) return null;
@@ -378,10 +280,6 @@ class ProductService {
 
         return product;
     }
-
-    /* =========================
-       UPDATE
-    ========================= */
 
     async updateProduct(id: string, data: UpdateProductDTO) {
         try {
@@ -608,10 +506,6 @@ class ProductService {
         return result.map((p) => this.transformWithLang(p));
     }
 
-    /* =========================
-       TOGGLE STATUS
-    ========================= */
-
     async toggleStatus(id: string) {
         const product = await prisma.products.findUnique({
             where: { id },
@@ -626,10 +520,6 @@ class ProductService {
             data: { status: newStatus },
         });
     }
-
-    /* =========================
-       DELETE
-    ========================= */
 
     async deleteProduct(id: string) {
         return prisma.products.delete({

@@ -61,7 +61,6 @@ model services {
   status      ServiceStatus @default(active)
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
-  deleted_at  DateTime?
 
   category_id String   @db.Char(36)
 
@@ -72,7 +71,6 @@ model services {
   bookings      bookings[]
   availability  service_availability[]
 
-  @@index([deleted_at])
   @@index([category_id])
 }
 

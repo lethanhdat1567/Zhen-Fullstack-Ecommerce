@@ -16,17 +16,7 @@ class ProductController {
     }
 
     async listProducts(req: Request, res: Response) {
-        const { search, lang, page, limit, categorySlug, isActive } = req.query;
-
-        const result = await productService.listProducts({
-            search: typeof search === "string" ? search : undefined,
-            lang: typeof lang === "string" ? lang : undefined,
-            categorySlug:
-                typeof categorySlug === "string" ? categorySlug : undefined,
-            isActive: isActive === "true" ? true : undefined,
-            page: page as string,
-            limit: limit as string,
-        });
+        const result = await productService.listProducts(req.query);
 
         return res.success(result);
     }
@@ -35,7 +25,7 @@ class ProductController {
         const { slug } = req.params;
         const { lang } = req.query;
 
-        const result = await productService.getDetail(
+        const result = await productService.getDetailBySlug(
             slug as string,
             typeof lang === "string" ? lang : undefined,
         );

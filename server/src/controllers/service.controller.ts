@@ -16,17 +16,7 @@ class ServiceController {
     }
 
     async listServices(req: Request, res: Response) {
-        const { search, lang, page, limit, categorySlug, isActive } = req.query;
-
-        const result = await serviceService.listServices({
-            search: typeof search === "string" ? search : undefined,
-            lang: typeof lang === "string" ? lang : undefined,
-            categorySlug:
-                typeof categorySlug === "string" ? categorySlug : undefined,
-            isActive: isActive === "true" ? true : undefined,
-            page: page as string,
-            limit: limit as string,
-        });
+        const result = await serviceService.listServices(req.query);
 
         return res.success(result);
     }

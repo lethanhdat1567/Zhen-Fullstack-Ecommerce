@@ -1,5 +1,3 @@
-import { Prisma } from "@prisma/client";
-
 export interface ListQuery {
     search?: string;
     lang?: string;
@@ -62,13 +60,11 @@ export class QueryBuilder {
                     {
                         title: {
                             contains: search,
-                            mode: "insensitive",
                         },
                     },
                     {
                         slug: {
                             contains: search,
-                            mode: "insensitive",
                         },
                     },
                 ],
@@ -87,10 +83,24 @@ export class QueryBuilder {
 
         if (!minPrice && !maxPrice) return this;
 
-        this.where.price = {
-            ...(minPrice && { gte: Number(minPrice) }),
-            ...(maxPrice && { lte: Number(maxPrice) }),
-        };
+        const min = minPrice ? Number(minPrice) : undefined;
+        const max = maxPrice ? Number(maxPrice) : undefined;
+
+        this.where.OR = [
+            {
+                sale_price: {
+                    ...(min !== undefined && { gte: min }),
+                    ...(max !== undefined && { lte: max }),
+                },
+            },
+            {
+                OR: [{ sale_price: null }, { sale_price: 0 }],
+                price: {
+                    ...(min !== undefined && { gte: min }),
+                    ...(max !== undefined && { lte: max }),
+                },
+            },
+        ];
 
         return this;
     }
@@ -118,11 +128,17 @@ export class QueryBuilder {
 
         switch (sort) {
             case "price_asc":
-                this.orderBy = { price: "asc" };
+                this.orderBy = [
+                    { sale_price: { sort: "asc", nulls: "last" } },
+                    { price: "asc" },
+                ];
                 break;
 
             case "price_desc":
-                this.orderBy = { price: "desc" };
+                this.orderBy = [
+                    { sale_price: { sort: "desc", nulls: "last" } },
+                    { price: "desc" },
+                ];
                 break;
 
             case "oldest":
