@@ -218,7 +218,7 @@ class ProductService {
             .category()
             .search()
             .price()
-            .sort()
+            .sort("product")
             .build();
 
         const include = this.buildTranslationInclude(lang);

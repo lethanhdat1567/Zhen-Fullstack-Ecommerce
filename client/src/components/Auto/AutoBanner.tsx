@@ -2,19 +2,36 @@
 
 import { images } from "@/assets/images";
 import BreadcrumbBanner from "@/components/Auto/BreadcrumbBanner";
-import { Button } from "@/components/ui/button";
-import { TextSearch } from "lucide-react";
+import FilterBtn from "@/components/Auto/components/FilterBtn/FilterBtn";
 import Image from "next/image";
 
+export type SortType =
+    | "latest"
+    | "oldest"
+    | "price_asc"
+    | "price_desc"
+    | "best_seller";
+
+export type FilterValues = {
+    search?: string;
+    minPrice?: number;
+    maxPrice?: number;
+    sort?: SortType;
+};
 type Props = {
     breadcrumbData: {
         title: string;
         href: string;
     }[];
     hideBanner?: boolean;
+    isFilter?: boolean;
 };
 
-function AutoBanner({ breadcrumbData = [], hideBanner = false }: Props) {
+function AutoBanner({
+    breadcrumbData = [],
+    hideBanner = false,
+    isFilter = false,
+}: Props) {
     return (
         <div className="mb-10 w-full">
             {!hideBanner && (
@@ -31,9 +48,7 @@ function AutoBanner({ breadcrumbData = [], hideBanner = false }: Props) {
 
             <div className="container mt-6 flex items-center justify-between">
                 <BreadcrumbBanner breadcrumbData={breadcrumbData} />
-                <Button variant={"outline"}>
-                    <TextSearch /> Tìm kiếm và chọn lọc
-                </Button>
+                {isFilter && <FilterBtn />}
             </div>
         </div>
     );

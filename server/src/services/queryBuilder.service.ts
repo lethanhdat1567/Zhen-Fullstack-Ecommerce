@@ -123,7 +123,7 @@ export class QueryBuilder {
      SORT
   ========================= */
 
-    sort() {
+    sort(type: "product" | "service") {
         const { sort } = this.query;
 
         switch (sort) {
@@ -146,14 +146,26 @@ export class QueryBuilder {
                 break;
 
             case "best_seller":
-                this.orderBy = {
-                    order_items: {
-                        _count: "desc",
-                    },
-                };
+                if (type === "product") {
+                    this.orderBy = {
+                        order_items: {
+                            _count: "desc",
+                        },
+                    };
+                }
+
+                if (type === "service") {
+                    this.orderBy = {
+                        bookings: {
+                            _count: "desc",
+                        },
+                    };
+                }
                 break;
 
             case "latest":
+                this.orderBy = { created_at: "desc" };
+                break;
             default:
                 this.orderBy = { created_at: "desc" };
         }

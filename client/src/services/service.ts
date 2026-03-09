@@ -4,14 +4,20 @@ import { http } from "@/lib/http/http";
    TYPES
 ========================= */
 
-export type ServiceQueryParams = {
+export interface ListQuery {
     search?: string;
     lang?: string;
-    page?: number;
-    limit?: number;
     categorySlug?: string;
     isActive?: boolean;
-};
+
+    minPrice?: string;
+    maxPrice?: string;
+
+    sort?: "latest" | "oldest" | "price_asc" | "price_desc" | "best_seller";
+
+    page?: string;
+    limit?: string;
+}
 
 export type ServicePayload = {
     slug: string;
@@ -108,17 +114,25 @@ export const serviceService = {
         return res.data;
     },
 
-    async listServices(params?: ServiceQueryParams) {
+    async listServices(params?: ListQuery) {
         const query = new URLSearchParams();
 
         if (params?.search) query.append("search", params.search);
         if (params?.lang) query.append("lang", params.lang);
-        if (params?.page) query.append("page", String(params.page));
-        if (params?.limit) query.append("limit", String(params.limit));
         if (params?.categorySlug)
             query.append("categorySlug", params.categorySlug);
-        if (typeof params?.isActive === "boolean")
+
+        if (typeof params?.isActive === "boolean") {
             query.append("isActive", String(params.isActive));
+        }
+
+        if (params?.minPrice) query.append("minPrice", params.minPrice);
+        if (params?.maxPrice) query.append("maxPrice", params.maxPrice);
+
+        if (params?.sort) query.append("sort", params.sort);
+
+        if (params?.page) query.append("page", params.page);
+        if (params?.limit) query.append("limit", params.limit);
 
         const queryString = query.toString();
         const url = queryString ? `/services?${queryString}` : "/services";

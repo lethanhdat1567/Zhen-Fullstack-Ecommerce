@@ -224,7 +224,7 @@ class ServiceService {
             .category()
             .search()
             .price()
-            .sort();
+            .sort("service");
 
         const { where, orderBy } = qb.build();
 

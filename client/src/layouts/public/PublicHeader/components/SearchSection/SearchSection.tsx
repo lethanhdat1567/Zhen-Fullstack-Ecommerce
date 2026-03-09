@@ -1,33 +1,75 @@
 "use client";
 
+import { useDebounce } from "@/hooks/use-debounce";
+import SearchDropdownSection from "@/layouts/public/PublicHeader/components/SearchSection/components/SearchDropdownSection/SearchDropdownSection";
+import SearchInput from "@/layouts/public/PublicHeader/components/SearchSection/components/SearchInput/SearchBtn";
+import { searchService, SearchSuggestResult } from "@/services/searchService";
 import { Search } from "lucide-react";
-import { useState } from "react";
+import { useLocale } from "next-intl";
+import { useEffect, useState } from "react";
 
 function SearchSection() {
-    const [isFocused, setIsFocused] = useState(false);
+    const [searchValue, setSearchValue] = useState("");
+
+    const [searchData, setSearchData] = useState<SearchSuggestResult>({
+        products: [],
+        services: [],
+        posts: [],
+    });
+
+    const locale = useLocale();
+    const searchDebounce = useDebounce(searchValue, 300);
+
+    const fetchSearchData = async () => {
+        if (!searchDebounce.trim()) {
+            setSearchData({
+                products: [],
+                services: [],
+                posts: [],
+            });
+            return;
+        }
+
+        try {
+            const res = await searchService.suggest({
+                lang: locale,
+                q: searchDebounce,
+            });
+
+            setSearchData(res); //
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        fetchSearchData();
+    }, [searchDebounce]);
+
+    const hasData =
+        searchData.products.length ||
+        searchData.services.length ||
+        searchData.posts.length;
 
     return (
-        <div
-            className={`group relative flex w-full max-w-100 items-center rounded-full border px-4 py-2 transition-all duration-300 ease-in-out ${isFocused ? "border-primary ring-primary/20 bg-white ring-2" : "border-gray-200 bg-gray-100"} `}
-        >
-            {/* Icon Search */}
-            <Search
-                size={18}
-                className={`transition-colors duration-300 ${isFocused ? "text-primary" : "text-gray-400"}`}
+        <div className="relative w-100">
+            <SearchInput
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
             />
 
-            {/* Input */}
-            <input
-                className="ml-3 w-full border-none bg-transparent text-sm text-gray-700 outline-none placeholder:text-gray-400"
-                placeholder="Tìm kiếm sản phẩm, tin tức..."
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
-            />
-
-            {/* Phím tắt (K) - Tạo cảm giác chuyên nghiệp */}
-            <div className="group-hover:border-primary/30 hidden items-center gap-1 rounded border border-gray-200 bg-white px-1.5 py-0.5 text-[10px] font-medium text-gray-400 transition-colors md:flex">
-                <span className="text-xs">⌘</span> K
-            </div>
+            {searchDebounce && hasData ? (
+                <div
+                    className="absolute right-0 -bottom-2 left-0 z-50 max-h-100 translate-y-full overflow-y-auto rounded-sm border bg-white p-3 text-black shadow"
+                    data-lenis-prevent
+                >
+                    <SearchDropdownSection data={searchData} />
+                    <div className="mt-2 flex cursor-pointer items-center justify-center gap-2 border-t p-2 text-sm text-neutral-600 hover:bg-neutral-100">
+                        Tìm kiếm thêm <Search size={16} />
+                    </div>
+                </div>
+            ) : null}
         </div>
     );
 }

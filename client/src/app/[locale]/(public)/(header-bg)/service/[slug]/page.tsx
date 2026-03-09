@@ -14,12 +14,21 @@ type Props = {
     params: Promise<{
         slug: ServiceSlug;
     }>;
+
+    searchParams: {
+        search?: string;
+        minPrice?: string;
+        maxPrice?: string;
+        sort?: string;
+    };
 };
 
-export default async function ServicePage({ params }: Props) {
+export default async function ServicePage({ params, searchParams }: Props) {
     const t = await getTranslations("Site");
     const { slug } = await params;
+    const { search, minPrice, maxPrice, sort } = await searchParams;
     const locale = await getLocale();
+
     let loading = true;
 
     if (!slug) {
@@ -30,13 +39,19 @@ export default async function ServicePage({ params }: Props) {
         categorySlug: slug,
         lang: locale,
         isActive: true,
+        search,
+        minPrice,
+        maxPrice,
+        sort: sort || ("latest" as any),
     });
+
     const serviceCategory = await serviceCategoryService.detailBySlug(
         slug,
         locale,
     );
 
     loading = false;
+    console.log(serviceBySlug);
 
     return (
         <div className="mb-20">
@@ -48,6 +63,7 @@ export default async function ServicePage({ params }: Props) {
                             href: `service/${slug}`,
                         },
                     ]}
+                    isFilter
                 />
             </div>
             <div className="container grid grid-cols-1 gap-4 lg:grid-cols-12">
