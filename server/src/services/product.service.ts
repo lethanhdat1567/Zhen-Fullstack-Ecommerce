@@ -77,6 +77,7 @@ class ProductService {
         return {
             ...rest,
             ...t,
+            id: product.id,
             category: {
                 id: category.id,
                 name: ct?.name ?? null,
@@ -100,7 +101,7 @@ class ProductService {
                           },
                       },
                   },
-            // galleries: true,
+            galleries: true,
 
             category: {
                 include: {

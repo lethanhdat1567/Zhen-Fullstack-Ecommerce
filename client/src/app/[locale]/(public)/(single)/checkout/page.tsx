@@ -66,7 +66,9 @@ function CheckoutPage() {
             if (res.paymentUrl) {
                 routerOriginal.push(res.paymentUrl);
             } else {
-                router.push("/order/confirmation");
+                router.push(
+                    `/order/confirmation?type=product&orderId=${res.order.id}&status=success`,
+                );
             }
             clearCart();
         } catch (error) {

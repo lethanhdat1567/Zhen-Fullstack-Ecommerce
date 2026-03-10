@@ -90,7 +90,6 @@ class SearchService {
     async search(query: SearchQuery) {
         const { q, lang = "vi", page = 1, limit = 10 } = query;
 
-        // ĐÃ SỬA: Chấp nhận search từ 1 ký tự trở lên
         if (!q || q.trim().length < 1) {
             return { products: [], services: [], posts: [] };
         }
@@ -99,7 +98,7 @@ class SearchService {
         const skip = (page - 1) * limit;
         const searchCondition = this.buildSearchCondition(languageId, q);
 
-        const [products, services, posts] = await Promise.all([
+        const [productsRaw, servicesRaw, postsRaw] = await Promise.all([
             prisma.products.findMany({
                 where: { status: "active", translations: searchCondition },
                 skip,
@@ -123,6 +122,10 @@ class SearchService {
             }),
         ]);
 
+        const products = this.flattenTranslations(productsRaw);
+        const services = this.flattenTranslations(servicesRaw);
+        const posts = this.flattenTranslations(postsRaw);
+
         return { products, services, posts };
     }
 
@@ -133,6 +136,21 @@ class SearchService {
                 select: { title: true, slug: true, description: true },
             },
         };
+    }
+
+    private flattenTranslations<T extends { translations?: any[] }>(
+        items: T[],
+    ) {
+        return items.map((item) => {
+            const translation = item.translations?.[0];
+
+            const { translations, ...rest } = item;
+
+            return {
+                ...rest,
+                ...translation,
+            };
+        });
     }
 }
 

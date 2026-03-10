@@ -21,10 +21,13 @@ export default async function ProductDetailPage({ params }: Props) {
     let loading = true;
 
     const getProductDetail = await productService.getBySlug(slugDetail, locale);
+    console.log(getProductDetail);
+
     const productCategory = await productCategoryService.getBySlug(
         slug,
         locale,
     );
+
     const relatedProduct = await productService.getRelatedProducts({
         categorySlug: slug,
         lang: locale,

@@ -2,6 +2,7 @@ import { Link, useRouter } from "@/i18n/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 import {
     ChevronDown,
+    History,
     LayoutDashboard,
     LogOut,
     Settings,
@@ -57,7 +58,7 @@ function UserSection() {
                         </Avatar>
 
                         <div className="hidden flex-col items-start leading-none md:flex">
-                            <span className="text-[13px] font-semibold text-white">
+                            <span className="text-xs font-semibold text-white">
                                 {user.username}
                             </span>
                             <span className="mt-0.5 text-[10px] text-white/60">
@@ -90,6 +91,16 @@ function UserSection() {
                     <DropdownMenuItem className="cursor-pointer">
                         <User className="mr-2 h-4 w-4" />
                         <span>Hồ sơ của tôi</span>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem className="cursor-pointer">
+                        <Link
+                            href={`/orders`}
+                            className="flex h-full w-full items-center gap-2"
+                        >
+                            <History className="mr-2 h-4 w-4" />
+                            <span>Đơn mua của bạn</span>
+                        </Link>
                     </DropdownMenuItem>
 
                     <DropdownMenuItem className="cursor-pointer">

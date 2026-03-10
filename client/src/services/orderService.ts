@@ -82,8 +82,11 @@ export const orderService = {
     /**
      * Lấy chi tiết đơn hàng
      */
-    async getOrderDetail(orderId: string) {
-        const res = await http.get<ApiResponse<any>>(`/orders/${orderId}`);
+    async getOrderDetail(orderId: string, lang?: string) {
+        const query = lang ? `?lang=${lang}` : "";
+        const res = await http.get<ApiResponse<any>>(
+            `/orders/${orderId}${query}`,
+        );
         return res.data;
     },
 

@@ -16,6 +16,7 @@ export interface UpdateBookingDTO {
 
 export interface CreateBookingDTO {
     service_id: string;
+    user_id?: string;
     customer_name: string;
     customer_email: string;
     customer_phone: string;
@@ -107,8 +108,14 @@ class BookingService {
     }
 
     async createBooking(data: CreateBookingDTO) {
-        const { service_id, check_in, check_out, guests, payment_method } =
-            data;
+        const {
+            service_id,
+            check_in,
+            check_out,
+            guests,
+            payment_method,
+            user_id,
+        } = data;
 
         if (check_in >= check_out)
             throw new AppError("Ngày trả phòng phải sau ngày nhận phòng", 400);
@@ -155,6 +162,7 @@ class BookingService {
             // 5. Tạo đơn hàng
             const booking = await tx.bookings.create({
                 data: {
+                    user_id: user_id ?? null,
                     service_id,
                     customer_name: data.customer_name,
                     customer_email: data.customer_email,

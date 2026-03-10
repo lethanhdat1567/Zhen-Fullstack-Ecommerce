@@ -1,57 +1,100 @@
 "use client";
 
-import { Link } from "@/i18n/navigation";
+import ErrorBlock from "@/app/[locale]/(public)/(single)/order/confirmation/components/ErrorBlock/ErrorBlock";
+import SuccessBlock from "@/app/[locale]/(public)/(single)/order/confirmation/components/SuccessBlock/SuccessBlock";
+import { orderService } from "@/services/orderService";
 import { useCartStore } from "@/store/useCartStore";
+import { useLocale } from "next-intl";
 import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+
+export type OrderConfirmItem = {
+    id: string;
+    title: string;
+    thumbnail: string;
+    quantity: number;
+    price: number;
+    total: number;
+};
+
+export type OrderConfirmationResult = {
+    id: string;
+    fullName: string;
+    email: string;
+    phone: string;
+    address: string;
+    note?: string;
+
+    paymentMethod: string;
+    paymentStatus: string;
+
+    totalAmount: number;
+
+    items: OrderConfirmItem[];
+};
 
 function Confirmation() {
+    const locale = useLocale();
     const searchParams = useSearchParams();
     const clearCart = useCartStore((state) => state.clearCart);
+    const [order, setOrder] = useState<OrderConfirmationResult>();
 
-    // Lấy giá trị từ query parameters
     const status = searchParams.get("status");
     const orderId = searchParams.get("orderId");
+    const type = searchParams.get("type");
 
-    if (status === "success" && orderId) {
-        clearCart();
-    }
+    const fetchOrder = async () => {
+        if (!orderId) return;
+        try {
+            if (type === "product") {
+                const res = await orderService.getOrderDetail(orderId, locale);
+                const result: OrderConfirmationResult = {
+                    id: res.id,
+                    fullName: res.full_name,
+                    email: res.email,
+                    phone: res.phone_number,
+                    address: res.shipping_address,
+                    note: res.note,
+                    paymentMethod: res.payment_method,
+                    paymentStatus: res.payment_status,
+                    totalAmount: Number(res.total_amount),
+
+                    items: res.order_items.map((item: any) => ({
+                        id: item.id,
+                        title: item.product.title,
+                        thumbnail: item.product.thumbnail,
+                        quantity: item.quantity,
+                        price: Number(item.price),
+                        total: Number(item.price) * item.quantity,
+                    })),
+                };
+
+                setOrder(result);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        fetchOrder();
+    }, [orderId]);
+
+    useEffect(() => {
+        if (status === "success" && type === "product" && orderId) {
+            clearCart();
+        }
+    }, [status, clearCart]);
+
+    if (!orderId) return <ErrorBlock />;
+
+    if (!order) return null;
 
     return (
-        <div className="container">
-            <h1>Thank you for your purchase!</h1>
-
-            <div className="status-message">
-                {status === "success" ? (
-                    orderId ? (
-                        <div className="text-green-600">
-                            Thanh toán thành công. Mã đơn hàng: {orderId}
-                        </div>
-                    ) : (
-                        <div>
-                            Thanh toán thành công nhưng không tìm thấy mã đơn
-                            hàng.
-                        </div>
-                    )
-                ) : status === "error" ? (
-                    orderId ? (
-                        <div className="text-red-600">
-                            Đã có lỗi xảy ra khi thanh toán đơn hàng: {orderId}
-                        </div>
-                    ) : (
-                        <div className="text-red-600">
-                            Đã có lỗi xảy ra trong quá trình xử lý.
-                        </div>
-                    )
-                ) : (
-                    <div>Đang kiểm tra trạng thái thanh toán...</div>
-                )}
-            </div>
-
-            <div className="mt-4">
-                <Link href="/checkout" className="text-blue-500 underline">
-                    Quay lại trang Checkout
-                </Link>
-            </div>
+        <div>
+            {status === "success" && <SuccessBlock order={order} />}
+            {status === "error" && <ErrorBlock />}
         </div>
     );
 }

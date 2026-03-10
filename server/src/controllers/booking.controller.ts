@@ -28,8 +28,11 @@ class BookingController {
         return res.success(result);
     }
 
-    async createBooking(req: Request, res: Response) {
-        const result = await bookingService.createBooking(req.body);
+    async createBooking(req: any, res: Response) {
+        const result = await bookingService.createBooking({
+            ...req.body,
+            user_id: req.user?.userId,
+        });
         return res.success(result);
     }
 

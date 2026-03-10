@@ -115,6 +115,7 @@ model service_availability {
 model bookings {
   id              String         @id @default(uuid()) @db.Char(36)
   service_id      String         @db.Char(36)
+  user_id         String?  @db.Char(36)
 
   // Thông tin khách
   customer_name   String
@@ -135,6 +136,7 @@ model bookings {
   created_at      DateTime       @default(now())
   updated_at      DateTime       @updatedAt
 
+  user            users?         @relation(fields: [user_id], references: [id])
   service         services       @relation(fields: [service_id], references: [id])
 }
 
@@ -373,6 +375,7 @@ model users {
   tokens        user_tokens[] 
   cart_items    cart_items[]
   orders  orders[]
+  bookings  bookings[]
   favorites    user_favorites[]
 }
 

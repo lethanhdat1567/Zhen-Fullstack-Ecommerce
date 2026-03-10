@@ -1,51 +1,63 @@
 import { SearchSuggestResult } from "@/services/searchService";
 import SearchDropdownItem from "@/layouts/public/PublicHeader/components/SearchSection/components/SearchDropdownSection/SearchDropdownItem";
+import { Link } from "@/i18n/navigation";
 
 type Props = {
     data: SearchSuggestResult;
+    searchValue: string;
+    onClose: () => void;
 };
 
-function SearchDropdownSection({ data }: Props) {
+const sections = [
+    {
+        key: "services",
+        title: "Dịch vụ",
+        tab: "service",
+    },
+    {
+        key: "products",
+        title: "Sản phẩm",
+        tab: "product",
+    },
+    {
+        key: "posts",
+        title: "Bài viết",
+        tab: "post",
+    },
+] as const;
+
+function SearchDropdownSection({ data, searchValue, onClose }: Props) {
     return (
         <div className="space-y-4">
-            {/* SERVICES */}
-            {data.services.length > 0 && (
-                <div>
-                    <h3 className="text-sm font-medium">Dịch vụ</h3>
+            {sections.map((section) => {
+                const items = data[section.key];
 
-                    <div className="mt-2 space-y-2">
-                        {data.services.map((item) => (
-                            <SearchDropdownItem item={item} key={item.id} />
-                        ))}
+                if (!items.length) return null;
+
+                return (
+                    <div key={section.key}>
+                        <div className="flex items-center justify-between">
+                            <h3 className="text-sm font-medium">
+                                {section.title}
+                            </h3>
+
+                            <Link
+                                href={`/search?tab=${section.tab}&q=${searchValue}`}
+                                className="text-xs font-medium hover:text-green-800 hover:underline"
+                                onClick={onClose}
+                            >
+                                Xem thêm
+                            </Link>
+                        </div>
+
+                        <div className="mt-2 space-y-2">
+                            {items.map((item) => (
+                                <SearchDropdownItem item={item} key={item.id} />
+                            ))}
+                        </div>
                     </div>
-                </div>
-            )}
-
-            {/* PRODUCTS */}
-            {data.products.length > 0 && (
-                <div>
-                    <h3 className="text-sm font-medium">Sản phẩm</h3>
-
-                    <div className="mt-2 space-y-2">
-                        {data.products.map((item) => (
-                            <SearchDropdownItem item={item} key={item.id} />
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            {/* POSTS */}
-            {data.posts.length > 0 && (
-                <div>
-                    <h3 className="text-sm font-medium">Bài viết</h3>
-
-                    <div className="mt-2 space-y-2">
-                        {data.posts.map((item) => (
-                            <SearchDropdownItem item={item} key={item.id} />
-                        ))}
-                    </div>
-                </div>
-            )}
+                );
+            })}
         </div>
     );
 }
