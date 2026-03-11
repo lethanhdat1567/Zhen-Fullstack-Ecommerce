@@ -2,8 +2,8 @@
 
 import ErrorBlock from "@/app/[locale]/(public)/(single)/order/confirmation/components/ErrorBlock/ErrorBlock";
 import SuccessBlock from "@/app/[locale]/(public)/(single)/order/confirmation/components/SuccessBlock/SuccessBlock";
+import { bookingService } from "@/services/bookingService";
 import { orderService } from "@/services/orderService";
-import { useCartStore } from "@/store/useCartStore";
 import { useLocale } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -16,8 +16,10 @@ export type OrderConfirmItem = {
     price: number;
     total: number;
 };
+export type OrderType = "product" | "service";
 
 export type OrderConfirmationResult = {
+    type: OrderType;
     id: string;
     fullName: string;
     email: string;
@@ -36,7 +38,6 @@ export type OrderConfirmationResult = {
 function Confirmation() {
     const locale = useLocale();
     const searchParams = useSearchParams();
-    const clearCart = useCartStore((state) => state.clearCart);
     const [order, setOrder] = useState<OrderConfirmationResult>();
 
     const status = searchParams.get("status");
@@ -49,6 +50,7 @@ function Confirmation() {
             if (type === "product") {
                 const res = await orderService.getOrderDetail(orderId, locale);
                 const result: OrderConfirmationResult = {
+                    type: "product",
                     id: res.id,
                     fullName: res.full_name,
                     email: res.email,
@@ -70,6 +72,37 @@ function Confirmation() {
                 };
 
                 setOrder(result);
+            } else if (type === "service") {
+                const res = await bookingService.getById(orderId, locale);
+
+                const result: OrderConfirmationResult = {
+                    type: "service",
+
+                    id: res.id,
+                    fullName: res.customer_name,
+                    email: res.customer_email,
+                    phone: res.customer_phone,
+                    address: "",
+                    paymentMethod: res.payment_method,
+                    paymentStatus: res.payment_status as string,
+
+                    totalAmount: Number(res.total_price),
+
+                    items: [
+                        {
+                            id: res.service.id,
+                            title: res.service.title as string,
+                            thumbnail: res.service.thumbnail as string,
+                            quantity: 1,
+                            price: Number(
+                                res.service.sale_price || res.service.price,
+                            ),
+                            total: Number(res.total_price),
+                        },
+                    ],
+                };
+
+                setOrder(result);
             }
         } catch (error) {
             console.log(error);
@@ -80,12 +113,6 @@ function Confirmation() {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         fetchOrder();
     }, [orderId]);
-
-    useEffect(() => {
-        if (status === "success" && type === "product" && orderId) {
-            clearCart();
-        }
-    }, [status, clearCart]);
 
     if (!orderId) return <ErrorBlock />;
 

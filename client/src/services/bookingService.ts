@@ -51,16 +51,18 @@ export type Booking = {
     status: "pending" | "confirmed" | "cancelled" | "completed";
     payment_status?: string;
     payment_url?: string;
+    payment_method: string;
 
     note?: string;
 
     created_at: string;
     updated_at: string;
 
-    service?: {
+    service: {
         id: string;
         capacity: number;
         price: number;
+        sale_price?: string;
         thumbnail?: string;
         title?: string;
         description?: string;

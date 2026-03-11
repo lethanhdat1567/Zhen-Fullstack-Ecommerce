@@ -1,37 +1,17 @@
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { bookingService } from "@/services/bookingService";
+import { resolveMediaSrc } from "@/lib/image";
+import StatusBadge from "@/app/[locale]/(public)/(header-bg)/orders/components/StatusBadge/StatusBadge";
+import { formatDateWithTime } from "@/utils/formatDate";
+import { formatPrice } from "@/utils/formatPrice";
+import PaymentMethodBadge from "@/app/[locale]/(public)/(header-bg)/orders/components/PaymentMethodBadge/PaymentMethodBadge";
 
-const booking = {
-    id: "153d1731-6d5b-4a1c-b364-d934f7d2bd3c",
-    customer_name: "Admin One",
-    customer_email: "lethanhdat1567@gmail.com",
-    customer_phone: "0901234567",
+async function OrderServiceDetailPage({ params }: { params: { id: string } }) {
+    const { id } = await params;
 
-    check_in: "07/03/2026",
-    check_out: "11/03/2026",
-    guest_count: 2,
+    const booking = await bookingService.getById(id);
 
-    total_price: 6000000,
-    status: "pending",
-    payment_method: "cod",
-    payment_status: "unpaid",
-
-    note: "Xin phòng có view hướng hồ và 1 giỏ trái cây.",
-
-    created_at: "08/03/2026",
-
-    service: {
-        title: "Dịch vụ SEO",
-        thumbnail: "/uploads/images/seo.jpg",
-        capacity: 2,
-        price: 1500000,
-    },
-};
-
-const formatPrice = (price: number) => price.toLocaleString("vi-VN") + "đ";
-
-function OrderServiceDetailPage() {
     return (
         <div className="container space-y-8 py-10">
             {/* Header */}
@@ -40,17 +20,19 @@ function OrderServiceDetailPage() {
                     <h1 className="text-2xl font-semibold">
                         Chi tiết đặt dịch vụ
                     </h1>
+
                     <p className="text-sm text-gray-500">
-                        Mã đơn: {booking.id}
+                        Mã đơn: #{booking.id.slice(-6)}
                     </p>
+
                     <p className="text-sm text-gray-500">
-                        Ngày đặt: {booking.created_at}
+                        Ngày đặt:{" "}
+                        {formatDateWithTime(new Date(booking.created_at))}
                     </p>
                 </div>
 
                 <div className="flex gap-2">
-                    <Badge>Chờ xác nhận</Badge>
-                    <Badge variant="outline">Chưa thanh toán</Badge>
+                    <StatusBadge status={booking.status} />
                 </div>
             </div>
 
@@ -87,14 +69,14 @@ function OrderServiceDetailPage() {
                 <CardContent>
                     <div className="flex gap-4">
                         <Image
-                            src={booking.service.thumbnail}
-                            alt={booking.service.title}
+                            src={resolveMediaSrc(booking.service.thumbnail)}
+                            alt={booking.service.title || ""}
                             width={80}
                             height={80}
                             className="rounded-md object-cover"
                         />
 
-                        <div>
+                        <div className="space-y-1">
                             <p className="text-lg font-semibold">
                                 {booking.service.title}
                             </p>
@@ -104,7 +86,8 @@ function OrderServiceDetailPage() {
                             </p>
 
                             <p className="text-sm text-gray-500">
-                                Giá: {formatPrice(booking.service.price)}
+                                Giá dịch vụ:{" "}
+                                {formatPrice(Number(booking.service.price))}
                             </p>
                         </div>
                     </div>
@@ -120,12 +103,12 @@ function OrderServiceDetailPage() {
                 <CardContent className="space-y-2 text-sm">
                     <p>
                         <span className="font-medium">Check in:</span>{" "}
-                        {booking.check_in}
+                        {formatDateWithTime(new Date(booking.check_in))}
                     </p>
 
                     <p>
                         <span className="font-medium">Check out:</span>{" "}
-                        {booking.check_out}
+                        {formatDateWithTime(new Date(booking.check_out))}
                     </p>
 
                     <p>
@@ -133,10 +116,12 @@ function OrderServiceDetailPage() {
                         {booking.guest_count}
                     </p>
 
-                    <p>
-                        <span className="font-medium">Ghi chú:</span>{" "}
-                        {booking.note}
-                    </p>
+                    {booking.note && (
+                        <p>
+                            <span className="font-medium">Ghi chú:</span>{" "}
+                            {booking.note}
+                        </p>
+                    )}
                 </CardContent>
             </Card>
 
@@ -146,21 +131,28 @@ function OrderServiceDetailPage() {
                     <CardTitle>Thanh toán</CardTitle>
                 </CardHeader>
 
-                <CardContent className="space-y-2 text-sm">
-                    <p>
-                        <span className="font-medium">Phương thức:</span> Thanh
-                        toán khi nhận hàng (COD)
-                    </p>
+                <CardContent className="space-y-3 text-sm">
+                    <div className="flex justify-between">
+                        <span className="text-gray-500">Phương thức</span>
+                        <PaymentMethodBadge
+                            method={booking.payment_method as any}
+                        />
+                    </div>
 
-                    <p>
-                        <span className="font-medium">Trạng thái:</span> Chưa
-                        thanh toán
-                    </p>
+                    <div className="flex justify-between">
+                        <span className="text-gray-500">Trạng thái</span>
+                        <span>
+                            {booking.payment_status === "paid"
+                                ? "Đã thanh toán"
+                                : "Chưa thanh toán"}
+                        </span>
+                    </div>
 
                     <div className="flex justify-between border-t pt-3 text-lg font-semibold">
                         <span>Tổng thanh toán</span>
+
                         <span className="text-green-600">
-                            {formatPrice(booking.total_price)}
+                            {formatPrice(Number(booking.total_price))}
                         </span>
                     </div>
                 </CardContent>

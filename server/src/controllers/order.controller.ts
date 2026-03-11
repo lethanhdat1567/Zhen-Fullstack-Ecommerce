@@ -6,6 +6,7 @@ class OrderController {
     async checkout(req: AuthRequest, res: Response) {
         const result = await orderService.createOrder(
             req.body,
+            req.query.type as "cart" | "single",
             req?.user?.userId,
         );
         return res.success(result);

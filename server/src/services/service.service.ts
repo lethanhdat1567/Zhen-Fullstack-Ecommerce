@@ -104,6 +104,7 @@ class ServiceService {
         return {
             ...rest,
             ...t,
+            id: service.id,
             category: category
                 ? {
                       id: category.id,

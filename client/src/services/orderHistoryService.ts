@@ -70,6 +70,48 @@ export type ApiResponse<T> = {
     data: T;
 };
 
+export type LookupType = "product" | "service";
+
+export type LookupProductOrder = {
+    id: string;
+    status: OrderStatus;
+    payment_status: string;
+
+    total_amount: number;
+    created_at: string;
+
+    order_items: OrderItem[];
+};
+
+export type LookupServiceBooking = {
+    id: string;
+    status: OrderStatus;
+    payment_status: string;
+
+    check_in: string;
+    check_out: string;
+
+    total_price: number;
+    created_at: string;
+
+    service: {
+        id: string;
+        thumbnail: string;
+        title: string;
+        slug: string;
+    };
+};
+
+export type LookupOrderResponse =
+    | {
+          type: "product";
+          data: LookupProductOrder;
+      }
+    | {
+          type: "service";
+          data: LookupServiceBooking;
+      };
+
 /* =========================
    SERVICE
 ========================= */
@@ -83,6 +125,18 @@ export const orderHistoryService = {
 
         const res = await http.get<ApiResponse<OrderHistoryResponse>>(
             `/order-history?${query.toString()}`,
+        );
+
+        return res.data;
+    },
+
+    async lookupOrder(id: string, lang?: string) {
+        const query = new URLSearchParams();
+
+        if (lang) query.append("lang", lang);
+
+        const res = await http.get<ApiResponse<LookupOrderResponse | null>>(
+            `/order-history/lookup/${id}?${query.toString()}`,
         );
 
         return res.data;

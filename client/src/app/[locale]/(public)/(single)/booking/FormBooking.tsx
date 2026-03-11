@@ -58,9 +58,12 @@ function FormBooking() {
             if (res.payment_url) {
                 router.push(res.payment_url);
             } else {
-                router.push("/order/confirmation?type=service");
+                router.push(
+                    "/order/confirmation?type=service&status=success&orderId=" +
+                        res.id,
+                );
             }
-            toast.success("Dat phong thanh cong");
+            toast.success("Đặt phòng thành công!");
         } catch (error) {
             if (error instanceof HttpError) {
                 if (error.status === 400) {

@@ -5,7 +5,10 @@ import FormInfo from "@/app/[locale]/(public)/(single)/checkout/components/FormI
 import PayMethod from "@/app/[locale]/(public)/(single)/checkout/components/PayMethod/PayMethod";
 import { checkoutSchema } from "@/app/[locale]/(public)/(single)/checkout/schema";
 import { useRouter } from "@/i18n/navigation";
-import { useRouter as useRouterOriginal } from "next/navigation";
+import {
+    useRouter as useRouterOriginal,
+    useSearchParams,
+} from "next/navigation";
 import { CartItem, cartService } from "@/services/cartService";
 import { orderService } from "@/services/orderService";
 import { useCartStore } from "@/store/useCartStore";
@@ -14,6 +17,7 @@ import { useLocale } from "next-intl";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { productService } from "@/services/productService";
 
 function CheckoutPage() {
     const [products, setProducts] = useState<CartItem[]>([]);
@@ -23,6 +27,9 @@ function CheckoutPage() {
     const router = useRouter();
     const routerOriginal = useRouterOriginal();
     const clearCart = useCartStore((state) => state.clearCart);
+    const params = useSearchParams();
+    const productId = params.get("productId");
+    const quantity = params.get("quantity");
 
     const carts = useCartStore((state) => state.items);
     const form = useForm<z.infer<typeof checkoutSchema>>({
@@ -34,27 +41,58 @@ function CheckoutPage() {
             shipping_address: "123 Nguyễn Huệ, Quận 1, TP.HCM",
             payment_method: "cod",
             note: "Giao giờ hành chính",
-            items: [
-                {
-                    product_id: "1",
-                    quantity: 1,
-                },
-            ],
+            items: [],
         },
     });
 
     const syncProduct = async () => {
         try {
-            const res = await cartService.syncCart(carts, locale);
-            const itemsData = res.items.map((item) => ({
-                product_id: item.product_id,
-                quantity: item.quantity,
-                cart_item_id: item.id,
-            }));
+            if (productId && quantity) {
+                const qty = Math.max(1, Number(quantity) || 1);
 
-            form.setValue("items", itemsData);
-            setTotal(res.totalAmount);
-            setProducts(res.items);
+                const product = await productService.getById(productId, locale);
+
+                const price = product.sale_price || product.price;
+
+                const item = {
+                    id: product.id,
+                    quantity: qty,
+                    price,
+                    product: {
+                        id: product.id,
+                        title: product.title,
+                        thumbnail: product.thumbnail,
+                        slug: product.slug,
+                        price: product.price,
+                        sale_price: product.sale_price,
+                        stock: product.stock,
+                    },
+                };
+
+                const itemsData = [
+                    {
+                        product_id: product.id,
+                        quantity: qty,
+                    },
+                ];
+
+                form.setValue("items", itemsData);
+
+                setProducts([item as any]);
+                setTotal(Number(price) * qty);
+            } else {
+                const res = await cartService.syncCart(carts, locale);
+
+                const itemsData = res.items.map((item) => ({
+                    product_id: item.product_id,
+                    quantity: item.quantity,
+                    cart_item_id: item.id,
+                }));
+
+                form.setValue("items", itemsData);
+                setProducts(res.items);
+                setTotal(res.totalAmount);
+            }
         } catch (error) {
             console.log(error);
         }
@@ -62,7 +100,10 @@ function CheckoutPage() {
 
     const onSubmit = async (data: z.infer<typeof checkoutSchema>) => {
         try {
-            const res = await orderService.checkout(data as any);
+            const res = await orderService.checkout(
+                data as any,
+                productId && quantity ? "single" : "cart",
+            );
             if (res.paymentUrl) {
                 routerOriginal.push(res.paymentUrl);
             } else {
@@ -70,7 +111,10 @@ function CheckoutPage() {
                     `/order/confirmation?type=product&orderId=${res.order.id}&status=success`,
                 );
             }
-            clearCart();
+
+            if (!productId && !quantity) {
+                clearCart();
+            }
         } catch (error) {
             console.log(error);
         }

@@ -7,6 +7,11 @@ export interface OrderHistoryQuery {
     locale?: string;
 }
 
+interface LookupOrderQuery {
+    id: string;
+    locale?: string;
+}
+
 function flattenTranslation(entity: any) {
     const t = entity?.translations?.[0];
     if (!t) return entity;
@@ -118,5 +123,98 @@ export const orderHistoryService = {
             bookings: mappedBookings,
             orders: mappedOrders,
         };
+    },
+
+    async lookupOrder(query: LookupOrderQuery) {
+        const { id, locale } = query;
+
+        const order = await prisma.orders.findUnique({
+            where: { id },
+            select: {
+                id: true,
+                status: true,
+                payment_status: true,
+                total_amount: true,
+                created_at: true,
+
+                order_items: {
+                    select: {
+                        quantity: true,
+                        price: true,
+                        product: {
+                            select: {
+                                id: true,
+                                thumbnail: true,
+                                translations: {
+                                    where: locale
+                                        ? { language: { code: locale } }
+                                        : undefined,
+                                    take: 1,
+                                    select: {
+                                        title: true,
+                                        slug: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+        if (order) {
+            return {
+                type: "product",
+                data: {
+                    ...order,
+                    order_items: order.order_items.map((item) => ({
+                        ...item,
+                        product: flattenTranslation(item.product),
+                    })),
+                },
+            };
+        }
+
+        const booking = await prisma.bookings.findUnique({
+            where: { id },
+            select: {
+                id: true,
+                status: true,
+                payment_status: true,
+                check_in: true,
+                check_out: true,
+                total_price: true,
+                created_at: true,
+
+                service: {
+                    select: {
+                        id: true,
+                        thumbnail: true,
+                        translations: {
+                            where: locale
+                                ? { language: { code: locale } }
+                                : undefined,
+                            take: 1,
+                            select: {
+                                title: true,
+                                slug: true,
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+        if (booking) {
+            return {
+                type: "service",
+                data: {
+                    ...booking,
+                    service: flattenTranslation(booking.service),
+                },
+            };
+        }
+
+        return null;
     },
 };

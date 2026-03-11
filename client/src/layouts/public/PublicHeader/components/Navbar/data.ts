@@ -8,6 +8,7 @@ const navNameMap: Record<string, Record<string, string>> = {
         media: "Media",
         recruitment: "Tuyển dụng",
         contact: "Liên hệ",
+        "track-order": "Theo dõi đơn hàng",
     },
     en: {
         home: "Home",
@@ -18,6 +19,7 @@ const navNameMap: Record<string, Record<string, string>> = {
         media: "Media",
         recruitment: "Recruitment",
         contact: "Contact",
+        "track-order": "Theo dõi đơn hàng",
     },
     fr: {
         home: "Accueil",
@@ -28,6 +30,7 @@ const navNameMap: Record<string, Record<string, string>> = {
         media: "Médias",
         recruitment: "Recrutement",
         contact: "Contact",
+        "track-order": "Theo dõi đơn hàng",
     },
 };
 

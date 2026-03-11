@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { images } from "@/assets/images";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -11,51 +10,20 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import {
-    paymentMethodMap,
-    paymentStatusMap,
-} from "@/app/[locale]/(public)/(header-bg)/orders/helpers";
+import { paymentMethodMap } from "@/app/[locale]/(public)/(header-bg)/orders/helpers";
+import { orderService } from "@/services/orderService";
+import { formatDateWithTime } from "@/utils/formatDate";
+import StatusBadge from "@/app/[locale]/(public)/(header-bg)/orders/components/StatusBadge/StatusBadge";
+import { resolveMediaSrc } from "@/lib/image";
+import { formatPrice } from "@/utils/formatPrice";
+import PaymentMethodBadge from "@/app/[locale]/(public)/(header-bg)/orders/components/PaymentMethodBadge/PaymentMethodBadge";
+import { getLocale } from "next-intl/server";
 
-const order = {
-    id: "ORD-123456",
-    createdAt: "10/03/2026",
-    status: "processing",
-    paymentStatus: "unpaid",
-    paymentMethod: "cod",
-    customer: {
-        name: "Lê Thành Đạt",
-        email: "dat.dev@gmail.com",
-        phone: "0901234567",
-        address: "123 Nguyễn Huệ, Quận 1, TP.HCM",
-    },
-    items: [
-        {
-            id: 1,
-            title: "Omega 3 Tinh Khiết",
-            thumbnail: images.fallback,
-            quantity: 2,
-            price: 30000,
-        },
-        {
-            id: 2,
-            title: "Vitamin D3",
-            thumbnail: images.fallback,
-            quantity: 1,
-            price: 120000,
-        },
-    ],
-};
+async function ProductDetailPage({ params }: { params: { id: string } }) {
+    const { id } = await params;
+    const locale = await getLocale();
 
-const formatPrice = (price: number) => price.toLocaleString("vi-VN") + "đ";
-
-function ProductDetailPage() {
-    const subtotal = order.items.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0,
-    );
-
-    const shipping = 0;
-    const total = subtotal + shipping;
+    const order = await orderService.getOrderDetail(id, locale);
 
     return (
         <div className="container space-y-8 py-10">
@@ -63,16 +31,17 @@ function ProductDetailPage() {
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-2xl font-semibold">
-                        Chi tiết đơn hàng #{order.id}
+                        Chi tiết đơn hàng #{order.id.slice(-6)}
                     </h1>
+
                     <p className="text-sm text-gray-500">
-                        Ngày đặt: {order.createdAt}
+                        Ngày đặt:{" "}
+                        {formatDateWithTime(new Date(order.created_at))}
                     </p>
                 </div>
 
                 <div className="flex gap-2">
-                    <Badge>Đang xử lý</Badge>
-                    <Badge variant="outline">Chưa thanh toán</Badge>
+                    <StatusBadge status={order.status} />
                 </div>
             </div>
 
@@ -85,29 +54,35 @@ function ProductDetailPage() {
                 <CardContent className="space-y-2 text-sm">
                     <p>
                         <span className="font-medium">Họ tên:</span>{" "}
-                        {order.customer.name}
-                    </p>
-                    <p>
-                        <span className="font-medium">Email:</span>{" "}
-                        {order.customer.email}
-                    </p>
-                    <p>
-                        <span className="font-medium">Số điện thoại:</span>{" "}
-                        {order.customer.phone}
-                    </p>
-                    <p>
-                        <span className="font-medium">Địa chỉ:</span>{" "}
-                        {order.customer.address}
-                    </p>
-                    <p>
-                        <span className="font-medium">Phương thức:</span>{" "}
-                        {paymentMethodMap[order.paymentMethod]}
+                        {order.full_name}
                     </p>
 
                     <p>
-                        <span className="font-medium">Trạng thái:</span>{" "}
-                        {paymentStatusMap[order.paymentStatus]}
+                        <span className="font-medium">Email:</span>{" "}
+                        {order.email}
                     </p>
+
+                    <p>
+                        <span className="font-medium">Số điện thoại:</span>{" "}
+                        {order.phone_number}
+                    </p>
+
+                    <p>
+                        <span className="font-medium">Địa chỉ:</span>{" "}
+                        {order.shipping_address}
+                    </p>
+
+                    <p>
+                        <span className="font-medium">Phương thức:</span>{" "}
+                        <PaymentMethodBadge method={order.payment_method} />
+                    </p>
+
+                    {order.note && (
+                        <p>
+                            <span className="font-medium">Ghi chú:</span>{" "}
+                            {order.note}
+                        </p>
+                    )}
                 </CardContent>
             </Card>
 
@@ -121,7 +96,7 @@ function ProductDetailPage() {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="w-[80px]">Ảnh</TableHead>
+                                <TableHead className="w-20">Ảnh</TableHead>
                                 <TableHead>Sản phẩm</TableHead>
                                 <TableHead className="text-center">
                                     Số lượng
@@ -136,37 +111,41 @@ function ProductDetailPage() {
                         </TableHeader>
 
                         <TableBody>
-                            {order.items.map((item) => (
-                                <TableRow key={item.id}>
-                                    <TableCell>
-                                        <Image
-                                            src={item.thumbnail}
-                                            alt={item.title}
-                                            width={50}
-                                            height={50}
-                                            className="rounded-md object-cover"
-                                        />
-                                    </TableCell>
+                            {order.order_items.map((item: any) => {
+                                return (
+                                    <TableRow key={item.id}>
+                                        <TableCell>
+                                            <Image
+                                                src={resolveMediaSrc(
+                                                    item.thumbnail,
+                                                )}
+                                                alt={item.title}
+                                                width={50}
+                                                height={50}
+                                                className="rounded-md object-cover"
+                                            />
+                                        </TableCell>
 
-                                    <TableCell className="font-medium">
-                                        {item.title}
-                                    </TableCell>
+                                        <TableCell className="font-medium">
+                                            {item.title}
+                                        </TableCell>
 
-                                    <TableCell className="text-center">
-                                        {item.quantity}
-                                    </TableCell>
+                                        <TableCell className="text-center">
+                                            {item.quantity}
+                                        </TableCell>
 
-                                    <TableCell className="text-right">
-                                        {formatPrice(item.price)}
-                                    </TableCell>
+                                        <TableCell className="text-right">
+                                            {formatPrice(item.price)}
+                                        </TableCell>
 
-                                    <TableCell className="text-right font-semibold">
-                                        {formatPrice(
-                                            item.price * item.quantity,
-                                        )}
-                                    </TableCell>
-                                </TableRow>
-                            ))}
+                                        <TableCell className="text-right font-semibold">
+                                            {formatPrice(
+                                                item.price * item.quantity,
+                                            )}
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
                         </TableBody>
                     </Table>
                 </CardContent>
@@ -181,7 +160,7 @@ function ProductDetailPage() {
                 <CardContent className="space-y-3 text-sm">
                     <div className="flex justify-between">
                         <span className="text-gray-500">Tạm tính</span>
-                        <span>{formatPrice(subtotal)}</span>
+                        <span>{formatPrice(Number(order.total_amount))}</span>
                     </div>
 
                     <div className="flex justify-between">
@@ -193,8 +172,9 @@ function ProductDetailPage() {
 
                     <div className="flex justify-between text-lg font-semibold">
                         <span>Tổng thanh toán</span>
+
                         <span className="text-green-600">
-                            {formatPrice(total)}
+                            {formatPrice(Number(order.total_amount))}
                         </span>
                     </div>
                 </CardContent>

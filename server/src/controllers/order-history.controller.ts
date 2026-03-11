@@ -15,6 +15,18 @@ class OrderHistoryController {
 
         return res.success(result);
     }
+
+    async lookupOrder(req: any, res: Response) {
+        const { id } = req.params;
+        const { lang } = req.query;
+
+        const result = await orderHistoryService.lookupOrder({
+            id,
+            locale: lang,
+        });
+
+        return res.success(result);
+    }
 }
 
 export default new OrderHistoryController();

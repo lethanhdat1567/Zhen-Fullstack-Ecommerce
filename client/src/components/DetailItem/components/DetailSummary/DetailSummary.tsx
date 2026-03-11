@@ -11,6 +11,8 @@ type Props = {
     type: "service" | "product";
 };
 function DetailSummary({ item, type }: Props) {
+    console.log(item);
+
     return (
         <div>
             {/* Title */}

@@ -40,7 +40,11 @@ class OrderService {
         };
     }
 
-    async createOrder(data: CheckoutDTO, userId?: string) {
+    async createOrder(
+        data: CheckoutDTO,
+        type: "cart" | "single",
+        userId?: string,
+    ) {
         const { items, payment_method, ...orderInfo } = data;
 
         return await prisma.$transaction(async (tx) => {
@@ -99,9 +103,8 @@ class OrderService {
                 },
                 include: { order_items: true },
             });
-            console.log(userId);
 
-            if (userId) {
+            if (userId && type === "cart") {
                 const cartItemIds = items
                     .filter((i) => i.cart_item_id)
                     .map((i) => i.cart_item_id!);

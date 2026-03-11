@@ -28,6 +28,7 @@ function Navbar({ onClick }: { onClick?: () => void }) {
                 "media", // Mới bổ sung
                 "recruitment",
                 "contact", // Mới bổ sung
+                "track-order",
             ];
 
             // 2. Sắp xếp lại thứ tự hiển thị cho hợp lý
@@ -40,6 +41,7 @@ function Navbar({ onClick }: { onClick?: () => void }) {
                 media: 5,
                 recruitment: 6,
                 contact: 7,
+                "track-order": 8,
             };
 
             const [

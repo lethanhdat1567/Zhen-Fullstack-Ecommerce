@@ -70,9 +70,9 @@ export const orderService = {
      * - COD → tạo order
      * - VNPAY → trả về paymentUrl
      */
-    async checkout(payload: CheckoutPayload) {
+    async checkout(payload: CheckoutPayload, type: "cart" | "single") {
         const res = await http.post<ApiResponse<CheckoutResponse>>(
-            "/orders/checkout",
+            `/orders/checkout?type=${type}`,
             payload,
         );
 

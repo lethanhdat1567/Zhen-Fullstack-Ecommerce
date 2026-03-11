@@ -93,14 +93,14 @@ function UserSection() {
                         <span>Hồ sơ của tôi</span>
                     </DropdownMenuItem>
 
-                    <DropdownMenuItem className="cursor-pointer">
-                        <Link
-                            href={`/orders`}
-                            className="flex h-full w-full items-center gap-2"
-                        >
-                            <History className="mr-2 h-4 w-4" />
-                            <span>Đơn mua của bạn</span>
-                        </Link>
+                    <DropdownMenuItem
+                        className="cursor-pointer"
+                        onClick={() => {
+                            router.push("/orders");
+                        }}
+                    >
+                        <History className="mr-2 h-4 w-4" />
+                        <span>Đơn mua của bạn</span>
                     </DropdownMenuItem>
 
                     <DropdownMenuItem className="cursor-pointer">

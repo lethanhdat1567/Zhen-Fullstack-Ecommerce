@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Minus, Plus } from "lucide-react";
 import { Product } from "@/services/productService";
 import { useCartStore } from "@/store/useCartStore";
+import { useRouter } from "@/i18n/navigation";
 
 type Props = {
     item: Product;
@@ -12,6 +13,7 @@ type Props = {
 function AddToCartBtn({ item }: Props) {
     const [qty, setQty] = useState(1);
     const addItem = useCartStore((state) => state.addItem);
+    const router = useRouter();
 
     // Hàm xử lý tăng/giảm số lượng tại chỗ
     const updateQty = (delta: number) => {
@@ -61,6 +63,19 @@ function AddToCartBtn({ item }: Props) {
                 disabled={item.stock <= 0}
             >
                 {item.stock > 0 ? "Thêm vào giỏ hàng" : "Hết hàng"}
+            </button>
+
+            {/* Checkout */}
+            <button
+                className="relative inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-tl-3xl rounded-br-3xl bg-(--primary-color) px-6 text-sm font-medium text-white transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:bg-gray-400 sm:w-auto md:h-12.5 md:px-6.75 md:text-base"
+                onClick={() => {
+                    router.push(
+                        `/checkout?productId=${item.id}&quantity=${qty}`,
+                    );
+                }}
+                disabled={item.stock <= 0}
+            >
+                Checkout
             </button>
         </div>
     );

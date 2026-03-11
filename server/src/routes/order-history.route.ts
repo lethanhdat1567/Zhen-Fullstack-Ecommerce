@@ -5,6 +5,8 @@ import { Router } from "express";
 
 const router = Router();
 
+router.get("/lookup/:id", asyncHandler(orderHistoryController.lookupOrder));
+
 router.get(
     "/",
     authMiddleware,
