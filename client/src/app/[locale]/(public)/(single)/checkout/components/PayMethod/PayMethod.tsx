@@ -1,5 +1,6 @@
+"use client";
+
 import { checkoutSchema } from "@/app/[locale]/(public)/(single)/checkout/schema";
-import { Label } from "@/components/ui/label";
 import {
     Select,
     SelectContent,
@@ -10,19 +11,19 @@ import {
 } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
 import z from "zod";
+import { useTranslations } from "next-intl";
 
 type Props = {
     form: UseFormReturn<z.infer<typeof checkoutSchema>>;
 };
 
 function PayMethod({ form }: Props) {
+    const t = useTranslations("Checkout");
     const paymentMethod = form.watch("payment_method");
 
     return (
         <div>
-            <h2 className="mb-10 text-lg font-semibold">
-                Phương thức thanh toán
-            </h2>
+            <h2 className="mb-9 text-lg font-semibold">{t("paymentMethod")}</h2>
             <Select
                 value={paymentMethod}
                 onValueChange={(value: "cod" | "vnpay") => {
@@ -30,15 +31,13 @@ function PayMethod({ form }: Props) {
                 }}
             >
                 <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Chọn phương thức thanh toán" />
+                    <SelectValue placeholder={t("paymentPlaceholder")} />
                 </SelectTrigger>
                 <SelectContent>
                     <SelectGroup>
-                        <SelectItem value="cod">
-                            Thanh toán khi nhận hàng
-                        </SelectItem>
+                        <SelectItem value="cod">{t("paymentCOD")}</SelectItem>
                         <SelectItem value="vnpay">
-                            Thanh toán qua VN PAY
+                            {t("paymentVNPAY")}
                         </SelectItem>
                     </SelectGroup>
                 </SelectContent>

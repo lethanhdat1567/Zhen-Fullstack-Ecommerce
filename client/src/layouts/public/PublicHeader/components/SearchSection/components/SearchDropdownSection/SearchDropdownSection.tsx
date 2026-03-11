@@ -1,6 +1,7 @@
 import { SearchSuggestResult } from "@/services/searchService";
 import SearchDropdownItem from "@/layouts/public/PublicHeader/components/SearchSection/components/SearchDropdownSection/SearchDropdownItem";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 type Props = {
     data: SearchSuggestResult;
@@ -27,6 +28,8 @@ const sections = [
 ] as const;
 
 function SearchDropdownSection({ data, searchValue, onClose }: Props) {
+    const t = useTranslations("Header.search");
+
     return (
         <div className="space-y-4">
             {sections.map((section) => {
@@ -46,7 +49,7 @@ function SearchDropdownSection({ data, searchValue, onClose }: Props) {
                                 className="text-xs font-medium hover:text-green-800 hover:underline"
                                 onClick={onClose}
                             >
-                                Xem thêm
+                                {t("more")}
                             </Link>
                         </div>
 

@@ -14,6 +14,7 @@ router.get(
     asyncHandler(AuthController.verifyResetToken),
 );
 router.post("/reset-password", asyncHandler(AuthController.resetPassword));
+router.post("/google-login", asyncHandler(AuthController.googleLogin));
 
 router.post("/logout", authMiddleware, asyncHandler(AuthController.logout));
 

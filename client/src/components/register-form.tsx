@@ -21,6 +21,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { useCartStore } from "@/store/useCartStore";
 import { cartService } from "@/services/cartService";
 import { useFavoriteStore } from "@/store/useFavoriteStore";
+import GoogleLogin from "@/app/(auth)/components/GoogleLogin/GoogleLogin";
 
 export function RegisterForm({
     className,
@@ -52,17 +53,14 @@ export function RegisterForm({
         setError(null);
 
         try {
-            // 1. Gọi API Register (Đã bao gồm logic trả về token)
             const res = await authService.register(formData);
 
-            // 2. Lưu Cookie (Next Server) để Middleware đọc được
             await authService.loginFormNextClientToNextServer({
                 accessToken: res.data.accessToken,
                 role: res.data.user.role,
                 expiresIn: res.data.expiresIn,
             });
 
-            // 3. Cập nhật Zustand Store
             await setAuth({
                 user: res.data.user,
                 accessToken: res.data.accessToken,
@@ -72,7 +70,6 @@ export function RegisterForm({
 
             toast.success("Đăng ký tài khoản thành công!");
 
-            // 4. Điều hướng dựa trên Role
             if (res.data.user.role === "admin") {
                 router.push("/admin/dashboard");
             } else {
@@ -82,7 +79,6 @@ export function RegisterForm({
             }
         } catch (err: any) {
             if (err instanceof HttpError) {
-                // Handle lỗi 409 Conflict (Username/Email đã tồn tại)
                 if (err.status === 409) {
                     setError("Username hoặc Email đã được sử dụng");
                 } else {
@@ -114,7 +110,7 @@ export function RegisterForm({
                         <Input
                             id="full_name"
                             type="text"
-                            placeholder="Nguyễn Văn A"
+                            placeholder="Nhập họ tên đầy đủ của bạn" // Đã sửa
                             value={formData.full_name}
                             onChange={handleChange}
                             required
@@ -127,7 +123,7 @@ export function RegisterForm({
                         <Input
                             id="username"
                             type="text"
-                            placeholder="admin123"
+                            placeholder="username" // Đã sửa
                             value={formData.username}
                             onChange={handleChange}
                             required
@@ -140,7 +136,7 @@ export function RegisterForm({
                         <Input
                             id="email"
                             type="email"
-                            placeholder="example@gmail.com"
+                            placeholder="yourname@example.com" // Đã sửa
                             value={formData.email}
                             onChange={handleChange}
                             required
@@ -153,7 +149,6 @@ export function RegisterForm({
                         <Input
                             id="password"
                             type="password"
-                            placeholder="••••••••"
                             value={formData.password}
                             onChange={handleChange}
                             required
@@ -171,16 +166,18 @@ export function RegisterForm({
                     <Button type="submit" className="w-full" disabled={loading}>
                         {loading ? "Đang xử lý..." : "Đăng ký ngay"}
                     </Button>
-
-                    <div className="text-center text-sm">
-                        Đã có tài khoản?{" "}
-                        <Link
-                            href="/login"
-                            className="text-primary hover:underline"
-                        >
-                            Đăng nhập
-                        </Link>
-                    </div>
+                    <GoogleLogin />
+                    <Field>
+                        <FieldDescription className="text-center">
+                            Đã có tài khoản?{" "}
+                            <a
+                                href={"/login"}
+                                className="text-primary hover:underline"
+                            >
+                                Đăng nhập
+                            </a>
+                        </FieldDescription>
+                    </Field>
                 </FieldGroup>
             </form>
         </div>

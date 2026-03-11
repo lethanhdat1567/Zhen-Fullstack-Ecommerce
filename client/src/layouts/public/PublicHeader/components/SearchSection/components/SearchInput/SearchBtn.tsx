@@ -1,6 +1,7 @@
 import { Search, X } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 type Props = {
     searchValue: string;
@@ -18,6 +19,7 @@ function SearchInput({
     onClear,
 }: Props) {
     const router = useRouter();
+    const t = useTranslations("Header.search");
 
     return (
         <div
@@ -31,12 +33,12 @@ function SearchInput({
 
             <input
                 className="ml-3 w-full border-none bg-transparent text-sm text-gray-700 outline-none placeholder:text-gray-400"
-                placeholder="Tìm kiếm sản phẩm, tin tức..."
+                placeholder={t("placeholder")}
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 onKeyDown={(e) => {
                     if (e.key === "Enter") {
-                        router.push(`/search?p=${searchValue}&tab=product`);
+                        router.push(`/search?q=${searchValue}&tab=product`);
                     }
                 }}
                 onFocus={onFocus}

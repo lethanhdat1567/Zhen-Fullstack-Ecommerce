@@ -1,14 +1,17 @@
 import FormBooking from "@/app/[locale]/(public)/(single)/booking/FormBooking";
 import AutoBanner from "@/components/Auto/AutoBanner";
 import { Card, CardContent } from "@/components/ui/card";
+import { getTranslations } from "next-intl/server";
 
-function BookingPage() {
+async function BookingPage() {
+    const t = await getTranslations("Booking");
+
     return (
         <div className="pt-4 pb-8">
             <AutoBanner
                 breadcrumbData={[
                     {
-                        title: "Đặt phòng",
+                        title: t("breadcrumb"),
                         href: "/booking",
                     },
                 ]}

@@ -103,9 +103,7 @@ function Navbar({ onClick }: { onClick?: () => void }) {
 
     if (loading)
         return (
-            <div className="flex flex-col gap-4">
-                <Skeleton className="h-8 w-full" />
-                <Skeleton className="h-8 w-full" />
+            <div className="mr-4 flex flex-col gap-4">
                 <Skeleton className="h-8 w-full" />
             </div>
         );

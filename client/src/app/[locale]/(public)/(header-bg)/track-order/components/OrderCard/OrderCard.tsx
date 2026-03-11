@@ -6,12 +6,15 @@ import { formatPrice } from "@/utils/formatPrice";
 import { formatDate } from "@/utils/formatDate";
 import { ChevronRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 type Props = {
     order: LookupOrderResponse;
 };
 
 function OrderCard({ order }: Props) {
+    const t = useTranslations("TrackOrder");
+
     if (!order) return null;
 
     const isProduct = order.type === "product";
@@ -26,7 +29,7 @@ function OrderCard({ order }: Props) {
             <div className="flex items-center justify-between border-b px-4 py-2 text-sm">
                 <div className="flex items-center gap-2">
                     <span className="border px-2 py-0.5 text-xs font-semibold">
-                        {isProduct ? "PRODUCT ORDER" : "SERVICE BOOKING"}
+                        {isProduct ? t("productOrder") : t("serviceBooking")}
                     </span>
 
                     <span className="text-gray-500">
@@ -63,7 +66,8 @@ function OrderCard({ order }: Props) {
                             </p>
 
                             <p className="text-sm text-gray-500">
-                                {order.data.order_items.length} sản phẩm
+                                {order.data.order_items.length}{" "}
+                                {t("productCount")}
                             </p>
                         </>
                     ) : (
@@ -73,18 +77,20 @@ function OrderCard({ order }: Props) {
                             </p>
 
                             <p className="text-sm text-gray-500">
-                                Check-in: {formatDate(order.data.check_in)}
+                                {t("checkIn")}:{" "}
+                                {formatDate(order.data.check_in)}
                             </p>
 
                             <p className="text-sm text-gray-500">
-                                Check-out: {formatDate(order.data.check_out)}
+                                {t("checkOut")}:{" "}
+                                {formatDate(order.data.check_out)}
                             </p>
                         </>
                     )}
                 </div>
 
                 <div className="text-right">
-                    <p className="text-xs text-gray-500">Tổng cộng</p>
+                    <p className="text-xs text-gray-500">{t("total")}</p>
 
                     <p className="font-semibold text-green-600">
                         $
@@ -103,7 +109,7 @@ function OrderCard({ order }: Props) {
                     href={detailHref}
                     className="flex items-center gap-2 border px-3 py-1 text-sm font-medium hover:bg-gray-100"
                 >
-                    Xem chi tiết <ChevronRight size={16} />
+                    {t("viewDetail")} <ChevronRight size={16} />
                 </Link>
             </div>
         </div>

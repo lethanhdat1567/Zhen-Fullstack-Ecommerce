@@ -1,4 +1,168 @@
 {
+    "Header": {
+        "search": {
+            "placeholder": "Search products, services, news,...",
+            "more": "See more"
+        },
+        "user": {
+            "login": "Login",
+            "register": "Register",
+            "profile": "My Profile",
+            "history": "My Orders",
+            "admin": "Admin Panel",
+            "logout": "Logout",
+            "roleUser": "Member",
+            "roleAdmin": "Administrator"
+        },
+        "cart": {
+            "emptyCart": "No products in cart",
+            "cart-quantity": "Quantity",
+            "deleteText": "Remove",
+            "total": "Total",
+            "checkoutBtn": "Checkout All"
+        }
+    },
+    "Search": {
+        "title": "Search",
+        "desc": "Search for products, services, or news you like!",
+        "empty": "No results found",
+        "product": "Products",
+        "service": "Services",
+        "post": "News",
+        "searching": "Searching..."
+    },
+    "Wishlist": {
+        "breadcrumb": "Wishlist",
+        "empty": "Wishlist is empty",
+        "all": "All",
+        "product": "Products",
+        "service": "Services",
+        "emptyProduct": "No products found",
+        "emptyService": "No services found",
+        "table": {
+            "info": "Information",
+            "price": "Price",
+            "status": "Status",
+            "action": "Actions",
+            "inStock": "In stock",
+            "outStock": "Out of stock",
+            "roomAvailable": "Room available"
+        },
+        "addProductBtn": "Add to cart",
+        "addServiceBtn": "Book now"
+    },
+    "Cart": {
+        "breadcrumb": "Cart",
+        "table": {
+            "info": "Information",
+            "price": "Price",
+            "quantity": "Quantity",
+            "total": "Total"
+        },
+        "textBtn": "Proceed to checkout",
+        "total": "Total",
+        "emptyTitle": "Your cart is empty",
+        "emptyDesc": "You have no items in your cart.",
+        "remove": "Delete"
+    },
+    "TrackOrder": {
+        "title": "Track Order",
+        "description": "Enter your order number to check the status and detailed information of your order.",
+        "searchPlaceholder": "Search...",
+        "searching": "Searching...",
+        "orderNotFound": "Order not found!",
+        "productOrder": "PRODUCT ORDER",
+        "serviceBooking": "SERVICE BOOKING",
+        "productCount": "{count} products",
+        "checkIn": "Check-in: {date}",
+        "checkOut": "Check-out: {date}",
+        "total": "Total",
+        "viewDetail": "View details"
+    },
+    "Booking": {
+        "breadcrumb": "Booking",
+        "title": "Booking Information",
+        "serviceId": "Service",
+        "fullName": "Full Name",
+        "fullNamePlaceholder": "Enter your name",
+        "email": "Email",
+        "phone": "Phone Number",
+        "guests": "Number of Guests",
+        "checkIn": "Check-in",
+        "checkOut": "Check-out",
+        "note": "Additional Notes",
+        "notePlaceholder": "Special requests...",
+        "paymentMethod": "Payment Method",
+        "confirmButton": "Confirm Booking",
+        "successMessage": "Booking successful!",
+        "errorOvernightOnly": "We only accept overnight bookings.",
+        "selectDatePlaceholder": "Select check-in and check-out dates",
+        "paymentCash": "Cash",
+        "paymentTransfer": "Bank Transfer"
+    },
+    "Checkout": {
+        "title": "Checkout",
+        "shippingInfo": "Shipping Information",
+        "fullName": "Full Name",
+        "fullNamePlaceholder": "Enter your full name",
+        "phoneNumber": "Phone Number",
+        "phoneNumberPlaceholder": "0901234567",
+        "email": "Email",
+        "emailPlaceholder": "example@gmail.com",
+        "address": "Shipping Address",
+        "addressPlaceholder": "House number, street name, ward...",
+        "note": "Note (Optional)",
+        "notePlaceholder": "Example: Delivery during office hours...",
+        "paymentMethod": "Payment Method",
+        "paymentPlaceholder": "Select payment method",
+        "paymentCOD": "Cash on Delivery",
+        "paymentVNPAY": "Pay via VN PAY",
+        "orderSummary": "Order ({count} products)",
+        "subtotal": "Subtotal:",
+        "shippingFee": "Shipping Fee:",
+        "shippingFree": "Free",
+        "total": "Total",
+        "backToCart": "Back to cart",
+        "orderButton": "Place Order"
+    },
+    "OrderConfirmation": {
+        "success": {
+            "productTitle": "Order Payment Successful",
+            "productDescription": "Your order has been placed successfully.",
+            "serviceTitle": "Service Booking Successful",
+            "serviceDescription": "Your service has been booked successfully.",
+            "emailConfirmation": "We have sent a confirmation email to you.",
+            "labelEmail": "Email:",
+            "labelPhone": "Phone:",
+            "labelAddress": "Address:",
+            "labelPaymentMethod": "Payment Method:",
+            "labelStatus": "Status:",
+            "methodCod": "Cash on Delivery",
+            "methodVnpay": "VNPay",
+            "methodMomo": "MoMo",
+            "statusPaid": "Paid",
+            "statusUnpaid": "Unpaid",
+            "statusFailed": "Payment Failed",
+            "personalInfoTitle": "Your Information:",
+            "tableThumbnail": "Image",
+            "tableProduct": "Product",
+            "tableQuantity": "Quantity",
+            "tablePrice": "Price",
+            "tableTotal": "Total",
+            "summaryTitle": "Order Summary",
+            "summarySubtotal": "Subtotal",
+            "summaryShipping": "Shipping",
+            "summaryShippingFree": "Free",
+            "summaryTotal": "Total Amount",
+            "historyButton": "Purchase History"
+        },
+        "error": {
+            "title": "Payment Failed",
+            "description": "An error occurred during payment. Please try again or choose another payment method.",
+            "retryButton": "Retry Payment",
+            "homeButton": "Back to Home"
+        }
+    },
     "Home": {
         "Hero": {
             "title": "Zhen Diététique – Therapeutic Nutrition",

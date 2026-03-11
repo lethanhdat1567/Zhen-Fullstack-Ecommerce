@@ -48,7 +48,7 @@ function PublicHeader() {
                 </div>
             </div>
             <div className="bg-[#FFFAF0]">
-                <div className="container">
+                <div className="px-30">
                     <div className="flex items-center py-4">
                         <div className="flex-1">
                             <Navbar />

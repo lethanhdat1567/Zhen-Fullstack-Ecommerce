@@ -4,6 +4,7 @@ import { CartItem } from "@/services/cartService";
 import { useCartStore } from "@/store/useCartStore";
 import { cartUtils } from "@/utils/cartUtils";
 import { Minus, Plus, Trash } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { toast } from "sonner";
 
@@ -12,6 +13,7 @@ type Props = {
 };
 
 function CartHeaderItem({ item }: Props) {
+    const t = useTranslations("Header.cart");
     const updateCartItem = useCartStore((state) => state.updateQuantity);
     const removeCartItem = useCartStore((state) => state.removeItem);
 
@@ -63,7 +65,7 @@ function CartHeaderItem({ item }: Props) {
                     <h3 className="mb-1 text-sm font-medium">
                         {item.product.title}
                     </h3>
-                    <p className="mb-0.5 text-sm">Số lượng</p>
+                    <p className="mb-0.5 text-sm">{t("cart-quantity")}</p>
                     <div className="flex items-center justify-start border">
                         <Button
                             variant={"outline"}
@@ -93,7 +95,7 @@ function CartHeaderItem({ item }: Props) {
                     className="mb-1.5 flex cursor-pointer items-center justify-end gap-1 text-sm font-medium hover:text-red-500"
                     onClick={handleRemove}
                 >
-                    <Trash size={16} /> Xóa
+                    <Trash size={16} /> {t("deleteText")}
                 </span>
                 <p className="text-md font-semibold text-(--primary-color)">
                     {cartUtils.formatCurrency(cartUtils.getItemSubtotal(item))}

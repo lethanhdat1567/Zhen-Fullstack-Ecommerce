@@ -13,7 +13,7 @@ import { CartItem, cartService } from "@/services/cartService";
 import { orderService } from "@/services/orderService";
 import { useCartStore } from "@/store/useCartStore";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
@@ -23,6 +23,7 @@ function CheckoutPage() {
     const [products, setProducts] = useState<CartItem[]>([]);
     const [total, setTotal] = useState(0);
 
+    const t = useTranslations("Checkout");
     const locale = useLocale();
     const router = useRouter();
     const routerOriginal = useRouterOriginal();
@@ -137,11 +138,13 @@ function CheckoutPage() {
                 <div className="grid grid-cols-2 gap-6">
                     <div className="pl-36">
                         <h2 className="mb-4 text-lg font-semibold">
-                            Thông tin nhận hàng
+                            {t("shippingInfo")}
                         </h2>
                         <FormInfo form={form} />
                     </div>
-                    <PayMethod form={form} />
+                    <div className="flex flex-col gap-4">
+                        <PayMethod form={form} />
+                    </div>
                 </div>
             </div>
             <div className="col-span-4 h-full border-l bg-neutral-100 pr-20 pl-10">

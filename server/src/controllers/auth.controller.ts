@@ -23,6 +23,18 @@ export class AuthController {
         });
     };
 
+    // auth.controller.ts
+    static googleLogin = async (req: Request, res: Response) => {
+        const { idToken } = req.body;
+
+        const result = await AuthService.googleLogin(idToken);
+
+        return res.success({
+            message: "Login with Google successfully",
+            data: result,
+        });
+    };
+
     static refresh = async (req: Request, res: Response) => {
         const { refreshToken } = req.body;
 

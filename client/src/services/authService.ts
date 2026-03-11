@@ -37,6 +37,9 @@ export type LoginResponse = {
     refreshToken: string;
     expiresIn: number;
 };
+export type GoogleLoginParams = {
+    idToken: string;
+};
 
 /* =========================
    SERVICE
@@ -133,6 +136,15 @@ export const authService = {
     async resetPassword(params: ResetPasswordParams) {
         const res = await http.post<AuthResponse<null>>(
             "/auth/reset-password",
+            params,
+        );
+
+        return res.data;
+    },
+
+    async googleLogin(params: GoogleLoginParams) {
+        const res = await http.post<AuthResponse<{ data: LoginResponse }>>(
+            "/auth/google-login",
             params,
         );
 

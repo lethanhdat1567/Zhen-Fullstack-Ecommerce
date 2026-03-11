@@ -56,7 +56,6 @@ export const dashboardService = {
         ] = await Promise.all([
             prisma.services.count({
                 where: {
-                    deleted_at: null,
                     created_at: {
                         gte: startDate,
                         lte: endDate,

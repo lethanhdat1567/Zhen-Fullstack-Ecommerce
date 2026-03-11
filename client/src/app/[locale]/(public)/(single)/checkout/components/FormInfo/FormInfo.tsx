@@ -6,12 +6,15 @@ import z from "zod";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { useTranslations } from "next-intl";
 
 type Props = {
     form: UseFormReturn<z.infer<typeof checkoutSchema>>;
 };
 
 function FormInfo({ form }: Props) {
+    const t = useTranslations("Checkout");
+
     return (
         <div className="space-y-6">
             {/* Họ và tên */}
@@ -24,13 +27,13 @@ function FormInfo({ form }: Props) {
                         data-invalid={fieldState.invalid}
                     >
                         <Label htmlFor={field.name} className="font-semibold">
-                            Họ và tên
+                            {t("fullName")}
                         </Label>
                         <Input
                             {...field}
                             id={field.name}
                             aria-invalid={fieldState.invalid}
-                            placeholder="Nguyễn Văn A"
+                            placeholder={t("fullNamePlaceholder")}
                             className={
                                 fieldState.invalid
                                     ? "border-red-500 focus-visible:ring-red-500"
@@ -56,13 +59,13 @@ function FormInfo({ form }: Props) {
                         data-invalid={fieldState.invalid}
                     >
                         <Label htmlFor={field.name} className="font-semibold">
-                            Số điện thoại
+                            {t("phoneNumber")}
                         </Label>
                         <Input
                             {...field}
                             id={field.name}
                             aria-invalid={fieldState.invalid}
-                            placeholder="0901234567"
+                            placeholder={t("phoneNumberPlaceholder")}
                             className={
                                 fieldState.invalid
                                     ? "border-red-500 focus-visible:ring-red-500"
@@ -88,14 +91,14 @@ function FormInfo({ form }: Props) {
                         data-invalid={fieldState.invalid}
                     >
                         <Label htmlFor={field.name} className="font-semibold">
-                            Email
+                            {t("email")}
                         </Label>
                         <Input
                             {...field}
                             id={field.name}
                             type="email"
                             aria-invalid={fieldState.invalid}
-                            placeholder="example@gmail.com"
+                            placeholder={t("emailPlaceholder")}
                             className={
                                 fieldState.invalid
                                     ? "border-red-500 focus-visible:ring-red-500"
@@ -121,13 +124,13 @@ function FormInfo({ form }: Props) {
                         data-invalid={fieldState.invalid}
                     >
                         <Label htmlFor={field.name} className="font-semibold">
-                            Địa chỉ nhận hàng
+                            {t("address")}
                         </Label>
                         <Input
                             {...field}
                             id={field.name}
                             aria-invalid={fieldState.invalid}
-                            placeholder="Số nhà, tên đường, phường/xã..."
+                            placeholder={t("addressPlaceholder")}
                             className={
                                 fieldState.invalid
                                     ? "border-red-500 focus-visible:ring-red-500"
@@ -153,13 +156,13 @@ function FormInfo({ form }: Props) {
                         data-invalid={fieldState.invalid}
                     >
                         <Label htmlFor={field.name} className="font-semibold">
-                            Ghi chú (Tùy chọn)
+                            {t("note")}
                         </Label>
                         <Textarea
                             {...field}
                             id={field.name}
                             aria-invalid={fieldState.invalid}
-                            placeholder="Ví dụ: Giao giờ hành chính..."
+                            placeholder={t("notePlaceholder")}
                             className={`resize-none ${fieldState.invalid ? "border-red-500 focus-visible:ring-red-500" : ""}`}
                         />
                         {fieldState.error && (

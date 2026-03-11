@@ -6,6 +6,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { useTranslations } from "next-intl";
 function SelectPaymentMethod({
     value,
     onChange,
@@ -13,6 +14,8 @@ function SelectPaymentMethod({
     value: string;
     onChange: any;
 }) {
+    const t = useTranslations("Booking");
+
     return (
         <Select value={value} onValueChange={onChange}>
             <SelectTrigger className="w-full">
@@ -20,8 +23,10 @@ function SelectPaymentMethod({
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>
-                    <SelectItem value="cod">Tiền mặt</SelectItem>
-                    <SelectItem value="vnpay">Chuyển khoản</SelectItem>
+                    <SelectItem value="cod">{t("paymentCash")}</SelectItem>
+                    <SelectItem value="vnpay">
+                        {t("paymentTransfer")}
+                    </SelectItem>
                 </SelectGroup>
             </SelectContent>
         </Select>

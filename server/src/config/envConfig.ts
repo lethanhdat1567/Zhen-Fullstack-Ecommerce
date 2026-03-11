@@ -44,4 +44,8 @@ export const envConfig = {
         currCode: process.env.VNPAY_CURR_CODE || "VND",
         locale: process.env.VNPAY_LOCALE || "vn",
     },
+    google: {
+        clientId: process.env.GOOGLE_CLIENT_ID!,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    },
 };

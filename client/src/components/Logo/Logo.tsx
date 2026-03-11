@@ -1,6 +1,7 @@
 "use client";
 
 import { images } from "@/assets/images";
+import { Skeleton } from "@/components/ui/skeleton";
 import { resolveMediaSrc } from "@/lib/image";
 import { siteSettingService } from "@/services/siteService";
 import Image from "next/image";
@@ -12,11 +13,18 @@ type Props = {
 };
 
 function Logo({ href = "/" }: Props) {
+    const [loading, setLoading] = useState(true);
     const [logo, setLogo] = useState("");
 
     const fetchLogo = async () => {
-        const { logo } = await siteSettingService.get();
-        setLogo(logo || "");
+        try {
+            const { logo } = await siteSettingService.get();
+            setLogo(logo || "");
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -24,7 +32,12 @@ function Logo({ href = "/" }: Props) {
         fetchLogo();
     }, []);
 
-    if (!logo) return;
+    if (loading)
+        return (
+            <div>
+                <Skeleton className="h-12 w-20" />
+            </div>
+        );
 
     return (
         <Link href={href} className="block h-12 w-20">

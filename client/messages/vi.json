@@ -1,4 +1,169 @@
 {
+    "Header": {
+        "search": {
+            "placeholder": "Tìm kiếm sản phẩm, dịch vụ, tin tức,...",
+            "more": "Xem thêm"
+        },
+
+        "user": {
+            "login": "Đăng nhập",
+            "register": "Đăng ký",
+            "profile": "Hồ sơ của tôi",
+            "history": "Đơn mua của tôi",
+            "admin": "Trang quản trị",
+            "logout": "Đăng xuất",
+            "roleUser": "Thành viên",
+            "roleAdmin": "Quản trị viên"
+        },
+        "cart": {
+            "emptyCart": "Không có sản phẩm nào",
+            "cart-quantity": "Số lượng",
+            "deleteText": "Xóa",
+            "total": "Tổng tiền",
+            "checkoutBtn": "Thanh toán tất cả"
+        }
+    },
+    "Search": {
+        "title": "Tìm kiếm",
+        "desc": "Tìm kiếm sản phẩm, dịch vụ hoặc tin tức mà bạn yêu thích!.",
+        "empty": "Không tìm thấy kết quả",
+        "product": "Sản phẩm",
+        "service": "Dịch vụ",
+        "post": "Tin tức",
+        "searching": "Đang tìm kiếm..."
+    },
+    "Wishlist": {
+        "breadcrumb": "Danh sách yêu thích",
+        "empty": "Danh sách trống",
+        "all": "Tat ca",
+        "product": "Sản phẩm",
+        "service": "Dịch vụ",
+        "emptyProduct": "Không có sản phẩm nào",
+        "emptyService": "Không có dịch vụ nào",
+        "table": {
+            "info": "Thông tin",
+            "price": "Đơn giá",
+            "status": "Tình trạng",
+            "action": "Thao tác",
+            "inStock": "Còn hàng",
+            "outStock": "Hết hàng",
+            "roomAvailable": "Còn phòng"
+        },
+        "addProductBtn": "Thêm vào giỏ hàng",
+        "addServiceBtn": "Đặt phòng"
+    },
+    "Cart": {
+        "breadcrumb": "Giỏ hàng",
+        "table": {
+            "info": "Thông tin",
+            "price": "Đơn giá",
+            "quantity": "Số lượng",
+            "total": "Thành tiền"
+        },
+        "textBtn": "Tiến hành thanh toán",
+        "total": "Tổng tiền",
+        "emptyTitle": "Giỏ hàng trống",
+        "emptyDesc": "Bạn chưa có sản phẩm nào trong giỏ hàng.",
+        "remove": "Xóa"
+    },
+    "TrackOrder": {
+        "title": "Tra cứu đơn hàng",
+        "description": "Nhập mã đơn hàng để kiểm tra trạng thái và thông tin chi tiết đơn hàng của bạn.",
+        "searchPlaceholder": "Tìm kiếm...",
+        "searching": "Đang tìm kiếm...",
+        "orderNotFound": "Không tìm thấy đơn hàng!",
+        "productOrder": "ĐƠN HÀNG SẢN PHẨM",
+        "serviceBooking": "ĐẶT DỊCH VỤ",
+        "productCount": "{count} sản phẩm",
+        "checkIn": "Check-in: {date}",
+        "checkOut": "Check-out: {date}",
+        "total": "Tổng cộng",
+        "viewDetail": "Xem chi tiết"
+    },
+    "Booking": {
+        "breadcrumb": "Đặt phòng",
+        "title": "Thông tin đặt phòng",
+        "serviceId": "Dịch vụ",
+        "fullName": "Họ và tên",
+        "fullNamePlaceholder": "Nhập tên của bạn",
+        "email": "Email",
+        "phone": "Số điện thoại",
+        "guests": "Số khách",
+        "checkIn": "Nhận phòng",
+        "checkOut": "Trả phòng",
+        "note": "Ghi chú thêm",
+        "notePlaceholder": "Yêu cầu đặc biệt...",
+        "paymentMethod": "Phương thức thanh toán",
+        "confirmButton": "Xác nhận đặt phòng",
+        "successMessage": "Đặt phòng thành công!",
+        "errorOvernightOnly": "Chúng tôi chỉ nhận đặt phòng qua đêm.",
+        "selectDatePlaceholder": "Chọn ngày nhận - trả phòng",
+        "paymentCash": "Tiền mặt",
+        "paymentTransfer": "Chuyển khoản"
+    },
+    "Checkout": {
+        "title": "Thanh toán",
+        "shippingInfo": "Thông tin nhận hàng",
+        "fullName": "Họ và tên",
+        "fullNamePlaceholder": "Nguyễn Văn A",
+        "phoneNumber": "Số điện thoại",
+        "phoneNumberPlaceholder": "0901234567",
+        "email": "Email",
+        "emailPlaceholder": "example@gmail.com",
+        "address": "Địa chỉ nhận hàng",
+        "addressPlaceholder": "Số nhà, tên đường, phường/xã...",
+        "note": "Ghi chú (Tùy chọn)",
+        "notePlaceholder": "Ví dụ: Giao giờ hành chính...",
+        "paymentMethod": "Phương thức thanh toán",
+        "paymentPlaceholder": "Chọn phương thức thanh toán",
+        "paymentCOD": "Thanh toán khi nhận hàng",
+        "paymentVNPAY": "Thanh toán qua VN PAY",
+        "orderSummary": "Đơn hàng ({count} sản phẩm)",
+        "subtotal": "Tạm tính:",
+        "shippingFee": "Phí vận chuyển:",
+        "shippingFree": "Miễn phí",
+        "total": "Tổng cộng",
+        "backToCart": "Quay về giỏ hàng",
+        "orderButton": "Đặt hàng"
+    },
+    "OrderConfirmation": {
+        "success": {
+            "productTitle": "Thanh toán đơn hàng thành công",
+            "productDescription": "Đơn hàng của bạn đã được đặt thành công.",
+            "serviceTitle": "Đặt dịch vụ thành công",
+            "serviceDescription": "Dịch vụ của bạn đã được đặt thành công.",
+            "emailConfirmation": "Chúng tôi đã gửi email xác nhận đơn hàng.",
+            "labelEmail": "Email:",
+            "labelPhone": "Số điện thoại:",
+            "labelAddress": "Địa chỉ:",
+            "labelPaymentMethod": "Phương thức thanh toán:",
+            "labelStatus": "Trạng thái:",
+            "methodCod": "Thanh toán khi nhận hàng",
+            "methodVnpay": "VNPay",
+            "methodMomo": "MoMo",
+            "statusPaid": "Đã thanh toán",
+            "statusUnpaid": "Chưa thanh toán",
+            "statusFailed": "Thanh toán thất bại",
+            "personalInfoTitle": "Thông tin của bạn:",
+            "tableThumbnail": "Ảnh",
+            "tableProduct": "Sản phẩm",
+            "tableQuantity": "Số lượng",
+            "tablePrice": "Giá",
+            "tableTotal": "Tổng",
+            "summaryTitle": "Tóm tắt đơn hàng",
+            "summarySubtotal": "Tạm tính",
+            "summaryShipping": "Phí vận chuyển",
+            "summaryShippingFree": "Miễn phí",
+            "summaryTotal": "Tổng thanh toán",
+            "historyButton": "Lịch sử mua hàng"
+        },
+        "error": {
+            "title": "Thanh toán thất bại",
+            "description": "Đã xảy ra lỗi trong quá trình thanh toán. Vui lòng thử lại hoặc chọn phương thức thanh toán khác.",
+            "retryButton": "Thanh toán lại",
+            "homeButton": "Quay về trang chủ"
+        }
+    },
     "Home": {
         "Hero": {
             "title": "Zhen Diététique – Dinh Dưỡng Trị Liệu",

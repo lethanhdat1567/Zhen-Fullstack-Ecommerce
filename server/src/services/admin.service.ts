@@ -8,12 +8,16 @@ export interface CreateAdminDTO {
     email: string;
     password: string;
     full_name?: string;
+    phone?: string; // Bổ sung
+    address?: string; // Bổ sung
     role?: string;
 }
 
 export interface UpdateAdminDTO {
     full_name?: string;
     avatar?: string;
+    phone?: string; // Bổ sung
+    address?: string; // Bổ sung
     role?: string;
     status?: string;
 }
@@ -46,6 +50,8 @@ export const adminService = {
                     email: data.email,
                     password_hash,
                     full_name: data.full_name,
+                    phone: data.phone,
+                    address: data.address,
                     role: data.role ?? "user",
                 },
                 select: {
@@ -53,6 +59,8 @@ export const adminService = {
                     username: true,
                     email: true,
                     full_name: true,
+                    phone: true, // Trả về thêm phone
+                    address: true, // Trả về thêm address
                     role: true,
                     status: true,
                     created_at: true,
@@ -80,6 +88,7 @@ export const adminService = {
                       { username: { contains: params.search } },
                       { email: { contains: params.search } },
                       { full_name: { contains: params.search } },
+                      { phone: { contains: params.search } }, // Cho phép tìm kiếm theo số điện thoại
                   ],
               }
             : {};
@@ -93,6 +102,8 @@ export const adminService = {
                 avatar: true,
                 email: true,
                 full_name: true,
+                phone: true, // Bổ sung vào select
+                address: true, // Bổ sung vào select
                 role: true,
                 status: true,
                 created_at: true,
@@ -114,6 +125,8 @@ export const adminService = {
                 avatar: true,
                 email: true,
                 full_name: true,
+                phone: true, // Bổ sung
+                address: true, // Bổ sung
                 role: true,
                 status: true,
                 created_at: true,
@@ -136,6 +149,8 @@ export const adminService = {
                 avatar: true,
                 email: true,
                 full_name: true,
+                phone: true, // Bổ sung
+                address: true, // Bổ sung
                 role: true,
                 status: true,
                 updated_at: true,
@@ -143,9 +158,7 @@ export const adminService = {
         });
     },
 
-    /* =========================
-       CHANGE PASSWORD
-    ========================= */
+    /* ... Các hàm khác (changePassword, delete) giữ nguyên ... */
 
     async changePassword(id: string, data: ChangePasswordDTO) {
         if (!data.old_password || !data.new_password) {
@@ -178,10 +191,6 @@ export const adminService = {
 
         return { message: "Đổi mật khẩu thành công." };
     },
-
-    /* =========================
-       DELETE
-    ========================= */
 
     async delete(id: string) {
         return prisma.users.delete({

@@ -5,14 +5,17 @@ import { Link } from "@/i18n/navigation";
 import { CartItem } from "@/services/cartService";
 import { cartUtils } from "@/utils/cartUtils";
 import { ChevronLeft } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 type Props = { carts: CartItem[]; total: number };
 
 function CartInfo({ carts, total }: Props) {
+    const t = useTranslations("Checkout");
+
     return (
         <div>
             <h2 className="mb-4 py-4 text-lg font-semibold">
-                Đơn hàng ({carts.length} sản phẩm)
+                {t("orderSummary", { count: carts.length })}
             </h2>
             <div className="flex flex-col gap-4">
                 {carts.map((item) => (
@@ -27,16 +30,16 @@ function CartInfo({ carts, total }: Props) {
             </div>
             <div className="mt-10 flex flex-col gap-4 text-sm font-medium">
                 <div className="flex items-center justify-between">
-                    <p>Tạm tính:</p>
+                    <p>{t("subtotal")}</p>
                     <p>{cartUtils.formatCurrency(total)}</p>
                 </div>
                 <div className="flex items-center justify-between">
-                    <p>Phí vận chuyển:</p>
-                    <p>Miễn phí</p>
+                    <p>{t("shippingFee")}</p>
+                    <p>{t("shippingFree")}</p>
                 </div>
                 <Separator />
                 <div className="flex items-center justify-between">
-                    <p className="text-lg">Tổng cộng</p>
+                    <p className="text-lg">{t("total")}</p>
                     <p className="text-lg font-semibold text-(--primary-color)">
                         {cartUtils.formatCurrency(total)}
                     </p>
@@ -47,14 +50,14 @@ function CartInfo({ carts, total }: Props) {
                     href={"/cart"}
                     className="flex items-center gap-1 text-sm font-medium hover:underline"
                 >
-                    <ChevronLeft size={16} /> Quay về giỏ hàng
+                    <ChevronLeft size={16} /> {t("backToCart")}
                 </Link>
                 <Button
                     className="bg-(--primary-color)"
                     size={"lg"}
                     type="submit"
                 >
-                    Đặt hàng
+                    {t("orderButton")}
                 </Button>
             </div>
         </div>

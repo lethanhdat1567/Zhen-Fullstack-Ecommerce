@@ -24,4 +24,21 @@ export const adminSchema = z.object({
         ),
 
     email: z.string().email("Email không hợp lệ."),
+
+    // Bổ sung phone
+    phone: z
+        .string()
+        .optional()
+        .or(z.literal("")) // Cho phép chuỗi rỗng nếu không nhập
+        .refine(
+            (val) => !val || /^(0|\+84)[3|5|7|8|9][0-9]{8}$/.test(val),
+            "Số điện thoại không đúng định dạng Việt Nam.",
+        ),
+
+    // Bổ sung address
+    address: z
+        .string()
+        .max(500, "Địa chỉ quá dài (tối đa 500 ký tự).")
+        .optional()
+        .or(z.literal("")),
 });

@@ -360,9 +360,14 @@ model users {
   id            String    @id @default(uuid()) @db.Char(36)
   username      String    @unique
   email         String    @unique
-  password_hash String
+  password_hash String? 
   full_name     String?
   avatar        String?
+  phone         String?   
+  address       String?   @db.Text
+  
+  google_id     String?   @unique 
+  auth_provider String    @default("local") 
   
   // Dùng Enum hoặc String để phân quyền
   role          String    @default("user") // "admin", "user"

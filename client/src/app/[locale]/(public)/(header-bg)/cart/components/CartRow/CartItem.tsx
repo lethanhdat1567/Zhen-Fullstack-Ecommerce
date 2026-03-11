@@ -3,9 +3,11 @@ import { resolveMediaSrc } from "@/lib/image";
 import { CartItem as CartItemType } from "@/services/cartService";
 import { useCartStore } from "@/store/useCartStore";
 import { Trash } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 
 function CartItem({ item }: { item: CartItemType }) {
+    const t = useTranslations("Cart");
     const removeCart = useCartStore((state) => state.removeItem);
 
     async function handleRemove() {
@@ -31,7 +33,7 @@ function CartItem({ item }: { item: CartItemType }) {
                     className="inline-flex cursor-pointer items-center gap-2 font-medium hover:text-red-500"
                     onClick={handleRemove}
                 >
-                    <Trash size={20} /> Xóa
+                    <Trash size={20} /> {t("remove")}
                 </span>
             </div>
         </div>

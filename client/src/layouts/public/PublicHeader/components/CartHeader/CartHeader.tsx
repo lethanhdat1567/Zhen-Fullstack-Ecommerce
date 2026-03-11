@@ -5,10 +5,11 @@ import { CartItem, cartService } from "@/services/cartService";
 import { useCartStore } from "@/store/useCartStore";
 import { cartUtils } from "@/utils/cartUtils";
 import { ShoppingBag } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 function CartHeader() {
+    const t = useTranslations("Header.cart");
     const locale = useLocale();
     const cartItems = useCartStore((state) => state.items);
     const [carts, setCarts] = useState<CartItem[]>([]);
@@ -50,7 +51,7 @@ function CartHeader() {
 
             <div className="invisible absolute right-0 bottom-0 z-999 w-100 translate-y-[96%] scale-95 border bg-white text-black opacity-0 shadow transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover/cart:visible group-hover/cart:translate-y-full group-hover/cart:scale-100 group-hover/cart:opacity-100">
                 {carts.length === 0 ? (
-                    <div className="p-4 text-sm italic">Không có sản phẩm</div>
+                    <div className="p-4 text-sm italic">{t("emptyCart")}</div>
                 ) : (
                     <>
                         <div
@@ -66,7 +67,7 @@ function CartHeader() {
                         </div>
                         <div className="flex items-center justify-between px-2 py-5">
                             <span className="flex text-lg font-medium">
-                                Tổng tiền:
+                                {t("total")}:
                             </span>
                             <p className="text-lg font-semibold text-(--primary-color)">
                                 {cartUtils.formatCurrency(totalAmount)}
@@ -74,7 +75,7 @@ function CartHeader() {
                         </div>
                         <div className="w-full p-2">
                             <Button className="w-full rounded-full bg-(--primary-color) py-5!">
-                                Thanh toán tất cả
+                                {t("checkoutBtn")}
                             </Button>
                         </div>
                     </>

@@ -18,8 +18,10 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 import { useAuthStore } from "@/store/useAuthStore";
 import { userService } from "@/services/userService";
+import { useTranslations } from "next-intl";
 
 function FormBooking() {
+    const t = useTranslations("Booking");
     const user = useAuthStore((state) => state.user);
     const searchParams = useSearchParams();
     const service_id = searchParams.get("id");
@@ -63,33 +65,34 @@ function FormBooking() {
                         res.id,
                 );
             }
-            toast.success("Đặt phòng thành công!");
+            toast.success(t("successMessage"));
         } catch (error) {
             if (error instanceof HttpError) {
                 if (error.status === 400) {
                     form.setError("check_in", {
-                        message: "Chúng tôi chỉ nhận đặt phòng qua đêm.",
+                        message: t("errorOvernightOnly"),
                     });
                 }
             }
         }
     }
 
-    // eslint-disable-next-line react-hooks/incompatible-library
     const serviceId = form.watch("service_id");
     const dateFrom = form.watch("check_in");
     const dateTo = form.watch("check_out");
 
     return (
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-4">
-            <h2 className="mb-4 text-xl font-bold">Thông tin đặt phòng</h2>
+            <h2 className="mb-4 text-xl font-bold">{t("title")}</h2>
 
             <Controller
                 name="service_id"
                 control={form.control}
                 render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={field.name}>Mã dịch vụ</FieldLabel>
+                        <FieldLabel htmlFor={field.name}>
+                            {t("serviceId")}
+                        </FieldLabel>
 
                         <SelectService
                             value={serviceId}
@@ -108,11 +111,13 @@ function FormBooking() {
                 control={form.control}
                 render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={field.name}>Họ và tên</FieldLabel>
+                        <FieldLabel htmlFor={field.name}>
+                            {t("fullName")}
+                        </FieldLabel>
                         <Input
                             {...field}
                             id={field.name}
-                            placeholder="Nhập tên của bạn"
+                            placeholder={t("fullNamePlaceholder")}
                         />
                         {fieldState.error && (
                             <FieldError errors={[fieldState.error]} />
@@ -128,7 +133,9 @@ function FormBooking() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                         <Field data-invalid={fieldState.invalid}>
-                            <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                            <FieldLabel htmlFor={field.name}>
+                                {t("email")}
+                            </FieldLabel>
                             <Input
                                 {...field}
                                 id={field.name}
@@ -149,7 +156,7 @@ function FormBooking() {
                     render={({ field, fieldState }) => (
                         <Field data-invalid={fieldState.invalid}>
                             <FieldLabel htmlFor={field.name}>
-                                Số điện thoại
+                                {t("phone")}
                             </FieldLabel>
                             <Input
                                 {...field}
@@ -172,7 +179,7 @@ function FormBooking() {
                     render={({ field, fieldState }) => (
                         <Field data-invalid={fieldState.invalid}>
                             <FieldLabel htmlFor={field.name}>
-                                Số khách
+                                {t("guests")}
                             </FieldLabel>
                             <Input
                                 {...field}
@@ -196,7 +203,7 @@ function FormBooking() {
                     render={({ field, fieldState }) => (
                         <Field data-invalid={fieldState.invalid}>
                             <FieldLabel htmlFor={field.name}>
-                                Nhận phòng
+                                {t("checkIn")}
                             </FieldLabel>
                             <DatePickerWithRange
                                 from={dateFrom}
@@ -228,14 +235,13 @@ function FormBooking() {
                 render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
                         <FieldLabel htmlFor={field.name}>
-                            Ghi chú thêm
+                            {t("note")}
                         </FieldLabel>
                         <Textarea
                             {...field}
                             id={field.name}
-                            placeholder="Yêu cầu đặc biệt..."
+                            placeholder={t("notePlaceholder")}
                         />
-                        {/* Hoặc dùng <Textarea {...field} /> nếu bạn có component đó */}
                         {fieldState.error && (
                             <FieldError errors={[fieldState.error]} />
                         )}
@@ -249,7 +255,7 @@ function FormBooking() {
                 render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
                         <FieldLabel htmlFor={field.name}>
-                            Phương thức thanh toán
+                            {t("paymentMethod")}
                         </FieldLabel>
                         <SelectPaymentMethod
                             value={field.value}
@@ -263,7 +269,7 @@ function FormBooking() {
             />
 
             <Button type="submit" className="mt-6 w-full">
-                Xác nhận đặt phòng
+                {t("confirmButton")}
             </Button>
         </form>
     );

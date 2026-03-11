@@ -3,7 +3,6 @@
 import CartRow from "@/app/[locale]/(public)/(header-bg)/cart/components/CartRow/CartRow";
 import AutoBanner from "@/components/Auto/AutoBanner";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
     Table,
     TableBody,
@@ -16,10 +15,11 @@ import { CartItem, cartService } from "@/services/cartService";
 import { useCartStore } from "@/store/useCartStore";
 import { cartUtils } from "@/utils/cartUtils";
 import { ShoppingBag } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 function CartPage() {
+    const t = useTranslations("Cart");
     const locale = useLocale();
     const cartItems = useCartStore((state) => state.items);
     const [carts, setCarts] = useState<CartItem[]>([]);
@@ -28,7 +28,6 @@ function CartPage() {
     const fetchCarts = async () => {
         try {
             const res = await cartService.syncCart(cartItems, locale);
-            console.log(res);
 
             setCarts(res.items);
             setTotal(res.totalAmount);
@@ -47,7 +46,7 @@ function CartPage() {
             <AutoBanner
                 breadcrumbData={[
                     {
-                        title: "Giỏ hàng",
+                        title: t("breadcrumb"),
                         href: "/cart",
                     },
                 ]}
@@ -62,33 +61,24 @@ function CartPage() {
 
                     {/* Thông báo chính */}
                     <h3 className="mb-2 text-xl font-semibold text-neutral-800">
-                        Giỏ hàng của bạn đang rỗng
+                        {t("emptyTitle")}
                     </h3>
 
                     {/* Gợi ý */}
                     <p className="mb-8 max-w-md text-sm text-neutral-500 italic">
-                        Có vẻ như bạn chưa chọn được sản phẩm ưng ý. Hãy khám
-                        phá thêm hàng ngàn sản phẩm thú vị nhé!
+                        {t("emptyDesc")}
                     </p>
-
-                    {/* Nút hành động quan trọng */}
-                    <Link
-                        href="/products"
-                        className="rounded-tl-3xl rounded-br-3xl bg-(--primary-color) px-8 py-3 text-sm font-bold text-white shadow-lg transition-all hover:scale-105 active:scale-95"
-                    >
-                        TIẾP TỤC MUA SẮM
-                    </Link>
                 </div>
             ) : (
                 <div className="container">
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Thông tin sản phẩm</TableHead>
-                                <TableHead>Đơn giá</TableHead>
-                                <TableHead>Số lượng</TableHead>
+                                <TableHead>{t("table.info")}</TableHead>
+                                <TableHead>{t("table.price")}</TableHead>
+                                <TableHead>{t("table.quantity")}</TableHead>
                                 <TableHead className="text-right">
-                                    Thành tiền
+                                    {t("table.total")}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -100,14 +90,14 @@ function CartPage() {
                     </Table>
                     <div className="mt-10 ml-auto flex w-sm flex-col items-end">
                         <div className="flex w-full items-center justify-between">
-                            <p className="text-lg">Tổng tiền:</p>
+                            <p className="text-lg">{t("total")}</p>
                             <p className="text-xl font-semibold text-(--primary-color)">
                                 {cartUtils.formatCurrency(total)}
                             </p>
                         </div>
                         <Link href="/checkout" className="mt-4 w-full">
                             <Button className="w-full rounded-sm bg-(--primary-color) py-6!">
-                                Thanh toán
+                                {t("textBtn")}
                             </Button>
                         </Link>
                     </div>

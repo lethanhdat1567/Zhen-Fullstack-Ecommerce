@@ -12,6 +12,7 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { type DateRange } from "react-day-picker";
 import { Availability, availableService } from "@/services/availableService";
+import { useTranslations } from "next-intl";
 
 type Props = {
     from: Date | undefined;
@@ -26,6 +27,7 @@ export function DatePickerWithRange({
     to,
     onRangeChange,
 }: Props) {
+    const t = useTranslations("Booking");
     const [date, setDate] = React.useState<DateRange | undefined>({
         from: from,
         to: to,
@@ -72,7 +74,7 @@ export function DatePickerWithRange({
                             format(date.from, "dd/MM/yyyy")
                         )
                     ) : (
-                        <span>Chọn ngày nhận - trả phòng</span>
+                        <span>{t("selectDatePlaceholder")}</span>
                     )}
                 </Button>
             </PopoverTrigger>

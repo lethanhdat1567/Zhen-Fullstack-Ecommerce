@@ -11,6 +11,7 @@ import ms, { StringValue } from "ms";
 import { envConfig } from "@/config/envConfig";
 import { prisma } from "@/lib/prisma";
 import { mailer } from "@/lib/mailer";
+import { OAuth2Client } from "google-auth-library";
 
 type RegisterInput = {
     username: string;
@@ -28,16 +29,14 @@ export class AuthService {
     static async register(data: RegisterInput) {
         const { username, email, password, full_name } = data;
 
-        // 1. Kiểm tra tồn tại
         const exists = await prisma.users.findFirst({
             where: { OR: [{ username }, { email }] },
         });
 
         if (exists) {
-            throw new AppError("Username or email already exists", 409);
+            throw new AppError("Username hoặc email đã tồn tại", 409);
         }
 
-        // 2. Hash mật khẩu và tạo User
         const password_hash = await hashPassword(password);
 
         const newUser = await prisma.users.create({
@@ -48,6 +47,7 @@ export class AuthService {
                 full_name,
                 role: "user",
                 status: "active",
+                auth_provider: "local",
             },
         });
 
@@ -99,12 +99,20 @@ export class AuthService {
         });
 
         if (!user) {
-            throw new AppError("Invalid credentials", 401);
+            throw new AppError("Thông tin đăng nhập không chính xác", 401);
         }
 
+        if (!user.password_hash) {
+            throw new AppError(
+                "Tài khoản này được đăng ký qua Google. Vui lòng đăng nhập bằng Google hoặc khôi phục mật khẩu.",
+                401,
+            );
+        }
+
+        // 3. So sánh mật khẩu
         const ok = await comparePassword(password, user.password_hash);
         if (!ok) {
-            throw new AppError("Invalid credentials", 401);
+            throw new AppError("Thông tin đăng nhập không chính xác", 401);
         }
 
         const payload = {
@@ -135,6 +143,113 @@ export class AuthService {
             data: { last_login_at: new Date() },
         });
 
+        return {
+            user: {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                role: user.role,
+                avatar: user.avatar,
+            },
+            accessToken,
+            refreshToken,
+            expiresIn: ms(ACCESS_EXPIRES_IN),
+        };
+    }
+
+    // auth.service.ts
+    static async googleLogin(idToken: string) {
+        const googleClient = new OAuth2Client(envConfig.google.clientId);
+
+        if (!idToken) {
+            throw new AppError("ID Token is required", 400);
+        }
+
+        let payload;
+        try {
+            const ticket = await googleClient.verifyIdToken({
+                idToken: idToken,
+                audience: envConfig.google.clientId,
+            });
+            payload = ticket.getPayload();
+        } catch (error) {
+            throw new AppError(
+                "Xác thực Google thất bại hoặc Token hết hạn",
+                401,
+            );
+        }
+
+        if (!payload || !payload.email) {
+            throw new AppError("Không thể lấy thông tin từ Google", 401);
+        }
+
+        // Lấy thông tin chuẩn từ Google
+        const {
+            email,
+            name: full_name,
+            picture: avatar,
+            sub: google_id,
+        } = payload;
+
+        // 2. Tìm user theo email hoặc google_id
+        let user = await prisma.users.findFirst({
+            where: {
+                OR: [{ email }, { google_id }],
+            },
+        });
+
+        if (!user) {
+            // Tự sinh username nếu là user mới
+            const emailPrefix = email.split("@")[0];
+            const uniqueSuffix = google_id.slice(-4);
+            const generatedUsername = `${emailPrefix}_${uniqueSuffix}`;
+
+            user = await prisma.users.create({
+                data: {
+                    email,
+                    username: generatedUsername,
+                    full_name: full_name || "",
+                    avatar: avatar || "",
+                    google_id,
+                    auth_provider: "google",
+                    status: "active",
+                    role: "user",
+                    last_login_at: new Date(),
+                },
+            });
+        } else {
+            // Cập nhật thông tin nếu user đã tồn tại
+            user = await prisma.users.update({
+                where: { id: user.id },
+                data: {
+                    google_id,
+                    auth_provider: "google",
+                    avatar: avatar || user.avatar,
+                    last_login_at: new Date(),
+                },
+            });
+        }
+
+        // 3. Tạo Token hệ thống (JWT của riêng bạn)
+        const tokenPayload = { userId: user.id, role: user.role };
+        const accessToken = signAccessToken(tokenPayload);
+        const refreshToken = signRefreshToken(tokenPayload);
+
+        // 4. Quản lý Refresh Token trong DB
+        await prisma.user_tokens.deleteMany({
+            where: { user_id: user.id, type: "refresh" },
+        });
+
+        await prisma.user_tokens.create({
+            data: {
+                user_id: user.id,
+                token: refreshToken,
+                type: "refresh",
+                expired_at: new Date(Date.now() + ms(REFRESH_EXPIRES_IN)),
+            },
+        });
+
+        // 5. Trả về format chuẩn cho Frontend
         return {
             user: {
                 id: user.id,

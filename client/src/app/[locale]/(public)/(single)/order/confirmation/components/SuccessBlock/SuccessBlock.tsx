@@ -1,3 +1,5 @@
+"use client";
+
 import Logo from "@/components/Logo/Logo";
 import {
     Card,
@@ -11,51 +13,54 @@ import { Separator } from "@/components/ui/separator";
 import ItemSection from "@/app/[locale]/(public)/(single)/order/confirmation/components/SuccessBlock/components/ProductSection/ProductSection";
 import TotalSection from "@/app/[locale]/(public)/(single)/order/confirmation/components/SuccessBlock/components/TotalSection/TotalSection";
 import { OrderConfirmationResult } from "@/app/[locale]/(public)/(single)/order/confirmation/page";
+import { useTranslations } from "next-intl";
 
 interface SuccessBlockProps {
     order: OrderConfirmationResult;
 }
 
 function SuccessBlock({ order }: SuccessBlockProps) {
+    const t = useTranslations("OrderConfirmation.success");
+
     const paymentMethodMap: Record<string, string> = {
-        cod: "Thanh toán khi nhận hàng",
-        vnpay: "VNPay",
-        momo: "MoMo",
+        cod: t("methodCod"),
+        vnpay: t("methodVnpay"),
+        momo: t("methodMomo"),
     };
 
     const paymentStatusMap: Record<string, string> = {
-        paid: "Đã thanh toán",
-        unpaid: "Chưa thanh toán",
-        failed: "Thanh toán thất bại",
+        paid: t("statusPaid"),
+        unpaid: t("statusUnpaid"),
+        failed: t("statusFailed"),
     };
 
     const orderLabelMap = {
         product: {
-            title: "Thanh toán đơn hàng thành công",
-            description: "Đơn hàng của bạn đã được đặt thành công.",
+            title: t("productTitle"),
+            description: t("productDescription"),
         },
         service: {
-            title: "Đặt dịch vụ thành công",
-            description: "Dịch vụ của bạn đã được đặt thành công.",
+            title: t("serviceTitle"),
+            description: t("serviceDescription"),
         },
     };
 
-    const labels = orderLabelMap[order.type];
+    const labels = orderLabelMap[order.type as keyof typeof orderLabelMap];
 
     const infoItems = [
-        { label: "Email:", value: order.email },
-        { label: "Số điện thoại:", value: order.phone },
+        { label: t("labelEmail"), value: order.email },
+        { label: t("labelPhone"), value: order.phone },
 
         ...(order.type === "product" && order.address
-            ? [{ label: "Địa chỉ:", value: order.address }]
+            ? [{ label: t("labelAddress"), value: order.address }]
             : []),
 
         {
-            label: "Phương thức thanh toán:",
+            label: t("labelPaymentMethod"),
             value: paymentMethodMap[order.paymentMethod] || order.paymentMethod,
         },
         {
-            label: "Trạng thái:",
+            label: t("labelStatus"),
             value: paymentStatusMap[order.paymentStatus] || order.paymentStatus,
         },
     ];
@@ -76,7 +81,7 @@ function SuccessBlock({ order }: SuccessBlockProps) {
                     <CardHeader>
                         <CardTitle>{labels.description}</CardTitle>
                         <CardDescription>
-                            Chúng tôi đã gửi email xác nhận đơn hàng.
+                            {t("emailConfirmation")}
                         </CardDescription>
                     </CardHeader>
 

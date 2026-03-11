@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 interface InfoItem {
     label: string;
     value: React.ReactNode;
@@ -8,9 +10,13 @@ interface ProductInfoProps {
 }
 
 function ProductInfo({ items }: ProductInfoProps) {
+    const t = useTranslations("OrderConfirmation.success");
+
     return (
         <div>
-            <h3 className="text-md mb-2 font-semibold">Thông tin của bạn:</h3>
+            <h3 className="text-md mb-2 font-semibold">
+                {t("personalInfoTitle")}
+            </h3>
             <div className="grid grid-cols-2 gap-4">
                 {items.map((item, index) => (
                     <div key={index} className="flex flex-col gap-1">

@@ -1,11 +1,13 @@
 "use client";
 
+import { Skeleton } from "@/components/ui/skeleton";
 import { siteSettingService } from "@/services/siteService";
 import { Phone } from "lucide-react";
 import { useEffect, useState } from "react";
 
 function PhoneSection() {
     const [phoneNumber, setPhoneNumber] = useState("");
+    const [loading, setLoading] = useState(true);
 
     const fetchNumber = async () => {
         try {
@@ -13,6 +15,8 @@ function PhoneSection() {
             setPhoneNumber(response.phone_number || "");
         } catch (error) {
             console.error("Error fetching phone number:", error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -21,11 +25,15 @@ function PhoneSection() {
         fetchNumber();
     }, []);
 
-    if (!phoneNumber) return null;
-
     return (
         <div className="hidden items-center gap-1 text-sm font-semibold text-(--primary-color) md:flex">
-            Hotline: <Phone size={16} />+{phoneNumber}
+            {loading ? (
+                <Skeleton className="h-8 w-50" />
+            ) : (
+                <>
+                    Hotline: <Phone size={16} />+{phoneNumber}
+                </>
+            )}
         </div>
     );
 }

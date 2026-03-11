@@ -1,4 +1,5 @@
-import { images } from "@/assets/images";
+"use client";
+
 import Image from "next/image";
 import {
     Table,
@@ -10,23 +11,33 @@ import {
 } from "@/components/ui/table";
 import { OrderConfirmItem } from "@/app/[locale]/(public)/(single)/order/confirmation/page";
 import { resolveMediaSrc } from "@/lib/image";
+import { useTranslations } from "next-intl";
+import { formatPrice } from "@/utils/formatPrice";
 
 interface ProductSectionProps {
     items: OrderConfirmItem[];
 }
 
 function ProductSection({ items }: ProductSectionProps) {
-    const formatPrice = (price: number) => price.toLocaleString("vi-VN") + "đ";
+    const t = useTranslations("OrderConfirmation.success");
 
     return (
         <Table>
             <TableHeader>
                 <TableRow>
-                    <TableHead className="w-20">Ảnh</TableHead>
-                    <TableHead>Sản phẩm</TableHead>
-                    <TableHead className="text-center">Số lượng</TableHead>
-                    <TableHead className="text-right">Giá</TableHead>
-                    <TableHead className="text-right">Tổng</TableHead>
+                    <TableHead className="w-20">
+                        {t("tableThumbnail")}
+                    </TableHead>
+                    <TableHead>{t("tableProduct")}</TableHead>
+                    <TableHead className="text-center">
+                        {t("tableQuantity")}
+                    </TableHead>
+                    <TableHead className="text-right">
+                        {t("tablePrice")}
+                    </TableHead>
+                    <TableHead className="text-right">
+                        {t("tableTotal")}
+                    </TableHead>
                 </TableRow>
             </TableHeader>
 

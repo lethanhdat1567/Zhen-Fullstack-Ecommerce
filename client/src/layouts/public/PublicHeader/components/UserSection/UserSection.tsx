@@ -20,8 +20,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { authService } from "@/services/authService";
 import { useCartStore } from "@/store/useCartStore";
 import { useFavoriteStore } from "@/store/useFavoriteStore";
+import { useTranslations } from "next-intl";
+import { resolveMediaSrc } from "@/lib/image";
 
 function UserSection() {
+    const t = useTranslations("Header.user");
     const router = useRouter();
     const user = useAuthStore((state) => state.user);
     const refreshToken = useAuthStore((state) => state.refreshToken);
@@ -50,8 +53,10 @@ function UserSection() {
                 <DropdownMenuTrigger className="outline-none">
                     <div className="flex cursor-pointer items-center gap-2 rounded-full border border-transparent p-1 pr-2 transition-all hover:border-white/20 hover:bg-white/10">
                         {/* Avatar tròn tạo điểm nhấn thị giác */}
-                        <Avatar className="h-8 w-8 border border-white/20">
-                            <AvatarImage src={user.avatar} />
+                        <Avatar className="h-8 w-8 border border-white/20 object-cover">
+                            <AvatarImage
+                                src={resolveMediaSrc(user.avatar) as any}
+                            />
                             <AvatarFallback className="bg-yellow-500 text-xs font-bold text-black">
                                 {user.username[0].toUpperCase()}
                             </AvatarFallback>
@@ -63,8 +68,8 @@ function UserSection() {
                             </span>
                             <span className="mt-0.5 text-[10px] text-white/60">
                                 {user.role === "admin"
-                                    ? "Quản trị viên"
-                                    : "Thành viên"}
+                                    ? t("roleAdmin")
+                                    : t("roleUser")}
                             </span>
                         </div>
 
@@ -90,7 +95,7 @@ function UserSection() {
 
                     <DropdownMenuItem className="cursor-pointer">
                         <User className="mr-2 h-4 w-4" />
-                        <span>Hồ sơ của tôi</span>
+                        <span>{t("profile")}</span>
                     </DropdownMenuItem>
 
                     <DropdownMenuItem
@@ -100,18 +105,13 @@ function UserSection() {
                         }}
                     >
                         <History className="mr-2 h-4 w-4" />
-                        <span>Đơn mua của bạn</span>
-                    </DropdownMenuItem>
-
-                    <DropdownMenuItem className="cursor-pointer">
-                        <Settings className="mr-2 h-4 w-4" />
-                        <span>Cài đặt</span>
+                        <span>{t("history")}</span>
                     </DropdownMenuItem>
 
                     {user.role === "admin" && (
                         <DropdownMenuItem className="text-primary focus:text-primary cursor-pointer">
                             <LayoutDashboard className="mr-2 h-4 w-4" />
-                            <span>Trang quản trị</span>
+                            <span>{t("admin")}</span>
                         </DropdownMenuItem>
                     )}
 
@@ -121,7 +121,7 @@ function UserSection() {
                         onClick={handleLogout}
                     >
                         <LogOut className="mr-2 h-4 w-4" />
-                        <span>Đăng xuất</span>
+                        <span>{t("logout")}</span>
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
@@ -134,11 +134,11 @@ function UserSection() {
                 className="transition hover:text-yellow-500"
                 href={"/register"}
             >
-                Đăng ký
+                {t("register")}
             </Link>{" "}
             /{" "}
             <Link className="transition hover:text-yellow-500" href={"/login"}>
-                Đăng nhập
+                {t("login")}
             </Link>
         </div>
     );

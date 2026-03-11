@@ -28,6 +28,8 @@ function AdminForm() {
             avatar: "",
             username: "",
             email: "",
+            phone: "",
+            address: "",
         },
     });
 
@@ -55,14 +57,15 @@ function AdminForm() {
 
         try {
             setFetching(true);
-
             const res = await userService.detail(admin.id);
 
             form.reset({
-                full_name: res.full_name,
+                full_name: res.full_name || "",
                 avatar: res.avatar || "",
-                username: res.username,
-                email: res.email,
+                username: res.username || "",
+                email: res.email || "",
+                phone: res.phone || "", // Map phone từ API
+                address: res.address || "", // Map address từ API
             });
         } catch (error) {
             console.log(error);
@@ -100,18 +103,19 @@ function AdminForm() {
                 )}
             />
 
-            {/* USERNAME */}
+            {/* PHONE - Mới bổ sung */}
             <Controller
-                name="username"
+                name="phone"
                 control={form.control}
                 render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={field.name}>Username</FieldLabel>
+                        <FieldLabel htmlFor={field.name}>
+                            Số điện thoại
+                        </FieldLabel>
                         <Input
                             {...field}
                             id={field.name}
-                            placeholder="admin_01"
-                            autoComplete="off"
+                            placeholder="0912345678"
                             disabled={disabled}
                             aria-invalid={fieldState.invalid}
                         />
@@ -122,19 +126,65 @@ function AdminForm() {
                 )}
             />
 
-            {/* EMAIL */}
+            {/* EMAIL & USERNAME */}
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                <Controller
+                    name="username"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                            <FieldLabel htmlFor={field.name}>
+                                Username
+                            </FieldLabel>
+                            <Input
+                                {...field}
+                                id={field.name}
+                                placeholder="admin_01"
+                                autoComplete="off"
+                                disabled={disabled}
+                                aria-invalid={fieldState.invalid}
+                            />
+                            {fieldState.error && (
+                                <FieldError errors={[fieldState.error]} />
+                            )}
+                        </Field>
+                    )}
+                />
+
+                <Controller
+                    name="email"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                            <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                            <Input
+                                {...field}
+                                id={field.name}
+                                type="email"
+                                placeholder="admin@example.com"
+                                autoComplete="off"
+                                disabled={disabled}
+                                aria-invalid={fieldState.invalid}
+                            />
+                            {fieldState.error && (
+                                <FieldError errors={[fieldState.error]} />
+                            )}
+                        </Field>
+                    )}
+                />
+            </div>
+
+            {/* ADDRESS - Mới bổ sung */}
             <Controller
-                name="email"
+                name="address"
                 control={form.control}
                 render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                        <FieldLabel htmlFor={field.name}>Địa chỉ</FieldLabel>
                         <Input
                             {...field}
                             id={field.name}
-                            type="email"
-                            placeholder="admin@example.com"
-                            autoComplete="off"
+                            placeholder="Số 123, Đường ABC, Quận XYZ..."
                             disabled={disabled}
                             aria-invalid={fieldState.invalid}
                         />

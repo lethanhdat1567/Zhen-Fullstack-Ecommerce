@@ -3,24 +3,22 @@
 import TableSection from "@/app/[locale]/(public)/(header-bg)/wishlist/components/TableSection/TableSection";
 import AutoBanner from "@/components/Auto/AutoBanner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Link } from "@/i18n/navigation";
 import { useFavoriteStore } from "@/store/useFavoriteStore";
 import { HeartOff } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 function FavoritePage() {
     const favoriteItems = useFavoriteStore((state) => state.items);
-
-    // Lọc dữ liệu theo loại
     const products = favoriteItems.filter((item) => item.type === "product");
     const services = favoriteItems.filter((item) => item.type === "service");
 
-    // Hàm render bảng (tránh lặp code)
+    const t = useTranslations("Wishlist");
 
     return (
         <div className="mb-20">
             <AutoBanner
                 breadcrumbData={[
-                    { title: "Danh sách yêu thích", href: "/favorites" },
+                    { title: t("breadcrumb"), href: "/favorites" },
                 ]}
             />
 
@@ -31,14 +29,8 @@ function FavoritePage() {
                             <HeartOff size={64} strokeWidth={1} />
                         </div>
                         <h3 className="mb-2 text-xl font-semibold text-neutral-800">
-                            Danh sách trống
+                            {t("empty")}
                         </h3>
-                        <Link
-                            href="/"
-                            className="mt-6 rounded-tl-3xl rounded-br-3xl bg-(--primary-color) px-8 py-3 text-sm font-bold text-white shadow-lg transition-all hover:scale-105"
-                        >
-                            KHÁM PHÁ NGAY
-                        </Link>
                     </div>
                 ) : (
                     <Tabs defaultValue="all" className="w-full">
@@ -48,19 +40,19 @@ function FavoritePage() {
                                     value="all"
                                     className="rounded-none bg-transparent px-0 pb-2 text-base shadow-none transition-none data-[state=active]:border-b-2 data-[state=active]:border-(--primary-color)"
                                 >
-                                    Tất cả ({favoriteItems.length})
+                                    {t("all")} ({favoriteItems.length})
                                 </TabsTrigger>
                                 <TabsTrigger
                                     value="products"
                                     className="rounded-none bg-transparent px-0 pb-2 text-base shadow-none transition-none data-[state=active]:border-b-2 data-[state=active]:border-(--primary-color)"
                                 >
-                                    Sản phẩm ({products.length})
+                                    {t("product")} ({products.length})
                                 </TabsTrigger>
                                 <TabsTrigger
                                     value="services"
                                     className="rounded-none bg-transparent px-0 pb-2 text-base shadow-none transition-none data-[state=active]:border-b-2 data-[state=active]:border-(--primary-color)"
                                 >
-                                    Dịch vụ ({services.length})
+                                    {t("service")} ({services.length})
                                 </TabsTrigger>
                             </TabsList>
                         </div>
@@ -72,14 +64,14 @@ function FavoritePage() {
                             {products.length > 0 ? (
                                 <TableSection items={products} />
                             ) : (
-                                <EmptyTabState msg="Không có sản phẩm nào" />
+                                <EmptyTabState msg={t("emptyProduct")} />
                             )}
                         </TabsContent>
                         <TabsContent value="services">
                             {services.length > 0 ? (
                                 <TableSection items={services} />
                             ) : (
-                                <EmptyTabState msg="Không có dịch vụ nào" />
+                                <EmptyTabState msg={t("emptyService")} />
                             )}
                         </TabsContent>
                     </Tabs>

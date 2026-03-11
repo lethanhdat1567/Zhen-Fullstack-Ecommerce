@@ -15,19 +15,23 @@ import { FavoriteItem } from "@/services/favoriteService";
 import { useFavoriteStore } from "@/store/useFavoriteStore";
 import { useCartStore } from "@/store/useCartStore";
 import { Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 function TableSection({ items }: { items: FavoriteItem[] }) {
     const toggleFavorite = useFavoriteStore((state) => state.toggleFavorite);
     const addItem = useCartStore((state) => state.addItem);
+    const t = useTranslations("Wishlist");
 
     return (
         <Table>
             <TableHeader>
                 <TableRow>
-                    <TableHead className="w-112.5">Thông tin</TableHead>
-                    <TableHead>Đơn giá</TableHead>
-                    <TableHead>Tình trạng</TableHead>
-                    <TableHead className="text-right">Thao tác</TableHead>
+                    <TableHead className="w-112.5">{t("table.info")}</TableHead>
+                    <TableHead>{t("table.price")}</TableHead>
+                    <TableHead>{t("table.status")}</TableHead>
+                    <TableHead className="text-right">
+                        {t("table.action")}
+                    </TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -75,16 +79,16 @@ function TableSection({ items }: { items: FavoriteItem[] }) {
                             {item.type === "product" ? (
                                 item.stock && item.stock > 0 ? (
                                     <span className="text-sm font-medium text-green-600">
-                                        Còn hàng
+                                        {t("table.inStock")}
                                     </span>
                                 ) : (
                                     <span className="text-sm font-medium text-red-500">
-                                        Hết hàng
+                                        {t("table.outStock")}
                                     </span>
                                 )
                             ) : (
                                 <span className="text-sm font-medium text-blue-600">
-                                    Còn phòng
+                                    {t("table.roomAvailable")}
                                 </span>
                             )}
                         </TableCell>
@@ -99,12 +103,12 @@ function TableSection({ items }: { items: FavoriteItem[] }) {
                                         );
                                     }}
                                 >
-                                    Thêm vào giỏ hàng
+                                    {t("addProductBtn")}
                                 </Button>
                             )}
                             {item.type === "service" && (
                                 <Link href={`/booking?id=${item.id}`}>
-                                    <Button>Đặt phòng</Button>
+                                    <Button>{t("addServiceBtn")}</Button>
                                 </Link>
                             )}
                             <Button

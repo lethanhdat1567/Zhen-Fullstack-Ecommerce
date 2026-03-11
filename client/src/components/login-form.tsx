@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import { cartService } from "@/services/cartService";
 import { useCartStore } from "@/store/useCartStore";
 import { useFavoriteStore } from "@/store/useFavoriteStore";
+import GoogleLogin from "@/app/(auth)/components/GoogleLogin/GoogleLogin";
 
 export function LoginForm({
     className,
@@ -128,22 +129,29 @@ export function LoginForm({
                         <Input
                             id="password"
                             type="password"
-                            placeholder="••••••••"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
                     </Field>
+                    {/* Submit */}
+                    <Button type="submit" className="w-full" disabled={loading}>
+                        {loading ? "Đang đăng nhập..." : "Đăng nhập"}
+                    </Button>
+
+                    <GoogleLogin />
 
                     {/* Error message */}
                     {error && (
                         <p className="text-destructive text-sm">{error}</p>
                     )}
 
-                    {/* Submit */}
-                    <Button type="submit" className="w-full" disabled={loading}>
-                        {loading ? "Đang đăng nhập..." : "Đăng nhập"}
-                    </Button>
+                    <Field>
+                        <FieldDescription className="text-center">
+                            Don&apos;t have an account?{" "}
+                            <a href={"/register"}>Sign up</a>
+                        </FieldDescription>
+                    </Field>
                 </FieldGroup>
             </form>
         </div>

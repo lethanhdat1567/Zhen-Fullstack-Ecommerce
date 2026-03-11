@@ -5,11 +5,12 @@ import ProductCard from "@/app/[locale]/(public)/(header-bg)/search/components/P
 import SearchInput from "@/app/[locale]/(public)/(header-bg)/search/components/SearchInput/SearchInput";
 import ServiceCard from "@/app/[locale]/(public)/(header-bg)/search/components/ServiceCard/ServiceCard";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useRouter } from "@/i18n/navigation";
 import { searchService } from "@/services/searchService";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -65,6 +66,7 @@ function SearchPage() {
     const params = useSearchParams();
     const q = params.get("q");
     const tab = params.get("tab");
+    const t = useTranslations("Search");
 
     const [searchData, setSearchData] = useState<SearchDataType | null>(null);
     const [searchValue, setSearchValue] = useState(q || "");
@@ -79,8 +81,6 @@ function SearchPage() {
                 lang: locale,
                 q: searchDebounce,
             });
-            console.log(res);
-
             setSearchData(res as any);
         } catch (error) {
             console.log(error);
@@ -93,18 +93,14 @@ function SearchPage() {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         fetchSearchData();
         router.replace(`?q=${searchDebounce}&tab=${tab}`, { scroll: false });
-    }, [searchDebounce, locale]);
-
-    if (!searchData) return null;
+    }, [searchDebounce, locale, tab]);
 
     return (
-        <div className="py-20">
+        <div className="min-h-screen pt-20">
             <div className="mx-auto w-2xl">
                 <div className="text-center">
-                    <h1 className="mb-3 text-4xl font-bold">Tìm Kiếm</h1>
-                    <p className="mb-4 text-sm text-neutral-800">
-                        Tìm kiếm dịch vụ hoặc sản phẩm bạn yêu thích!.
-                    </p>
+                    <h1 className="mb-3 text-4xl font-bold">{t("title")}</h1>
+                    <p className="mb-4 text-sm text-neutral-800">{t("desc")}</p>
                     <SearchInput
                         value={searchValue}
                         onChange={(value) => setSearchValue(value)}
@@ -122,78 +118,83 @@ function SearchPage() {
                             value="product"
                             className="rounded-none bg-transparent px-0 pb-2 text-base shadow-none transition-none data-[state=active]:border-b-2 data-[state=active]:border-(--primary-color)"
                         >
-                            Sản phẩm
+                            {t("product")}
                         </TabsTrigger>
                         <TabsTrigger
                             value="service"
                             className="rounded-none bg-transparent px-0 pb-2 text-base shadow-none transition-none data-[state=active]:border-b-2 data-[state=active]:border-(--primary-color)"
                         >
-                            Dịch vụ
+                            {t("service")}
                         </TabsTrigger>
                         <TabsTrigger
                             value="post"
                             className="rounded-none bg-transparent px-0 pb-2 text-base shadow-none transition-none data-[state=active]:border-b-2 data-[state=active]:border-(--primary-color)"
                         >
-                            Tin tức
+                            {t("post")}
                         </TabsTrigger>
                     </TabsList>
                     <Separator className="my-2" />
                     {loading ? (
                         <div className="text-center text-sm text-neutral-800">
-                            Đang tìm kiếm...
+                            {t("searching")}
                         </div>
                     ) : (
-                        <>
-                            <TabsContent value="product">
-                                <div className="space-y-4">
-                                    {searchData.products.map((product) => (
-                                        <ProductCard
-                                            key={product.id}
-                                            product={product}
-                                        />
-                                    ))}
+                        searchData && (
+                            <>
+                                <TabsContent value="product">
+                                    <div className="space-y-4">
+                                        {searchData.products.map((product) => (
+                                            <ProductCard
+                                                key={product.id}
+                                                product={product}
+                                            />
+                                        ))}
 
-                                    {searchData.products.length === 0 &&
-                                        searchValue && (
-                                            <div className="text-center text-sm text-neutral-800">
-                                                Không tìm thấy kết quả
-                                            </div>
-                                        )}
-                                </div>
-                            </TabsContent>
-                            <TabsContent value="service">
-                                <div className="space-y-4">
-                                    {searchData.services.map((service) => (
-                                        <ServiceCard
-                                            key={service.id}
-                                            service={service}
-                                        />
-                                    ))}
+                                        {searchData.products.length === 0 &&
+                                            searchValue && (
+                                                <div className="text-center text-sm text-neutral-800">
+                                                    {t("empty")}
+                                                </div>
+                                            )}
+                                    </div>
+                                </TabsContent>
+                                <TabsContent value="service">
+                                    <div className="space-y-4">
+                                        {searchData.services.map((service) => (
+                                            <ServiceCard
+                                                key={service.id}
+                                                service={service}
+                                            />
+                                        ))}
 
-                                    {searchData.services.length === 0 &&
-                                        searchValue && (
-                                            <div className="text-center text-sm text-neutral-800">
-                                                Không tìm thấy kết quả
-                                            </div>
-                                        )}
-                                </div>
-                            </TabsContent>
+                                        {searchData.services.length === 0 &&
+                                            searchValue && (
+                                                <div className="text-center text-sm text-neutral-800">
+                                                    {t("empty")}
+                                                </div>
+                                            )}
+                                    </div>
+                                </TabsContent>
 
-                            <TabsContent value="post">
-                                <div className="space-y-4">
-                                    {searchData.posts.map((post) => (
-                                        <PostCard key={post.id} post={post} />
-                                    ))}
+                                <TabsContent value="post">
+                                    <div className="space-y-4">
+                                        {searchData.posts.map((post) => (
+                                            <PostCard
+                                                key={post.id}
+                                                post={post}
+                                            />
+                                        ))}
 
-                                    {searchData.posts.length === 0 &&
-                                        searchValue && (
-                                            <div className="text-center text-sm text-neutral-800">
-                                                Không tìm thấy kết quả
-                                            </div>
-                                        )}
-                                </div>
-                            </TabsContent>
-                        </>
+                                        {searchData.posts.length === 0 &&
+                                            searchValue && (
+                                                <div className="text-center text-sm text-neutral-800">
+                                                    {t("empty")}
+                                                </div>
+                                            )}
+                                    </div>
+                                </TabsContent>
+                            </>
+                        )
                     )}
                 </Tabs>
             </div>

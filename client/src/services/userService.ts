@@ -9,8 +9,10 @@ export type User = {
     username: string;
     email: string;
     full_name?: string;
+    phone?: string; // Bổ sung
+    address?: string; // Bổ sung
     avatar?: string;
-    role: string; // "user", "admin", etc.
+    role: string;
     status: "active" | "inactive" | "blocked";
     created_at: string;
     updated_at?: string;
@@ -21,15 +23,21 @@ export type CreateUserPayload = {
     email: string;
     password: string;
     full_name?: string;
+    phone?: string; // Bổ sung
+    address?: string; // Bổ sung
     role?: string;
 };
 
 export type UpdateUserPayload = {
     full_name?: string;
+    phone?: string; // Bổ sung
+    address?: string; // Bổ sung
     avatar?: string;
     role?: string;
     status?: "active" | "inactive" | "blocked";
 };
+
+// ... Các types khác (ChangePasswordPayload, UserQueryParams, v.v.) giữ nguyên ...
 
 export type ChangePasswordPayload = {
     old_password: string;
@@ -70,6 +78,7 @@ export const userService = {
         CREATE
     ========================= */
     async create(payload: CreateUserPayload) {
+        // Payload lúc này đã bao gồm phone và address
         const res = await http.post<ApiResponse<User>>("/users", payload);
         return res.data;
     },
@@ -105,6 +114,7 @@ export const userService = {
         UPDATE
     ========================= */
     async update(id: string, payload: UpdateUserPayload) {
+        // Payload lúc này đã bao gồm phone và address
         const res = await http.put<ApiResponse<User>>(`/users/${id}`, payload);
         return res.data;
     },
@@ -134,7 +144,6 @@ export const userService = {
         BULK DELETE
     ========================= */
     async bulkDelete(ids: string[]) {
-        // Lưu ý: Tùy vào Backend nhận ids qua body hay query
         const res = await http.delete<ApiResponse<{ deletedCount: number }>>(
             `/users/bulk`,
             { ids } as any,

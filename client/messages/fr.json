@@ -1,4 +1,168 @@
 {
+    "Header": {
+        "search": {
+            "placeholder": "Rechercher des produits, services, actualités,...",
+            "more": "Voir plus"
+        },
+        "user": {
+            "login": "Connexion",
+            "register": "Inscription",
+            "profile": "Mon profil",
+            "history": "Mes commandes",
+            "admin": "Panneau d'administration",
+            "logout": "Déconnexion",
+            "roleUser": "Membre",
+            "roleAdmin": "Administrateur"
+        },
+        "cart": {
+            "emptyCart": "Aucun produit dans le panier",
+            "cart-quantity": "Quantité",
+            "deleteText": "Supprimer",
+            "total": "Total",
+            "checkoutBtn": "Tout payer"
+        }
+    },
+    "Search": {
+        "title": "Recherche",
+        "desc": "Recherchez des produits, des services ou des actualités que vous aimez !",
+        "empty": "Aucun résultat trouvé",
+        "product": "Produits",
+        "service": "Services",
+        "post": "Actualités",
+        "searching": "Recherche en cours..."
+    },
+    "Wishlist": {
+        "breadcrumb": "Liste de souhaits",
+        "empty": "La liste de souhaits est vide",
+        "all": "Tout",
+        "product": "Produits",
+        "service": "Services",
+        "emptyProduct": "Aucun produit trouvé",
+        "emptyService": "Aucun service trouvé",
+        "table": {
+            "info": "Informations",
+            "price": "Prix",
+            "status": "Statut",
+            "action": "Actions",
+            "inStock": "En stock",
+            "outStock": "Rupture de stock",
+            "roomAvailable": "Chambre disponible"
+        },
+        "addProductBtn": "Ajouter au panier",
+        "addServiceBtn": "Réserver"
+    },
+    "Cart": {
+        "breadcrumb": "Panier",
+        "table": {
+            "info": "Informations",
+            "price": "Prix",
+            "quantity": "Quantité",
+            "total": "Total"
+        },
+        "textBtn": "Passer à la caisse",
+        "total": "Total",
+        "emptyTitle": "Votre panier est vide",
+        "emptyDesc": "Vous n'avez aucun produit dans votre panier.",
+        "remove": "Supprimer"
+    },
+    "TrackOrder": {
+        "title": "Suivre la commande",
+        "description": "Entrez votre numéro de commande pour vérifier le statut et les informations détaillées de votre commande.",
+        "searchPlaceholder": "Rechercher...",
+        "searching": "Recherche en cours...",
+        "orderNotFound": "Commande introuvable !",
+        "productOrder": "COMMANDE DE PRODUIT",
+        "serviceBooking": "RÉSERVATION DE SERVICE",
+        "productCount": "{count} produits",
+        "checkIn": "Arrivée : {date}",
+        "checkOut": "Départ : {date}",
+        "total": "Total",
+        "viewDetail": "Voir les détails"
+    },
+    "Booking": {
+        "breadcrumb": "Réservation",
+        "title": "Informations de Réservation",
+        "serviceId": "Service",
+        "fullName": "Nom complet",
+        "fullNamePlaceholder": "Entrez votre nom",
+        "email": "E-mail",
+        "phone": "Numéro de téléphone",
+        "guests": "Nombre de personnes",
+        "checkIn": "Arrivée",
+        "checkOut": "Départ",
+        "note": "Notes supplémentaires",
+        "notePlaceholder": "Demandes spéciales...",
+        "paymentMethod": "Mode de paiement",
+        "confirmButton": "Confirmer la réservation",
+        "successMessage": "Réservation réussie !",
+        "errorOvernightOnly": "Nous acceptons uniquement les réservations d'une nuit minimum.",
+        "selectDatePlaceholder": "Choisir les dates d'arrivée et de départ",
+        "paymentCash": "Espèces",
+        "paymentTransfer": "Virement bancaire"
+    },
+    "Checkout": {
+        "title": "Paiement",
+        "shippingInfo": "Informations de livraison",
+        "fullName": "Nom et prénom",
+        "fullNamePlaceholder": "Ex: Jean Dupont",
+        "phoneNumber": "Numéro de téléphone",
+        "phoneNumberPlaceholder": "0901234567",
+        "email": "E-mail",
+        "emailPlaceholder": "exemple@gmail.com",
+        "address": "Adresse de livraison",
+        "addressPlaceholder": "Numéro de rue, nom de la rue, quartier...",
+        "note": "Note (Optionnel)",
+        "notePlaceholder": "Ex: Livraison pendant les heures de bureau...",
+        "paymentMethod": "Mode de paiement",
+        "paymentPlaceholder": "Choisir un mode de paiement",
+        "paymentCOD": "Paiement à la livraison",
+        "paymentVNPAY": "Paiement via VN PAY",
+        "orderSummary": "Commande ({count} produits)",
+        "subtotal": "Sous-total :",
+        "shippingFee": "Frais de port :",
+        "shippingFree": "Gratuit",
+        "total": "Total",
+        "backToCart": "Retour au panier",
+        "orderButton": "Commander"
+    },
+    "OrderConfirmation": {
+        "success": {
+            "productTitle": "Paiement de la commande réussi",
+            "productDescription": "Votre commande a été passée avec succès.",
+            "serviceTitle": "Réservation de service réussie",
+            "serviceDescription": "Votre service a été réservé avec succès.",
+            "emailConfirmation": "Nous vous avons envoyé un e-mail de confirmation.",
+            "labelEmail": "E-mail :",
+            "labelPhone": "Téléphone :",
+            "labelAddress": "Adresse :",
+            "labelPaymentMethod": "Mode de paiement :",
+            "labelStatus": "Statut :",
+            "methodCod": "Paiement à la livraison",
+            "methodVnpay": "VNPay",
+            "methodMomo": "MoMo",
+            "statusPaid": "Payé",
+            "statusUnpaid": "Non payé",
+            "statusFailed": "Échec du paiement",
+            "personalInfoTitle": "Vos informations :",
+            "tableThumbnail": "Image",
+            "tableProduct": "Produit",
+            "tableQuantity": "Quantité",
+            "tablePrice": "Prix",
+            "tableTotal": "Total",
+            "summaryTitle": "Résumé de la commande",
+            "summarySubtotal": "Sous-total",
+            "summaryShipping": "Frais de port",
+            "summaryShippingFree": "Gratuit",
+            "summaryTotal": "Total à payer",
+            "historyButton": "Historique des achats"
+        },
+        "error": {
+            "title": "Échec du paiement",
+            "description": "Une erreur est survenue lors du paiement. Veuillez réessayer ou choisir un autre mode de paiement.",
+            "retryButton": "Réessayer le paiement",
+            "homeButton": "Retour à l'accueil"
+        }
+    },
     "Home": {
         "Hero": {
             "title": "Zhen Diététique – Thérapie Nutritionnelle",
