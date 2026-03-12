@@ -2,7 +2,12 @@
     "Header": {
         "search": {
             "placeholder": "Search products, services, news,...",
-            "more": "See more"
+            "more": "See more",
+            "type": {
+                "product": "Products",
+                "service": "Services",
+                "news": "Articles"
+            }
         },
         "user": {
             "login": "Login",
@@ -417,5 +422,71 @@
     "Site": {
         "breadcrumb": "Home",
         "emptyService": "No services available"
+    },
+    "Profile": {
+        "title": "My Profile",
+        "accountTitle": "Account Management",
+        "passwordTitle": "Password Management",
+        "form": {
+            "fullName": "Full Name",
+            "fullNamePlaceholder": "John Doe",
+            "phone": "Phone Number",
+            "phonePlaceholder": "0912345678",
+            "username": "Username",
+            "usernamePlaceholder": "admin_01",
+            "email": "Email",
+            "emailPlaceholder": "admin@example.com",
+            "address": "Address",
+            "addressPlaceholder": "123 ABC Street, District XYZ...",
+            "avatar": "Avatar",
+            "submitBtn": "Update Account",
+            "updating": "Updating..."
+        },
+        "password": {
+            "changeBtn": "Change Password",
+            "cancelBtn": "Cancel",
+            "currentPass": "Current Password",
+            "newPass": "New Password",
+            "confirmPass": "Confirm New Password",
+            "placeholder": "********"
+        },
+        "messages": {
+            "updateSuccess": "Update successful",
+            "updateError": "An error occurred",
+            "fetchError": "Failed to load account information"
+        }
+    },
+    "OrderHistory": {
+        "breadcrumb": "Order History",
+        "tabs": {
+            "all": "All",
+            "pending": "Pending",
+            "confirmed": "Processing",
+            "completed": "Completed",
+            "cancelled": "Cancelled"
+        },
+        "type": {
+            "product": "Products",
+            "service": "Services",
+            "news": "Articles"
+        },
+        "search": {
+            "placeholder": "Search by order ID or product name..."
+        },
+        "table": {
+            "orderId": "Order ID",
+            "bookingId": "Booking ID",
+            "product": "Product",
+            "service": "Service",
+            "orderDate": "Order Date",
+            "time": "Time",
+            "status": "Status",
+            "total": "Total Amount",
+            "action": "Action",
+            "viewDetail": "View details",
+            "emptyProduct": "You have no product purchase history.",
+            "emptyService": "You have no service booking history.",
+            "quantity": "Quantity: {qty}"
+        }
     }
 }

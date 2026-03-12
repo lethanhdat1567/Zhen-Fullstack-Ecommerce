@@ -93,7 +93,12 @@ function UserSection() {
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
 
-                    <DropdownMenuItem className="cursor-pointer">
+                    <DropdownMenuItem
+                        className="cursor-pointer"
+                        onClick={() => {
+                            router.push("/profile");
+                        }}
+                    >
                         <User className="mr-2 h-4 w-4" />
                         <span>{t("profile")}</span>
                     </DropdownMenuItem>
@@ -101,7 +106,7 @@ function UserSection() {
                     <DropdownMenuItem
                         className="cursor-pointer"
                         onClick={() => {
-                            router.push("/orders");
+                            router.push("/order-history");
                         }}
                     >
                         <History className="mr-2 h-4 w-4" />

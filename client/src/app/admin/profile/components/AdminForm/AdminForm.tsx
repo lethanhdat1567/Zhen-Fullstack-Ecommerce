@@ -14,8 +14,10 @@ import { HttpError } from "@/lib/http/errors";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { userService } from "@/services/userService";
+import { useTranslations } from "next-intl";
 
 function AdminForm() {
+    const t = useTranslations("Profile");
     const admin = useAuthStore((state) => state.user);
 
     const [loading, setLoading] = useState(false);
@@ -39,13 +41,12 @@ function AdminForm() {
         try {
             setLoading(true);
             await userService.update(admin.id, data);
-            toast.success("Cập nhật thành công");
+            toast.success(t("messages.updateSuccess"));
         } catch (error) {
-            console.log(error);
             if (error instanceof HttpError) {
                 toast.error(error.message);
             } else {
-                toast.error("Có lỗi xảy ra");
+                toast.error(t("messages.updateError"));
             }
         } finally {
             setLoading(false);
@@ -64,11 +65,11 @@ function AdminForm() {
                 avatar: res.avatar || "",
                 username: res.username || "",
                 email: res.email || "",
-                phone: res.phone || "", // Map phone từ API
-                address: res.address || "", // Map address từ API
+                phone: res.phone || "",
+                address: res.address || "",
             });
         } catch (error) {
-            console.log(error);
+            console.error(error);
         } finally {
             setFetching(false);
         }
@@ -82,17 +83,18 @@ function AdminForm() {
 
     return (
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-            {/* FULL NAME */}
             <Controller
                 name="full_name"
                 control={form.control}
                 render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={field.name}>Họ và tên</FieldLabel>
+                        <FieldLabel htmlFor={field.name}>
+                            {t("form.fullName")}
+                        </FieldLabel>
                         <Input
                             {...field}
                             id={field.name}
-                            placeholder="Nguyễn Văn A"
+                            placeholder={t("form.fullNamePlaceholder")}
                             disabled={disabled}
                             aria-invalid={fieldState.invalid}
                         />
@@ -103,19 +105,18 @@ function AdminForm() {
                 )}
             />
 
-            {/* PHONE - Mới bổ sung */}
             <Controller
                 name="phone"
                 control={form.control}
                 render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
                         <FieldLabel htmlFor={field.name}>
-                            Số điện thoại
+                            {t("form.phone")}
                         </FieldLabel>
                         <Input
                             {...field}
                             id={field.name}
-                            placeholder="0912345678"
+                            placeholder={t("form.phonePlaceholder")}
                             disabled={disabled}
                             aria-invalid={fieldState.invalid}
                         />
@@ -126,7 +127,6 @@ function AdminForm() {
                 )}
             />
 
-            {/* EMAIL & USERNAME */}
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                 <Controller
                     name="username"
@@ -134,12 +134,12 @@ function AdminForm() {
                     render={({ field, fieldState }) => (
                         <Field data-invalid={fieldState.invalid}>
                             <FieldLabel htmlFor={field.name}>
-                                Username
+                                {t("form.username")}
                             </FieldLabel>
                             <Input
                                 {...field}
                                 id={field.name}
-                                placeholder="admin_01"
+                                placeholder={t("form.usernamePlaceholder")}
                                 autoComplete="off"
                                 disabled={disabled}
                                 aria-invalid={fieldState.invalid}
@@ -156,12 +156,14 @@ function AdminForm() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                         <Field data-invalid={fieldState.invalid}>
-                            <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                            <FieldLabel htmlFor={field.name}>
+                                {t("form.email")}
+                            </FieldLabel>
                             <Input
                                 {...field}
                                 id={field.name}
                                 type="email"
-                                placeholder="admin@example.com"
+                                placeholder={t("form.emailPlaceholder")}
                                 autoComplete="off"
                                 disabled={disabled}
                                 aria-invalid={fieldState.invalid}
@@ -174,17 +176,18 @@ function AdminForm() {
                 />
             </div>
 
-            {/* ADDRESS - Mới bổ sung */}
             <Controller
                 name="address"
                 control={form.control}
                 render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={field.name}>Địa chỉ</FieldLabel>
+                        <FieldLabel htmlFor={field.name}>
+                            {t("form.address")}
+                        </FieldLabel>
                         <Input
                             {...field}
                             id={field.name}
-                            placeholder="Số 123, Đường ABC, Quận XYZ..."
+                            placeholder={t("form.addressPlaceholder")}
                             disabled={disabled}
                             aria-invalid={fieldState.invalid}
                         />
@@ -195,13 +198,14 @@ function AdminForm() {
                 )}
             />
 
-            {/* AVATAR */}
             <Controller
                 name="avatar"
                 control={form.control}
                 render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={field.name}>Avatar</FieldLabel>
+                        <FieldLabel htmlFor={field.name}>
+                            {t("form.avatar")}
+                        </FieldLabel>
                         <UploadThumbnail
                             value={field.value}
                             onChange={async (file) => {
@@ -226,7 +230,7 @@ function AdminForm() {
                     {loading && (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     )}
-                    Cập nhật tài khoản
+                    {loading ? t("form.updating") : t("form.submitBtn")}
                 </Button>
             </div>
         </form>

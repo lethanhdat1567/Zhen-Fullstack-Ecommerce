@@ -16,6 +16,7 @@ export type OrderStatus =
 export type OrderHistoryParams = {
     status?: OrderStatus;
     lang?: string;
+    search?: string;
 };
 
 export type BookingHistory = {
@@ -122,6 +123,7 @@ export const orderHistoryService = {
 
         if (params?.status) query.append("status", params.status);
         if (params?.lang) query.append("lang", params.lang);
+        if (params?.search) query.append("search", params.search);
 
         const res = await http.get<ApiResponse<OrderHistoryResponse>>(
             `/order-history?${query.toString()}`,

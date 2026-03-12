@@ -3,28 +3,16 @@
 import { images } from "@/assets/images";
 import { useLocale } from "next-intl";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function LanguageSwitcher() {
     const router = useRouter();
-    const pathname = usePathname();
     const locale = useLocale();
 
     const switchLocale = (nextLocale: string) => {
         if (locale === nextLocale) return;
 
-        const segments = pathname.split("/");
-
-        segments[1] = nextLocale;
-
-        const dynamicCategories = ["services", "products", "media", "posts"];
-
-        if (segments.length > 3 && dynamicCategories.includes(segments[2])) {
-            const categoryRoute = `/${nextLocale}`;
-            router.push(categoryRoute);
-        } else {
-            router.push(segments.join("/"));
-        }
+        router.push(`/${nextLocale}`);
     };
 
     const languages = [

@@ -9,26 +9,26 @@ type Props = {
     onClose: () => void;
 };
 
-const sections = [
-    {
-        key: "services",
-        title: "Dịch vụ",
-        tab: "service",
-    },
-    {
-        key: "products",
-        title: "Sản phẩm",
-        tab: "product",
-    },
-    {
-        key: "posts",
-        title: "Bài viết",
-        tab: "post",
-    },
-] as const;
-
 function SearchDropdownSection({ data, searchValue, onClose }: Props) {
     const t = useTranslations("Header.search");
+
+    const sections = [
+        {
+            key: "services",
+            title: t("type.service"),
+            tab: "service",
+        },
+        {
+            key: "products",
+            title: t("type.product"),
+            tab: "product",
+        },
+        {
+            key: "posts",
+            title: t("type.news"),
+            tab: "post",
+        },
+    ] as const;
 
     return (
         <div className="space-y-4">

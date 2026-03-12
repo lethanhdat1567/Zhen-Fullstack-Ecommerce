@@ -17,7 +17,7 @@ type Props = {
 
 function NavItem({ title, href, code, childNavs, onClick }: Props) {
     const pathname = usePathname();
-    const isActive = pathname.startsWith(href);
+    const isActive = pathname === href;
     const [isShowDropdown, setIsShowDropdown] = useState(false);
 
     return (

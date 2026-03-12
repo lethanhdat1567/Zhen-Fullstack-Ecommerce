@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Link } from "@/i18n/navigation";
 import { ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -46,9 +47,11 @@ function TotalSection({ total }: TotalSectionProps) {
                     <span className="text-green-600">{formatPrice(total)}</span>
                 </div>
 
-                <Button className="mt-2 w-full">
-                    {t("historyButton")} <ChevronRight />
-                </Button>
+                <Link href={"/order-history"}>
+                    <Button className="mt-2 w-full">
+                        {t("historyButton")} <ChevronRight />
+                    </Button>
+                </Link>
             </CardContent>
         </Card>
     );

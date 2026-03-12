@@ -11,9 +11,12 @@ import { HttpError } from "@/lib/http/errors";
 import { changePasswordSchema } from "@/app/admin/profile/components/ChangePassword/schema";
 import { useAuthStore } from "@/store/useAuthStore";
 import { userService } from "@/services/userService";
+import { useTranslations } from "next-intl";
 
 function ChangePasswordForm({ onCancel }: { onCancel: any }) {
+    const t = useTranslations("Profile");
     const admin = useAuthStore((state) => state.user);
+
     const form = useForm<z.infer<typeof changePasswordSchema>>({
         resolver: zodResolver(changePasswordSchema),
         defaultValues: {
@@ -27,7 +30,7 @@ function ChangePasswordForm({ onCancel }: { onCancel: any }) {
             if (!admin?.id) return;
 
             await userService.changePassword(admin?.id, data);
-            toast.success("Cập nhật mật khẩu thành công");
+            toast.success(t("messages.updateSuccess"));
             form.reset();
             onCancel();
         } catch (error) {
@@ -49,19 +52,19 @@ function ChangePasswordForm({ onCancel }: { onCancel: any }) {
             onSubmit={form.handleSubmit(onSubmit)}
             className="mx-auto w-3xl space-y-5"
         >
-            {/* OLD PASSWORD */}
             <Controller
                 name="old_password"
                 control={form.control}
                 render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
                         <FieldLabel htmlFor={field.name}>
-                            Mật khẩu cũ
+                            {t("password.currentPass")}
                         </FieldLabel>
                         <Input
                             {...field}
                             id={field.name}
                             type="password"
+                            placeholder={t("password.placeholder")}
                             autoComplete="current-password"
                             aria-invalid={fieldState.invalid}
                         />
@@ -72,19 +75,19 @@ function ChangePasswordForm({ onCancel }: { onCancel: any }) {
                 )}
             />
 
-            {/* NEW PASSWORD */}
             <Controller
                 name="new_password"
                 control={form.control}
                 render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
                         <FieldLabel htmlFor={field.name}>
-                            Mật khẩu mới
+                            {t("password.newPass")}
                         </FieldLabel>
                         <Input
                             {...field}
                             id={field.name}
                             type="password"
+                            placeholder={t("password.placeholder")}
                             autoComplete="new-password"
                             aria-invalid={fieldState.invalid}
                         />
@@ -101,9 +104,9 @@ function ChangePasswordForm({ onCancel }: { onCancel: any }) {
                     onClick={onCancel}
                     variant={"destructive"}
                 >
-                    Hủy
+                    {t("password.cancelBtn")}
                 </Button>
-                <Button type="submit">Đổi mật khẩu</Button>
+                <Button type="submit">{t("password.changeBtn")}</Button>
             </div>
         </form>
     );

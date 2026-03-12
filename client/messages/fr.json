@@ -2,7 +2,12 @@
     "Header": {
         "search": {
             "placeholder": "Rechercher des produits, services, actualités,...",
-            "more": "Voir plus"
+            "more": "Voir plus",
+            "type": {
+                "product": "Produits",
+                "service": "Services",
+                "news": "Articles"
+            }
         },
         "user": {
             "login": "Connexion",
@@ -401,5 +406,71 @@
     "Site": {
         "breadcrumb": "Accueil",
         "emptyService": "Aucun service disponible"
+    },
+    "Profile": {
+        "title": "Mon Profil",
+        "accountTitle": "Gestion du compte",
+        "passwordTitle": "Gestion du mot de passe",
+        "form": {
+            "fullName": "Nom complet",
+            "fullNamePlaceholder": "Jean Dupont",
+            "phone": "Numéro de téléphone",
+            "phonePlaceholder": "0912345678",
+            "username": "Nom d'utilisateur",
+            "usernamePlaceholder": "admin_01",
+            "email": "E-mail",
+            "emailPlaceholder": "admin@example.com",
+            "address": "Adresse",
+            "addressPlaceholder": "123 Rue ABC, Quartier XYZ...",
+            "avatar": "Avatar",
+            "submitBtn": "Mettre à jour le compte",
+            "updating": "Mise à jour..."
+        },
+        "password": {
+            "changeBtn": "Modifier le mot de passe",
+            "cancelBtn": "Annuler",
+            "currentPass": "Mot de passe actuel",
+            "newPass": "Nouveau mot de passe",
+            "confirmPass": "Confirmer le nouveau mot de passe",
+            "placeholder": "********"
+        },
+        "messages": {
+            "updateSuccess": "Mise à jour réussie",
+            "updateError": "Une erreur est survenue",
+            "fetchError": "Impossible de charger les informations du compte"
+        }
+    },
+    "OrderHistory": {
+        "breadcrumb": "Historique des commandes",
+        "tabs": {
+            "all": "Tout",
+            "pending": "En attente",
+            "confirmed": "En cours",
+            "completed": "Terminé",
+            "cancelled": "Annulé"
+        },
+        "type": {
+            "product": "Produits",
+            "service": "Services",
+            "news": "Articles"
+        },
+        "search": {
+            "placeholder": "Rechercher par ID ou nom de produit..."
+        },
+        "table": {
+            "orderId": "ID Commande",
+            "bookingId": "ID Réservation",
+            "product": "Produit",
+            "service": "Service",
+            "orderDate": "Date de commande",
+            "time": "Heure",
+            "status": "Statut",
+            "total": "Montant total",
+            "action": "Action",
+            "viewDetail": "Voir détails",
+            "emptyProduct": "Vous n'avez aucun historique d'achat de produits.",
+            "emptyService": "Vous n'avez aucun historique de réservation de services.",
+            "quantity": "Quantité: {qty}"
+        }
     }
 }

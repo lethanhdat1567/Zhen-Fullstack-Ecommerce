@@ -3,7 +3,7 @@ import { Response } from "express";
 
 class OrderHistoryController {
     async getOrderHistory(req: any, res: Response) {
-        const { status, lang } = req.query;
+        const { status, lang, search } = req.query;
 
         const userId = req.user!.userId;
 
@@ -11,6 +11,7 @@ class OrderHistoryController {
             userId,
             status: typeof status === "string" ? (status as any) : undefined,
             locale: lang,
+            search: search,
         });
 
         return res.success(result);

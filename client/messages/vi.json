@@ -2,7 +2,12 @@
     "Header": {
         "search": {
             "placeholder": "Tìm kiếm sản phẩm, dịch vụ, tin tức,...",
-            "more": "Xem thêm"
+            "more": "Xem thêm",
+            "type": {
+                "product": "Sản phẩm",
+                "service": "Dịch vụ",
+                "news": "Bài viết"
+            }
         },
 
         "user": {
@@ -419,5 +424,71 @@
     "Site": {
         "breadcrumb": "Trang chủ",
         "emptyService": "Không có dịch vụ nào"
+    },
+    "Profile": {
+        "title": "Hồ sơ của tôi",
+        "accountTitle": "Quản lý tài khoản",
+        "passwordTitle": "Quản lý mật khẩu",
+        "form": {
+            "fullName": "Họ và tên",
+            "fullNamePlaceholder": "Nguyễn Văn A",
+            "phone": "Số điện thoại",
+            "phonePlaceholder": "0912345678",
+            "username": "Username",
+            "usernamePlaceholder": "admin_01",
+            "email": "Email",
+            "emailPlaceholder": "admin@example.com",
+            "address": "Địa chỉ",
+            "addressPlaceholder": "Số 123, Đường ABC, Quận XYZ...",
+            "avatar": "Avatar",
+            "submitBtn": "Cập nhật tài khoản",
+            "updating": "Đang cập nhật..."
+        },
+        "password": {
+            "changeBtn": "Đổi mật khẩu",
+            "cancelBtn": "Hủy bỏ",
+            "currentPass": "Mật khẩu hiện tại",
+            "newPass": "Mật khẩu mới",
+            "confirmPass": "Xác nhận mật khẩu mới",
+            "placeholder": "********"
+        },
+        "messages": {
+            "updateSuccess": "Cập nhật thành công",
+            "updateError": "Có lỗi xảy ra",
+            "fetchError": "Không thể tải thông tin tài khoản"
+        },
+        "OrderHistory": {
+            "breadcrumb": "Lịch sử mua hàng",
+            "tabs": {
+                "all": "Tất cả",
+                "pending": "Chờ thanh toán",
+                "confirmed": "Đang xử lý",
+                "completed": "Hoàn thành",
+                "cancelled": "Đã hủy"
+            },
+            "type": {
+                "product": "Sản phẩm",
+                "service": "Dịch vụ",
+                "news": "Bài viết"
+            },
+            "search": {
+                "placeholder": "Tìm theo mã đơn hàng hoặc tên sản phẩm..."
+            },
+            "table": {
+                "orderId": "Mã đơn hàng",
+                "bookingId": "Mã đặt lịch",
+                "product": "Sản phẩm",
+                "service": "Dịch vụ",
+                "orderDate": "Ngày đặt",
+                "time": "Thời gian",
+                "status": "Trạng thái",
+                "total": "Tổng tiền",
+                "action": "Chi tiết",
+                "viewDetail": "Xem chi tiết",
+                "emptyProduct": "Bạn chưa có lịch sử mua hàng.",
+                "emptyService": "Bạn chưa có lịch sử đặt dịch vụ.",
+                "quantity": "Số lượng: {qty}"
+            }
+        }
     }
 }

@@ -18,20 +18,18 @@ function Navbar({ onClick }: { onClick?: () => void }) {
 
     const fetchNavs = async () => {
         try {
-            // 1. Bổ sung các mã code mới vào danh sách cho phép
             const allowedCodes = [
-                "home", // Thêm home nếu bạn muốn hiển thị
+                "home",
                 "introduce",
                 "service",
                 "product",
-                "news", // Mới bổ sung
-                "media", // Mới bổ sung
+                "news",
+                "media",
                 "recruitment",
-                "contact", // Mới bổ sung
+                "contact",
                 "track-order",
             ];
 
-            // 2. Sắp xếp lại thứ tự hiển thị cho hợp lý
             const orderMap: Record<string, number> = {
                 home: 0,
                 introduce: 1,
@@ -77,9 +75,9 @@ function Navbar({ onClick }: { onClick?: () => void }) {
                             ? serviceCategories
                             : nav.code === "product"
                               ? productCategories
-                              : nav.code === "news" // Logic mapping cho News
+                              : nav.code === "news"
                                 ? postCategories
-                                : nav.code === "media" // Logic mapping cho Media
+                                : nav.code === "media"
                                   ? mediaCategories
                                   : null,
                 }))
