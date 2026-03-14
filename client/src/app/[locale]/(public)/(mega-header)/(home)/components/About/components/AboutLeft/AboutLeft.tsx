@@ -5,6 +5,7 @@ import AnimatedContent from "@/components/AnimatedContent";
 import SplitText from "@/components/SplitText";
 import { get } from "http";
 import { getTranslations } from "next-intl/server";
+import { AnimateButton } from "@/components/AnimateButton/AnimateButton";
 
 async function AboutLeft() {
     const t = await getTranslations("Home");
@@ -38,9 +39,9 @@ async function AboutLeft() {
             </AnimatedContent>
 
             <AnimatedContent delay={0.2}>
-                <Button className="mt-0 border border-(--primary-color) text-(--primary-color) transition-all hover:shadow-[1px_1px_#8D388A,2px_2px_#8D388A,3px_3px_#8D388A] lg:mt-8">
+                <AnimateButton variant={"outline"}>
                     {t("About.btnText")}
-                </Button>
+                </AnimateButton>
             </AnimatedContent>
         </div>
     );

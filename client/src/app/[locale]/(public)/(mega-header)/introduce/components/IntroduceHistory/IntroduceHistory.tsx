@@ -29,7 +29,7 @@ function IntroduceHistory() {
 
     return (
         <div className="relative mt-20 overflow-hidden sm:mt-16 lg:mt-20">
-            <div className="container mb-14 sm:mb-16 lg:mb-20">
+            <div className="container mb-14 sm:mb-10 lg:mb-20">
                 {/* Title */}
                 <div className="flex flex-col items-center justify-center text-center">
                     <SplitText

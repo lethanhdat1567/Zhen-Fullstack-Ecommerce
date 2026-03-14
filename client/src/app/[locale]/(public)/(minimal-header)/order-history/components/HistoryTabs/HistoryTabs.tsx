@@ -24,9 +24,13 @@ function HistoryTabs({ currentStatus, onChangeStatus }: Props) {
             onValueChange={onChangeStatus as any}
             className="w-full"
         >
-            <TabsList className="grid w-full grid-cols-5">
+            <TabsList className="flex w-full justify-start overflow-x-auto overflow-y-hidden md:grid md:grid-cols-5">
                 {statuses.map((status) => (
-                    <TabsTrigger key={status.id} value={status.id}>
+                    <TabsTrigger
+                        key={status.id}
+                        value={status.id}
+                        className="min-w-34 flex-1 text-sm md:min-w-0 md:text-base"
+                    >
                         {status.label}
                     </TabsTrigger>
                 ))}

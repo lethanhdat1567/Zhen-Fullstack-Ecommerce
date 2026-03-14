@@ -4,6 +4,7 @@ import { createActionsColumn } from "@/app/admin/components/ActionColumn/ActionC
 import { createSelectColumn } from "@/app/admin/components/CreateSelectColumn/CreateSelectColumn";
 import { SortableHeader } from "@/app/admin/components/SortableHeader/SortableHeader";
 import ToggleStatus from "@/app/admin/components/ToggleStatus/ToggleStatus";
+import { HttpError } from "@/lib/http/errors";
 import { productService } from "@/services/productService";
 import { formatDateVN } from "@/utils/formatDate";
 import { toast } from "sonner";
@@ -161,7 +162,11 @@ const productColumns = ({ router, onRefreshs }: Props) => [
                 onRefreshs();
             } catch (error) {
                 console.log(error);
-                toast.error("Xóa sản phẩm thất bại!");
+                if (error instanceof HttpError) {
+                    toast.error(error.message);
+                } else {
+                    toast.error("Xóa danh mục thất bại!");
+                }
             }
         },
     }),

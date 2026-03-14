@@ -78,7 +78,7 @@
         "orderNotFound": "Commande introuvable !",
         "productOrder": "COMMANDE DE PRODUIT",
         "serviceBooking": "RÉSERVATION DE SERVICE",
-        "productCount": "{count} produits",
+        "productCount": "produits",
         "checkIn": "Arrivée : {date}",
         "checkOut": "Départ : {date}",
         "total": "Total",
@@ -472,5 +472,12 @@
             "emptyService": "Vous n'avez aucun historique de réservation de services.",
             "quantity": "Quantité: {qty}"
         }
+    },
+    "orderStatus": {
+        "pending": "En attente",
+        "confirmed": "Confirmé",
+        "cancelled": "Annulé",
+        "completed": "Terminé",
+        "all": "Tout"
     }
 }

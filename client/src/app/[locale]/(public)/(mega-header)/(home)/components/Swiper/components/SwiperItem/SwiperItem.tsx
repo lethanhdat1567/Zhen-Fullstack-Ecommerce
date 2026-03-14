@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { serviceService } from "@/services/service";
 import { useEffect, useState } from "react";
+import { AnimateButton } from "@/components/AnimateButton/AnimateButton";
 interface IProps {
     src: string;
     isActive: boolean;
@@ -42,7 +43,7 @@ function SwiperItem({ src, isActive }: IProps) {
             <div className="absolute inset-0 bg-black/20" />
 
             <div
-                className={`absolute bottom-14 left-5 pr-2 text-white transition-transform duration-700 ease-out sm:pl-0 md:bottom-30 md:left-40 lg:bottom-18 lg:left-70 ${
+                className={`absolute bottom-14 left-5 pr-2 text-white transition-transform duration-700 ease-out sm:pl-0 md:bottom-30 md:left-30 lg:bottom-18 lg:left-70 ${
                     isActive
                         ? "translate-y-0 opacity-100"
                         : "translate-y-20 opacity-0"
@@ -62,9 +63,10 @@ function SwiperItem({ src, isActive }: IProps) {
 
                 <AnimatedContent duration={2} delay={0.2} threshold={-10}>
                     <Link href={`/services/${serviceSlug}`}>
-                        <Button className="text-md bg-(--primary-color) lg:text-lg">
+                        {/* <Button className="text-md bg-(--primary-color) transition-all duration-300 ease-out hover:-translate-x-1 hover:shadow-[2px_-2px_0_#fff,2px_2px_0_#fff,4px_4px_0_#fff] lg:text-lg">
                             {t("Hero.btnText")}
-                        </Button>
+                        </Button> */}
+                        <AnimateButton>{t("Hero.btnText")}</AnimateButton>
                     </Link>
                 </AnimatedContent>
             </div>

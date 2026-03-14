@@ -402,9 +402,24 @@ class ServiceService {
     ========================= */
 
     async deleteService(id: string) {
-        return prisma.services.delete({
-            where: { id },
-        });
+        try {
+            return await prisma.services.delete({
+                where: { id },
+            });
+        } catch (error: any) {
+            if (error.code === "P2003") {
+                throw new AppError(
+                    "Không thể xóa dịch vụ này vì đang có dữ liệu liên quan (lịch đặt chỗ hoặc hình ảnh).",
+                    400,
+                );
+            }
+
+            if (error.code === "P2025") {
+                throw new AppError("Dịch vụ không tồn tại", 404);
+            }
+
+            throw error;
+        }
     }
 
     async getServiceById(id: string, lang?: string) {
@@ -506,11 +521,44 @@ class ServiceService {
     }
 
     async bulkDelete(ids: string[]) {
-        return prisma.services.deleteMany({
-            where: {
-                id: { in: ids },
-            },
-        });
+        // 1. Kiểm tra đầu vào để tránh gửi query rỗng xuống DB
+        if (!ids?.length) {
+            throw new AppError("Danh sách ID không được để trống", 400);
+        }
+
+        try {
+            const result = await prisma.services.deleteMany({
+                where: {
+                    id: { in: ids },
+                },
+            });
+
+            // 2. Kiểm tra nếu không có bản ghi nào bị xóa (ID sai hoặc không tồn tại)
+            if (result.count === 0) {
+                throw new AppError("Không tìm thấy dịch vụ nào để xóa", 404);
+            }
+
+            return {
+                message: "Xóa các dịch vụ thành công",
+                deletedCount: result.count,
+            };
+        } catch (error: any) {
+            // 3. Xử lý lỗi khóa ngoại (P2003)
+            // Ví dụ: Một trong các Service này đã có khách đặt (Booking) hoặc có Gallery
+            if (error.code === "P2003") {
+                throw new AppError(
+                    "Một hoặc nhiều dịch vụ không thể xóa vì đã có dữ liệu liên quan (lịch đặt chỗ hoặc hình ảnh).",
+                    400,
+                );
+            }
+
+            // Đẩy lỗi AppError (404) lên trên
+            if (error instanceof AppError) {
+                throw error;
+            }
+
+            throw error;
+        }
     }
 }
 

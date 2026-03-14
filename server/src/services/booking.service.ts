@@ -220,24 +220,69 @@ class BookingService {
     }
 
     async deleteBooking(id: string) {
-        const existing = await this.getById(id);
-        if (!existing) throw new AppError("Booking not found", 404);
+        try {
+            const existing = await this.getById(id);
+            if (!existing) throw new AppError("Booking not found", 404);
 
-        return await prisma.bookings.delete({
-            where: { id },
-        });
+            return await prisma.bookings.delete({
+                where: { id },
+            });
+        } catch (error: any) {
+            if (error.code === "P2003") {
+                throw new AppError(
+                    "Không thể xóa đơn đặt chỗ này vì đã có dữ liệu liên quan (như thanh toán hoặc chi tiết dịch vụ).",
+                    400,
+                );
+            }
+
+            if (error.code === "P2025") {
+                throw new AppError("Đơn đặt chỗ không tồn tại", 404);
+            }
+
+            throw error;
+        }
     }
 
     async bulkDelete(ids: string[]) {
-        if (!ids?.length) throw new AppError("No IDs provided", 400);
+        if (!ids?.length) {
+            throw new AppError("Danh sách ID không được để trống", 400);
+        }
 
-        return await prisma.$transaction(async (tx) => {
-            const result = await tx.bookings.deleteMany({
-                where: { id: { in: ids } },
+        try {
+            return await prisma.$transaction(async (tx) => {
+                const result = await tx.bookings.deleteMany({
+                    where: {
+                        id: { in: ids },
+                    },
+                });
+
+                if (result.count === 0) {
+                    throw new AppError(
+                        "Không tìm thấy đơn đặt chỗ nào để xóa",
+                        404,
+                    );
+                }
+
+                return {
+                    message: "Xóa các đơn đặt chỗ thành công",
+                    deletedCount: result.count,
+                };
             });
+        } catch (error: any) {
+            if (error.code === "P2003") {
+                throw new AppError(
+                    "Một số đơn đặt chỗ không thể xóa vì đã có dữ liệu liên quan (thanh toán, lịch sử dịch vụ).",
+                    400,
+                );
+            }
 
-            return { deletedCount: result.count };
-        });
+            if (error instanceof AppError) {
+                throw error;
+            }
+
+            // Các lỗi database khác
+            throw error;
+        }
     }
 }
 

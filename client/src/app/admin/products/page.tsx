@@ -5,6 +5,7 @@ import Title from "@/app/admin/components/Title/Title";
 import productColumns from "@/app/admin/products/columns";
 import { DataTable } from "@/components/DataTable/data-table";
 import { Button } from "@/components/ui/button";
+import { HttpError } from "@/lib/http/errors";
 import { Product, productService } from "@/services/productService";
 import { Plus } from "lucide-react";
 import Link from "next/link";
@@ -51,7 +52,11 @@ function AdminProductPage() {
             fetchCategory();
         } catch (error) {
             console.log(error);
-            toast.error("Xóa thất bại!");
+            if (error instanceof HttpError) {
+                toast.error(error.message);
+            } else {
+                toast.error("Xóa thất bại!");
+            }
         }
     }
 

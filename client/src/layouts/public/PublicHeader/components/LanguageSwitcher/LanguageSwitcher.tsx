@@ -29,7 +29,7 @@ export default function LanguageSwitcher() {
                     <button
                         key={lang.code}
                         onClick={() => switchLocale(lang.code)}
-                        className="cursor-pointer transition-transform duration-300 hover:scale-110"
+                        className="h-[15px] w-[24px] cursor-pointer transition-transform duration-300 hover:scale-110"
                     >
                         <Image
                             src={lang.flag}

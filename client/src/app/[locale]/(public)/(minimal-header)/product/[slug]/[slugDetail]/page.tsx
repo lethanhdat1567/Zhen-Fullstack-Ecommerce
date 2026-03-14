@@ -67,7 +67,7 @@ export default async function ProductDetailPage({ params }: Props) {
                     </>
                 )}
             </div>
-            <CardRelated slug={slug} item={relatedProduct as any} />
+            <CardRelated type="product" item={relatedProduct as any[]} />
         </div>
     );
 }

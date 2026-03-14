@@ -3,6 +3,7 @@ import { createSelectColumn } from "@/app/admin/components/CreateSelectColumn/Cr
 import { SortableHeader } from "@/app/admin/components/SortableHeader/SortableHeader";
 import TableThumbnail from "@/app/admin/components/TableThumbnail/TableThumbnail";
 import ToggleStatus from "@/app/admin/components/ToggleStatus/ToggleStatus";
+import { HttpError } from "@/lib/http/errors";
 import { serviceService } from "@/services/service";
 import { formatDateVN } from "@/utils/formatDate";
 import { toast } from "sonner";
@@ -136,9 +137,19 @@ const serviceColumns = ({ router, onRefreshs }: Props) => [
             router.push(`/admin/services/${row.id}`);
         },
         onDelete: async (row) => {
-            await serviceService.deleteService(row.id);
-            toast.success("Xóa dịch vụ thành công!");
-            onRefreshs();
+            try {
+                await serviceService.deleteService(row.id);
+                toast.success("Xóa dịch vụ thành công!");
+                onRefreshs();
+            } catch (error) {
+                if (error instanceof HttpError) {
+                    if (error.status === 400) {
+                        toast.error(error.message);
+                    }
+                } else {
+                    toast.error("Xóa dịch vụ thất bại!");
+                }
+            }
         },
     }),
 ];

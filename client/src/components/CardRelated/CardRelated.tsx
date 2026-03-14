@@ -14,31 +14,34 @@ import "swiper/css";
 
 type Props = {
     item: Service[] | Product[];
-    slug: string;
+    hideTitle?: boolean;
+    type: "product" | "service";
 };
 
-function CardRelated({ item, slug }: Props) {
+function CardRelated({ item, hideTitle = false, type }: Props) {
     const swiperRef = useRef<any>(null);
     const t = useTranslations("CardRelated");
 
     if (!item || item.length === 0) return null;
 
     return (
-        <div className="container pt-12 md:pt-16 lg:pt-25">
+        <div className="container">
             {/* ================= HEADER ================= */}
-            <div className="flex flex-col items-center justify-center text-center">
-                <h2 className="text-2xl font-light text-(--primary-color) md:text-4xl lg:text-[50px]">
-                    {t("title")}
-                </h2>
+            {!hideTitle && (
+                <div className="flex flex-col items-center justify-center text-center">
+                    <h2 className="text-2xl font-light text-(--primary-color) md:text-4xl lg:text-[50px]">
+                        {t("title")}
+                    </h2>
 
-                <Image
-                    src={images.lotus}
-                    width={116}
-                    height={25}
-                    alt=""
-                    className="mt-4 mb-8 md:mb-10"
-                />
-            </div>
+                    <Image
+                        src={images.lotus}
+                        width={116}
+                        height={25}
+                        alt=""
+                        className="mt-4 mb-8 md:mb-10"
+                    />
+                </div>
+            )}
 
             {/* ================= SWIPER ================= */}
             <div className="relative">
@@ -54,14 +57,11 @@ function CardRelated({ item, slug }: Props) {
                         640: { slidesPerView: 2 },
                         1024: { slidesPerView: 3 },
                     }}
+                    className="pb-10!"
                 >
                     {item.map((service) => (
                         <SwiperSlide key={service.id}>
-                            <CardItem
-                                basePath="services"
-                                item={service}
-                                slug={slug}
-                            />
+                            <CardItem basePath={type} item={service} />
                         </SwiperSlide>
                     ))}
                 </Swiper>
@@ -69,14 +69,14 @@ function CardRelated({ item, slug }: Props) {
                 {/* LEFT BUTTON */}
                 <SwiperNavButtonLeft
                     onClick={() => swiperRef.current?.slidePrev()}
-                    className="absolute top-1/2 left-0 -translate-y-1/2 scale-75 border border-(--primary-color) bg-white transition-all duration-300 ease-out hover:-translate-x-1 hover:-translate-y-[calc(50%+2px)] hover:shadow-[1px_1px_0_#8D388A,2px_2px_0_#8D388A,3px_3px_0_#8D388A] md:scale-90 lg:-left-12.5 lg:scale-100"
+                    className="absolute top-1/2 left-0 -translate-y-1/2 scale-75 border border-(--primary-color) bg-white transition-all duration-300 ease-out hover:-translate-x-1 hover:-translate-y-[calc(50%+2px)] hover:shadow-[1px_1px_0_#8D388A,2px_2px_0_#8D388A,3px_3px_0_#8D388A] md:scale-90 lg:-left-15.5 lg:scale-100"
                     iconClassName="text-(--primary-color)"
                 />
 
                 {/* RIGHT BUTTON */}
                 <SwiperNavButtonRight
                     onClick={() => swiperRef.current?.slideNext()}
-                    className="absolute top-1/2 right-0 -translate-y-1/2 scale-75 border border-(--primary-color) bg-white transition-all duration-300 ease-out hover:translate-x-1 hover:-translate-y-[calc(50%+2px)] hover:shadow-[1px_1px_0_#8D388A,2px_2px_0_#8D388A,3px_3px_0_#8D388A] md:scale-90 lg:-right-12.5 lg:scale-100"
+                    className="absolute top-1/2 right-0 -translate-y-1/2 scale-75 border border-(--primary-color) bg-white transition-all duration-300 ease-out hover:translate-x-1 hover:-translate-y-[calc(50%+2px)] hover:shadow-[1px_1px_0_#8D388A,2px_2px_0_#8D388A,3px_3px_0_#8D388A] md:scale-90 lg:-right-15.5 lg:scale-100"
                     iconClassName="text-(--primary-color)"
                 />
             </div>

@@ -63,42 +63,53 @@ function OrderHistory() {
 
     if (loading)
         return (
-            <div className="container space-y-6 py-10">
+            <div className="container space-y-4 py-6 md:space-y-6 md:py-10">
                 <Skeleton className="h-10 w-full" />
-                <div className="flex items-center justify-between">
-                    <Skeleton className="h-10 w-full max-w-100" />
-                    <Skeleton className="h-10 w-full max-w-100" />
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <Skeleton className="h-10 w-full sm:max-w-75" />
+                    <Skeleton className="h-10 w-full sm:max-w-75" />
                 </div>
-                <Skeleton className="h-110 w-full" />
+                <Skeleton className="h-100 w-full md:h-150" />
             </div>
         );
 
     return (
-        <div className="min-h-[86vh] pb-20">
+        <div className="min-h-[86vh] pb-10 md:pb-20">
             <AutoBanner
                 breadcrumbData={[
                     { title: t("breadcrumb"), href: "/order-history" },
                 ]}
                 hideBanner
             />
-            <div className="container">
-                <HistoryTabs
-                    currentStatus={currentStatus}
-                    onChangeStatus={setCurrentStatus}
-                />
-                <div className="relative flex items-center">
-                    <HistoryTypeTab
-                        setType={setCurrentType}
-                        type={currentType}
-                    />
-                    <HistorySearch
-                        searchTerm={searchValue}
-                        onSearchChange={setSearchValue}
+            <div className="container px-4 md:px-6">
+                <div className="mb-4 overflow-x-auto pb-2 md:mb-6">
+                    <HistoryTabs
+                        currentStatus={currentStatus}
+                        onChangeStatus={setCurrentStatus}
                     />
                 </div>
 
+                <div className="relative mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div className="w-full md:w-auto">
+                        <HistoryTypeTab
+                            setType={setCurrentType}
+                            type={currentType}
+                        />
+                    </div>
+                    <div className="w-full md:max-w-md">
+                        <HistorySearch
+                            searchTerm={searchValue}
+                            onSearchChange={setSearchValue}
+                        />
+                    </div>
+                </div>
+
                 <div
-                    className={`transition-all duration-200 ${isSearching ? "pointer-events-none opacity-40 grayscale-[0.5]" : "opacity-100"}`}
+                    className={`transition-all duration-200 ${
+                        isSearching
+                            ? "pointer-events-none opacity-40 grayscale-[0.5]"
+                            : "opacity-100"
+                    } overflow-x-auto`}
                 >
                     {currentType === "product" && (
                         <HistoryTable data={historyOrders.orders} />
@@ -111,8 +122,8 @@ function OrderHistory() {
                 </div>
 
                 {isSearching && (
-                    <div className="mt-4 flex justify-center">
-                        <div className="border-primary h-5 w-5 animate-spin rounded-full border-2 border-t-transparent"></div>
+                    <div className="mt-6 flex justify-center">
+                        <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent"></div>
                     </div>
                 )}
             </div>

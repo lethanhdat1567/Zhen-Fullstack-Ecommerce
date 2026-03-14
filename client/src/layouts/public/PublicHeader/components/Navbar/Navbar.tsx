@@ -101,15 +101,16 @@ function Navbar({ onClick }: { onClick?: () => void }) {
 
     if (loading)
         return (
-            <div className="mr-4 flex flex-col gap-4">
-                <Skeleton className="h-8 w-full" />
+            <div className="mr-4 flex flex-col gap-4 sm:flex-row">
+                {[...Array(10)].map((_, index) => (
+                    <Skeleton key={index} className="h-8 w-full" />
+                ))}
             </div>
         );
 
     return (
-        <ul className="flex flex-col items-end gap-0 lg:flex-row lg:items-center lg:gap-2 xl:gap-5">
+        <ul className="flex flex-col flex-wrap items-start gap-5 sm:flex-row sm:items-center">
             {navs.map((navItem) => {
-                // Kiểm tra xem code có cần lấy slug của thằng con đầu tiên không
                 const needSlug = [
                     "product",
                     "service",

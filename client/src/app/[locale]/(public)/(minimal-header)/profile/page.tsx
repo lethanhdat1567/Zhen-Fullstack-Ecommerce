@@ -8,7 +8,7 @@ async function ProfilePage() {
     const t = await getTranslations("Profile");
 
     return (
-        <div className="mx-auto w-3xl py-10">
+        <div className="mx-0 w-full px-4 py-10 md:mx-auto md:w-3xl md:px-0">
             <Title title={t("accountTitle")} className="mb-5" />
             <AdminForm />
             <Separator className="my-5" />

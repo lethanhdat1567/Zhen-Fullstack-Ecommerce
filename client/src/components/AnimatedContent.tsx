@@ -37,7 +37,7 @@ const AnimatedContent: React.FC<AnimatedContentProps> = ({
     initialOpacity = 0,
     animateOpacity = true,
     scale = 1,
-    threshold = 0,
+    threshold = -0.4,
     delay = 0,
     disappearAfter = 0,
     disappearDuration = 0.5,
@@ -45,6 +45,7 @@ const AnimatedContent: React.FC<AnimatedContentProps> = ({
     onComplete,
     onDisappearanceComplete,
     className = "",
+
     ...props
 }) => {
     const ref = useRef<HTMLDivElement>(null);

@@ -54,8 +54,8 @@ class OrderController {
     }
 
     async bulkDestroy(req: AuthRequest, res: Response) {
-        const { ids } = req.body;
-        const result = await orderService.bulkDestroy(ids);
+        const { data } = req.body;
+        const result = await orderService.bulkDestroy(data.ids);
         return res.success(result);
     }
 }

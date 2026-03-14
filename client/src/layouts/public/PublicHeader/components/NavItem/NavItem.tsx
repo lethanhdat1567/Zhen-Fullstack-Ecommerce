@@ -22,7 +22,7 @@ function NavItem({ title, href, code, childNavs, onClick }: Props) {
 
     return (
         <li
-            className={`${pathname === href ? "font-medium text-(--primary-color)" : ""} group/nav relative flex w-full cursor-pointer flex-col items-center justify-between gap-2 py-3 text-[18px] text-neutral-600 transition hover:text-(--primary-color) lg:w-auto lg:py-0 lg:text-sm lg:text-inherit`}
+            className={`${pathname === href ? "font-medium text-(--primary-color)" : ""} group/nav text-md relative flex w-full cursor-pointer flex-col items-center justify-between gap-2 py-2 text-neutral-600 transition hover:text-(--primary-color) sm:w-auto sm:py-0 sm:text-sm lg:py-0`}
         >
             <div
                 className={`relative flex w-full items-center justify-between gap-2 ${
@@ -42,7 +42,7 @@ function NavItem({ title, href, code, childNavs, onClick }: Props) {
                 </Link>
 
                 {childNavs && (
-                    <span className="flex h-10 w-10 items-center justify-center lg:h-2 lg:w-2">
+                    <span className="flex h-8 w-8 items-center justify-center sm:h-2 sm:w-2">
                         <ChevronDown
                             size={20}
                             onClick={() => setIsShowDropdown(!isShowDropdown)}

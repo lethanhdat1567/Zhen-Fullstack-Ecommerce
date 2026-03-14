@@ -5,14 +5,15 @@ import Image from "next/image";
 import { images } from "@/assets/images";
 import { productService } from "@/services/productService";
 import { getLocale } from "next-intl/server";
-import ProductItem from "@/app/[locale]/(public)/(mega-header)/(home)/components/Products/components/ProductItem/ProductItem";
-import AnimatedContent from "@/components/AnimatedContent";
+import CardRelated from "@/components/CardRelated/CardRelated";
 
 async function Products() {
     const locale = await getLocale();
-    const products = await productService.getRelatedProducts({
+
+    const relatedProduct = await productService.getRelatedProducts({
         lang: locale,
-        limit: 3,
+        isActive: true,
+        limit: 6,
     });
 
     return (
@@ -20,19 +21,11 @@ async function Products() {
             <div className="relative z-10 container">
                 <HeaderProduct />
 
-                <div className="pt-2 lg:pt-10">
-                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-10">
-                        {products.map((item, index) => (
-                            <AnimatedContent key={index} delay={index / 10}>
-                                <ProductItem
-                                    thumbnail={item.thumbnail || ""}
-                                    title={item.title || ""}
-                                    isScale={index === 1}
-                                />
-                            </AnimatedContent>
-                        ))}
-                    </div>
-                </div>
+                <CardRelated
+                    type="product"
+                    item={relatedProduct as any}
+                    hideTitle
+                />
             </div>
 
             <Image

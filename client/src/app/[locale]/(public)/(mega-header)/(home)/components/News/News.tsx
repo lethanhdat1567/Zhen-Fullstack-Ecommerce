@@ -5,6 +5,8 @@ import NewsItem from "./components/NewsItem/NewsItem";
 import { postService } from "@/services/postService";
 import { getLocale } from "next-intl/server";
 import AnimatedContent from "@/components/AnimatedContent";
+import Image from "next/image";
+import { images } from "@/assets/images";
 
 async function News() {
     const locale = await getLocale();
@@ -15,11 +17,11 @@ async function News() {
     });
 
     return (
-        <section className="bg-white py-10 sm:py-14 lg:py-16 xl:py-20">
-            <div className="container">
+        <section className="relative bg-white py-10 sm:py-14 lg:py-16 xl:py-20">
+            <div className="relative z-10 container">
                 <HeaderNews />
 
-                <div className="pt-6 sm:pt-8 lg:pt-10">
+                <div className="pt-4">
                     {/* Mobile + Tablet */}
                     <div className="xl:hidden">
                         <NewsItem />
@@ -37,6 +39,14 @@ async function News() {
                     </div>
                 </div>
             </div>
+
+            <Image
+                src={images.bg_about_us}
+                className="absolute bottom-0 left-0 z-0 h-auto w-auto"
+                alt="decor"
+                width={500}
+                height={500}
+            />
         </section>
     );
 }

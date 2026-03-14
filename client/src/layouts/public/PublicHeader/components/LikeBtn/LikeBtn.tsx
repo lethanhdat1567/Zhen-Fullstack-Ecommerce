@@ -7,7 +7,7 @@ function LikeBtn() {
     const favorites = useFavoriteStore((state) => state.items);
 
     return (
-        <div className="relative">
+        <div className="relative block">
             <Link href={"/wishlist"}>
                 <Button
                     variant={"ghost"}

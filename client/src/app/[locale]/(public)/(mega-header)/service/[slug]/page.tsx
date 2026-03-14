@@ -9,6 +9,7 @@ import { serviceCategoryService } from "@/services/serviceCategoryService";
 import AnimatedContent from "@/components/AnimatedContent";
 import ServiceItemLoading from "@/app/[locale]/(public)/(mega-header)/service/[slug]/components/ServiceItemLoading/ServiceItemLoading";
 import ServiceSidebar from "@/app/[locale]/(public)/(mega-header)/service/[slug]/components/ServiceSidebar/ServiceSidebar";
+import Pagination from "@/app/[locale]/(public)/components/Pagination/Pagination";
 
 type Props = {
     params: Promise<{
@@ -20,13 +21,14 @@ type Props = {
         minPrice?: string;
         maxPrice?: string;
         sort?: string;
+        page?: string;
     };
 };
 
 export default async function ServicePage({ params, searchParams }: Props) {
     const t = await getTranslations("Site");
     const { slug } = await params;
-    const { search, minPrice, maxPrice, sort } = await searchParams;
+    const { search, minPrice, maxPrice, sort, page } = await searchParams;
     const locale = await getLocale();
 
     let loading = true;
@@ -43,7 +45,10 @@ export default async function ServicePage({ params, searchParams }: Props) {
         minPrice,
         maxPrice,
         sort: sort || ("latest" as any),
+        limit: 10,
+        page: page || 1,
     });
+    const totalPages = serviceBySlug.pagination.totalPages;
 
     const serviceCategory = await serviceCategoryService.detailBySlug(
         slug,
@@ -51,7 +56,6 @@ export default async function ServicePage({ params, searchParams }: Props) {
     );
 
     loading = false;
-    console.log(serviceBySlug);
 
     return (
         <div className="mb-20">
@@ -95,11 +99,14 @@ export default async function ServicePage({ params, searchParams }: Props) {
                                     <CardItem
                                         basePath="service"
                                         item={service}
-                                        slug={slug}
                                     />
                                 </AnimatedContent>
                             ))
                         )}
+
+                        <div className="col-span-full flex justify-center pt-4">
+                            <Pagination totalPages={totalPages} />
+                        </div>
                     </div>
                 )}
             </div>

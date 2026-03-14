@@ -50,9 +50,7 @@ function CheckoutPage() {
         try {
             if (productId && quantity) {
                 const qty = Math.max(1, Number(quantity) || 1);
-
                 const product = await productService.getById(productId, locale);
-
                 const price = product.sale_price || product.price;
 
                 const item = {
@@ -70,20 +68,12 @@ function CheckoutPage() {
                     },
                 };
 
-                const itemsData = [
-                    {
-                        product_id: product.id,
-                        quantity: qty,
-                    },
-                ];
-
+                const itemsData = [{ product_id: product.id, quantity: qty }];
                 form.setValue("items", itemsData);
-
                 setProducts([item as any]);
                 setTotal(Number(price) * qty);
             } else {
                 const res = await cartService.syncCart(carts, locale);
-
                 const itemsData = res.items.map((item) => ({
                     product_id: item.product_id,
                     quantity: item.quantity,
@@ -129,14 +119,15 @@ function CheckoutPage() {
     return (
         <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="grid h-screen grid-cols-12 gap-6"
+            className="flex flex-col lg:grid lg:h-screen lg:grid-cols-12 lg:gap-6"
         >
-            <div className="col-span-8">
-                <div className="py-4 pl-36 text-2xl font-semibold text-(--primary-color)">
+            <div className="order-2 lg:order-1 lg:col-span-7 xl:col-span-8">
+                <div className="hidden py-4 text-2xl font-semibold text-(--primary-color) lg:block lg:pl-20 xl:pl-36">
                     ZHEN TEMPLATE
                 </div>
-                <div className="grid grid-cols-2 gap-6">
-                    <div className="pl-36">
+
+                <div className="flex flex-col gap-8 p-4 lg:grid lg:grid-cols-2 lg:gap-6 lg:p-0 lg:pl-20 xl:pl-36">
+                    <div>
                         <h2 className="mb-4 text-lg font-semibold">
                             {t("shippingInfo")}
                         </h2>
@@ -147,7 +138,11 @@ function CheckoutPage() {
                     </div>
                 </div>
             </div>
-            <div className="col-span-4 h-full border-l bg-neutral-100 pr-20 pl-10">
+
+            <div className="order-1 h-fit border-l bg-neutral-100 p-4 lg:order-2 lg:col-span-5 lg:h-full lg:pr-10 lg:pl-10 xl:col-span-4 xl:pr-20">
+                <div className="mb-6 text-center text-xl font-semibold text-(--primary-color) lg:hidden">
+                    ZHEN TEMPLATE
+                </div>
                 <CartInfo carts={products} total={total} />
             </div>
         </form>

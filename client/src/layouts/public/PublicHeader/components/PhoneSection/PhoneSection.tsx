@@ -26,7 +26,7 @@ function PhoneSection() {
     }, []);
 
     return (
-        <div className="hidden items-center gap-1 text-sm font-semibold text-(--primary-color) md:flex">
+        <div className="hidden items-center gap-1 text-sm font-semibold text-(--primary-color) lg:flex">
             {loading ? (
                 <Skeleton className="h-8 w-50" />
             ) : (

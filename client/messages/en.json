@@ -78,7 +78,7 @@
         "orderNotFound": "Order not found!",
         "productOrder": "PRODUCT ORDER",
         "serviceBooking": "SERVICE BOOKING",
-        "productCount": "{count} products",
+        "productCount": "products",
         "checkIn": "Check-in: {date}",
         "checkOut": "Check-out: {date}",
         "total": "Total",
@@ -488,5 +488,12 @@
             "emptyService": "You have no service booking history.",
             "quantity": "Quantity: {qty}"
         }
+    },
+    "orderStatus": {
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "cancelled": "Cancelled",
+        "completed": "Completed",
+        "all": "All"
     }
 }

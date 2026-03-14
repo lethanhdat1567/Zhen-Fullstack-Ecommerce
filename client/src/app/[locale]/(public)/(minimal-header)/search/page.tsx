@@ -6,7 +6,6 @@ import SearchInput from "@/app/[locale]/(public)/(minimal-header)/search/compone
 import ServiceCard from "@/app/[locale]/(public)/(minimal-header)/search/components/ServiceCard/ServiceCard";
 import AutoBanner from "@/components/Auto/AutoBanner";
 import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useRouter } from "@/i18n/navigation";
@@ -107,7 +106,7 @@ function SearchPage() {
                     },
                 ]}
             />
-            <div className="mx-auto w-2xl">
+            <div className="mx-0 w-screen px-4 lg:mx-auto lg:w-4xl lg:px-0 xl:w-2xl">
                 <div className="text-center">
                     <h1 className="mb-3 text-4xl font-bold">{t("title")}</h1>
                     <p className="mb-4 text-sm text-neutral-800">{t("desc")}</p>

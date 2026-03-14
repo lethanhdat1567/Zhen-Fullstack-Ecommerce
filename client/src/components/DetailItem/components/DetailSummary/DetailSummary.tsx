@@ -5,6 +5,7 @@ import { Product } from "@/services/productService";
 import AddToCartBtn from "@/components/DetailItem/components/DetailSummary/components/AddToCartBtn/AddToCartBtn";
 import { Link } from "@/i18n/navigation";
 import LikeBtn from "@/components/DetailItem/components/DetailSummary/components/LikeBtn/LikeBtn";
+import PriceBadge from "@/components/CardItem/PriceBadge";
 
 type Props = {
     item: Service | Product;
@@ -25,14 +26,17 @@ function DetailSummary({ item, type }: Props) {
 
             <Image src={images.lotus} height={25} width={116} alt="" />
 
-            {/* Price */}
-            <p className="mt-3 mb-8 text-lg font-medium text-(--primary-color) md:mb-10 md:text-xl lg:text-[23px]">
-                {Number(item.price) > 0
-                    ? `${Number(item.price).toLocaleString("vi-VN")}  Đ++`
-                    : "Miễn phí"}
-            </p>
+            <div className="my-4">
+                <PriceBadge
+                    price={item.price}
+                    sale_price={item.sale_price as any}
+                    className="text-4xl!"
+                />
+            </div>
             {type === "service" && (
-                <p>Số lượng: {(item as Service).capacity}</p>
+                <p className="my-3">
+                    <strong>Sức chứa: </strong> {(item as Service).capacity}
+                </p>
             )}
 
             {/* Description */}
@@ -53,10 +57,15 @@ function DetailSummary({ item, type }: Props) {
             )}
 
             {/* Meta */}
-            <div className="flex flex-col text-sm md:text-base">
-                {item.sku && <span className="mr-1.5">Mã: {item.sku}</span>}
+            <div className="mt-5 flex flex-col text-sm md:text-base">
                 <span className="mr-1.5">
-                    Danh mục: {item.category.name || "Không có danh mục"}
+                    Danh mục:{" "}
+                    <Link
+                        href={`/${type}/${item.category.slug}`}
+                        className="font-medium hover:underline"
+                    >
+                        {item.category.name || "Không có danh mục"}
+                    </Link>
                 </span>
             </div>
         </div>

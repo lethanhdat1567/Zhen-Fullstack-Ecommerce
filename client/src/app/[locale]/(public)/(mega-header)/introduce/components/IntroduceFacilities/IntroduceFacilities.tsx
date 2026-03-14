@@ -38,7 +38,7 @@ function IntroduceFacilities() {
             {/* Left Intro */}
             <div className="col-span-1 w-full bg-(--primary-color) px-6 py-10 text-white sm:col-span-2 sm:px-10 lg:col-span-3 lg:px-16 lg:py-7.5">
                 <div className="relative mb-6 lg:mb-10">
-                    <h2 className="mb-2 text-2xl leading-snug sm:text-3xl lg:text-[35px]">
+                    <h2 className="mb-2 text-center text-2xl leading-snug sm:text-3xl lg:text-[35px]">
                         {t("IntroduceFacilities.title")}
                     </h2>
                     <Image

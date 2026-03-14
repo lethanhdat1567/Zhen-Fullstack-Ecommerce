@@ -27,7 +27,10 @@ function TrackOrder() {
 
     useEffect(() => {
         const fetchOrder = async () => {
-            if (!searchDebounce) return;
+            if (!searchDebounce) {
+                setOrder(null);
+                return;
+            }
             try {
                 setLoading(true);
                 const res = await orderHistoryService.lookupOrder(
@@ -38,46 +41,56 @@ function TrackOrder() {
                 setOrder(res as any);
             } catch (error) {
                 console.log(error);
+                setOrder(null);
             } finally {
                 setLoading(false);
             }
         };
 
         fetchOrder();
-    }, [searchDebounce]);
+    }, [searchDebounce, locale]);
 
     return (
-        <div>
-            <div className="mx-auto min-h-[84vh] w-2xl py-20">
+        <div className="container px-4">
+            <div className="mx-auto min-h-[84vh] w-full max-w-2xl py-10 md:py-20">
                 <div className="text-center">
-                    <h1 className="mb-3 text-4xl font-semibold">
+                    <h1 className="mb-3 text-2xl font-semibold md:text-4xl">
                         {t("title")}
                     </h1>
-                    <p className="text-muted-foreground mb-4 text-sm">
+                    <p className="text-muted-foreground mb-6 text-sm">
                         {t("description")}
                     </p>
-                    <InputGroup>
-                        <InputGroupInput
-                            placeholder={t("searchPlaceholder")}
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                        />
-                        <InputGroupAddon>
-                            <SearchIcon />
-                        </InputGroupAddon>
-                    </InputGroup>
+                    <div className="mx-auto max-w-lg">
+                        <InputGroup>
+                            <InputGroupInput
+                                placeholder={t("searchPlaceholder")}
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                            <InputGroupAddon>
+                                <SearchIcon size={18} />
+                            </InputGroupAddon>
+                        </InputGroup>
+                    </div>
                 </div>
-                <Separator className="my-4" />
-                <div>
+
+                <Separator className="my-6 md:my-8" />
+
+                <div className="w-full">
                     {loading ? (
-                        <div className="text-muted-foreground flex items-center justify-center gap-2 text-sm">
+                        <div className="text-muted-foreground flex items-center justify-center gap-2 py-10 text-sm">
                             <Spinner /> {t("searching")}
                         </div>
                     ) : (
-                        <OrderCard order={order as any} />
-                    )}
-                    {searchDebounce && !loading && !order && (
-                        <div>{t("orderNotFound")}</div>
+                        <>
+                            {order && <OrderCard order={order as any} />}
+
+                            {searchDebounce && !order && (
+                                <div className="text-muted-foreground py-10 text-center text-sm">
+                                    {t("orderNotFound")}
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
             </div>

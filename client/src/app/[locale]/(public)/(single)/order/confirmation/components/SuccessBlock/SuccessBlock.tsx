@@ -66,36 +66,38 @@ function SuccessBlock({ order }: SuccessBlockProps) {
     ];
 
     return (
-        <div className="container pt-10">
+        <div className="container px-4 py-6 md:py-10">
             {/* Header */}
-            <div className="mx-auto flex w-2xl flex-col items-center gap-4">
+            <div className="mx-auto flex w-full max-w-2xl flex-col items-center gap-4">
                 <Logo />
-                <h1 className="text-center text-4xl font-semibold text-green-700">
+                <h1 className="text-center text-2xl font-semibold text-green-700 md:text-4xl">
                     {labels.title}
                 </h1>
             </div>
 
-            <div className="mt-10 grid grid-cols-12 gap-10">
+            <div className="mx-auto mt-8 flex w-full max-w-2xl flex-col gap-6">
                 {/* Order info */}
-                <Card className="col-span-8">
-                    <CardHeader>
-                        <CardTitle>{labels.description}</CardTitle>
+                <Card className="w-full">
+                    <CardHeader className="px-4 py-5 md:px-6">
+                        <CardTitle className="text-lg md:text-xl">
+                            {labels.description}
+                        </CardTitle>
                         <CardDescription>
                             {t("emailConfirmation")}
                         </CardDescription>
                     </CardHeader>
 
-                    <CardContent>
+                    <CardContent className="px-4 pb-6 md:px-6">
                         <OrderInfo items={infoItems} />
 
-                        <Separator className="my-4" />
+                        <Separator className="my-6" />
 
                         <ItemSection items={order.items} />
                     </CardContent>
                 </Card>
 
-                {/* Total */}
-                <div className="col-span-4">
+                {/* Total Section - Hiện 1 cột bên dưới Card chính */}
+                <div className="w-full">
                     <TotalSection total={order.totalAmount} />
                 </div>
             </div>

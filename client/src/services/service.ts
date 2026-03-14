@@ -15,8 +15,8 @@ export interface ListQuery {
 
     sort?: "latest" | "oldest" | "price_asc" | "price_desc" | "best_seller";
 
-    page?: string;
-    limit?: string;
+    page?: string | number;
+    limit?: string | number;
 }
 
 export type ServicePayload = {
@@ -51,6 +51,7 @@ export type Service = {
     category: {
         id: string;
         name: string;
+        slug: string;
     };
 };
 
@@ -131,8 +132,8 @@ export const serviceService = {
 
         if (params?.sort) query.append("sort", params.sort);
 
-        if (params?.page) query.append("page", params.page);
-        if (params?.limit) query.append("limit", params.limit);
+        if (params?.page) query.append("page", String(params.page));
+        if (params?.limit) query.append("limit", String(params.limit));
 
         const queryString = query.toString();
         const url = queryString ? `/services?${queryString}` : "/services";

@@ -5,6 +5,7 @@ import Title from "@/app/admin/components/Title/Title";
 import serviceColumns from "@/app/admin/services/columns";
 import { DataTable } from "@/components/DataTable/data-table";
 import { Button } from "@/components/ui/button";
+import { HttpError } from "@/lib/http/errors";
 import { Service, serviceService } from "@/services/service";
 import { Plus } from "lucide-react";
 import Link from "next/link";
@@ -26,8 +27,8 @@ function ServicePage() {
     const fetchServices = async () => {
         try {
             const res = await serviceService.listServices({
-                page: pagination.pageIndex + 1,
-                limit: pagination.pageSize,
+                page: String(pagination.pageIndex + 1),
+                limit: String(pagination.pageSize),
                 search: search,
                 lang: "vi",
             });
@@ -50,7 +51,11 @@ function ServicePage() {
             fetchServices();
         } catch (error) {
             console.log(error);
-            toast.error("Xóa thất bại!");
+            if (error instanceof HttpError) {
+                toast.error(error.message);
+            } else {
+                toast.error("Xóa thất bại!");
+            }
         }
     }
 

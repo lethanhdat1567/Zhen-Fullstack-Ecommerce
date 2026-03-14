@@ -82,51 +82,55 @@ function FormBooking() {
     const dateTo = form.watch("check_out");
 
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-4">
-            <h2 className="mb-4 text-xl font-bold">{t("title")}</h2>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 py-2">
+            <h2 className="text-xl font-bold md:text-2xl">{t("title")}</h2>
 
-            <Controller
-                name="service_id"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={field.name}>
-                            {t("serviceId")}
-                        </FieldLabel>
-
-                        <SelectService
-                            value={serviceId}
-                            onChange={field.onChange}
-                        />
-                        {fieldState.error && (
-                            <FieldError errors={[fieldState.error]} />
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                {/* Dịch vụ - Full width */}
+                <div className="md:col-span-2">
+                    <Controller
+                        name="service_id"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor={field.name}>
+                                    {t("serviceId")}
+                                </FieldLabel>
+                                <SelectService
+                                    value={serviceId}
+                                    onChange={field.onChange}
+                                />
+                                {fieldState.error && (
+                                    <FieldError errors={[fieldState.error]} />
+                                )}
+                            </Field>
                         )}
-                    </Field>
-                )}
-            />
+                    />
+                </div>
 
-            {/* Tên khách hàng */}
-            <Controller
-                name="customer_name"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={field.name}>
-                            {t("fullName")}
-                        </FieldLabel>
-                        <Input
-                            {...field}
-                            id={field.name}
-                            placeholder={t("fullNamePlaceholder")}
-                        />
-                        {fieldState.error && (
-                            <FieldError errors={[fieldState.error]} />
+                {/* Tên khách hàng - Full width */}
+                <div className="md:col-span-2">
+                    <Controller
+                        name="customer_name"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor={field.name}>
+                                    {t("fullName")}
+                                </FieldLabel>
+                                <Input
+                                    {...field}
+                                    id={field.name}
+                                    placeholder={t("fullNamePlaceholder")}
+                                />
+                                {fieldState.error && (
+                                    <FieldError errors={[fieldState.error]} />
+                                )}
+                            </Field>
                         )}
-                    </Field>
-                )}
-            />
+                    />
+                </div>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 {/* Email */}
                 <Controller
                     name="customer_email"
@@ -169,9 +173,7 @@ function FormBooking() {
                         </Field>
                     )}
                 />
-            </div>
 
-            <div className="grid grid-cols-3 gap-4">
                 {/* Số khách */}
                 <Controller
                     name="guests"
@@ -196,79 +198,90 @@ function FormBooking() {
                     )}
                 />
 
-                {/* Check-in */}
-                <Controller
-                    name="check_in"
-                    control={form.control}
-                    render={({ field, fieldState }) => (
-                        <Field data-invalid={fieldState.invalid}>
-                            <FieldLabel htmlFor={field.name}>
-                                {t("checkIn")}
-                            </FieldLabel>
-                            <DatePickerWithRange
-                                from={dateFrom}
-                                to={dateTo}
-                                serviceId={serviceId}
-                                onRangeChange={(range) => {
-                                    form.setValue(
-                                        "check_in",
-                                        range?.from as Date,
-                                    );
-                                    form.setValue(
-                                        "check_out",
-                                        range?.to as Date,
-                                    );
-                                }}
-                            />
-                            {fieldState.error && (
-                                <FieldError errors={[fieldState.error]} />
-                            )}
-                        </Field>
-                    )}
-                />
+                {/* Khoảng ngày - Ưu tiên hiển thị rộng hơn để tránh vỡ UI lịch */}
+                <div className="md:col-span-1">
+                    <Controller
+                        name="check_in"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor={field.name}>
+                                    {t("checkIn")}
+                                </FieldLabel>
+                                <DatePickerWithRange
+                                    from={dateFrom}
+                                    to={dateTo}
+                                    serviceId={serviceId}
+                                    onRangeChange={(range) => {
+                                        form.setValue(
+                                            "check_in",
+                                            range?.from as Date,
+                                        );
+                                        form.setValue(
+                                            "check_out",
+                                            range?.to as Date,
+                                        );
+                                    }}
+                                />
+                                {fieldState.error && (
+                                    <FieldError errors={[fieldState.error]} />
+                                )}
+                            </Field>
+                        )}
+                    />
+                </div>
+
+                {/* Ghi chú - Full width */}
+                <div className="md:col-span-2">
+                    <Controller
+                        name="note"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor={field.name}>
+                                    {t("note")}
+                                </FieldLabel>
+                                <Textarea
+                                    {...field}
+                                    id={field.name}
+                                    placeholder={t("notePlaceholder")}
+                                    className="min-h-[80px]"
+                                />
+                                {fieldState.error && (
+                                    <FieldError errors={[fieldState.error]} />
+                                )}
+                            </Field>
+                        )}
+                    />
+                </div>
+
+                {/* Phương thức thanh toán - Full width */}
+                <div className="md:col-span-2">
+                    <Controller
+                        name="payment_method"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor={field.name}>
+                                    {t("paymentMethod")}
+                                </FieldLabel>
+                                <SelectPaymentMethod
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                />
+                                {fieldState.error && (
+                                    <FieldError errors={[fieldState.error]} />
+                                )}
+                            </Field>
+                        )}
+                    />
+                </div>
             </div>
 
-            {/* Ghi chú */}
-            <Controller
-                name="note"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={field.name}>
-                            {t("note")}
-                        </FieldLabel>
-                        <Textarea
-                            {...field}
-                            id={field.name}
-                            placeholder={t("notePlaceholder")}
-                        />
-                        {fieldState.error && (
-                            <FieldError errors={[fieldState.error]} />
-                        )}
-                    </Field>
-                )}
-            />
-
-            <Controller
-                name="payment_method"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={field.name}>
-                            {t("paymentMethod")}
-                        </FieldLabel>
-                        <SelectPaymentMethod
-                            value={field.value}
-                            onChange={field.onChange}
-                        />
-                        {fieldState.error && (
-                            <FieldError errors={[fieldState.error]} />
-                        )}
-                    </Field>
-                )}
-            />
-
-            <Button type="submit" className="mt-6 w-full">
+            <Button
+                type="submit"
+                className="h-11 w-full font-bold md:h-12 md:text-lg"
+            >
                 {t("confirmButton")}
             </Button>
         </form>

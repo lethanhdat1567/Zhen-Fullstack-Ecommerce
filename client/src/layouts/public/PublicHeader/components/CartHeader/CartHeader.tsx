@@ -32,7 +32,7 @@ function CartHeader() {
     }, [cartItems]);
 
     return (
-        <div className="group/cart relative">
+        <div className="group/cart relative block">
             <Link href="/cart" className="relative">
                 <Button
                     variant="ghost"

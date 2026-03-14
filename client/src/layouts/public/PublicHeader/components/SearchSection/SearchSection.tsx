@@ -73,7 +73,7 @@ function SearchSection() {
     }, []);
 
     return (
-        <div ref={wrapperRef} className="relative w-100">
+        <div ref={wrapperRef} className="relative w-full">
             <SearchInput
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}

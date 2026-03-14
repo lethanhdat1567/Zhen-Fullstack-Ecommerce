@@ -76,7 +76,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                     </div>
                 )}
             </div>
-            <CardRelated slug={slug} item={relatedServices as any} />
+            <CardRelated type="service" item={relatedServices as any} />
         </div>
     );
 }

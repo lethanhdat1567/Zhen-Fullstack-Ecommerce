@@ -15,16 +15,23 @@ function FilterBtn() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant={"outline"}>
-                    <TextSearch /> Tìm kiếm và chọn lọc
+                <Button variant={"outline"} className="flex items-center gap-2">
+                    <TextSearch size={18} />
+                    <span className="inline">Tìm kiếm và chọn lọc</span>
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-md space-y-4 p-4" align="end">
-                <SearchInput />
-                <Separator />
-                <PriceRange />
-                <Separator />
-                <SortRadio />
+            <DropdownMenuContent
+                className="w-[calc(100vw-2rem)] space-y-4 p-4 sm:w-80 md:w-md"
+                align="end"
+                sideOffset={8}
+            >
+                <div className="space-y-4">
+                    <SearchInput />
+                    <Separator />
+                    <PriceRange />
+                    <Separator />
+                    <SortRadio />
+                </div>
             </DropdownMenuContent>
         </DropdownMenu>
     );

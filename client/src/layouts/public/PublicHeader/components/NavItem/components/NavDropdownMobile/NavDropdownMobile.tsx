@@ -18,7 +18,7 @@ function NavDropdownMobile({ navs, onClick, isActive, code }: Props) {
             {navs.map((nav, index) => (
                 <li key={index}>
                     <Link
-                        className="block w-full py-2"
+                        className="text-md block w-full py-3"
                         href={`/${code}/${nav.slug}`}
                         onClick={onClick}
                     >

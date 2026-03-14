@@ -16,17 +16,20 @@ function FormInfo({ form }: Props) {
     const t = useTranslations("Checkout");
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-4 md:space-y-6">
             {/* Họ và tên */}
             <Controller
                 name="full_name"
                 control={form.control}
                 render={({ field, fieldState }) => (
                     <div
-                        className="flex flex-col gap-2"
+                        className="flex flex-col gap-1.5 md:gap-2"
                         data-invalid={fieldState.invalid}
                     >
-                        <Label htmlFor={field.name} className="font-semibold">
+                        <Label
+                            htmlFor={field.name}
+                            className="text-sm font-semibold md:text-base"
+                        >
                             {t("fullName")}
                         </Label>
                         <Input
@@ -34,14 +37,14 @@ function FormInfo({ form }: Props) {
                             id={field.name}
                             aria-invalid={fieldState.invalid}
                             placeholder={t("fullNamePlaceholder")}
-                            className={
+                            className={`h-10 md:h-12 ${
                                 fieldState.invalid
                                     ? "border-red-500 focus-visible:ring-red-500"
                                     : ""
-                            }
+                            }`}
                         />
                         {fieldState.error && (
-                            <span className="text-sm font-medium text-red-500">
+                            <span className="text-xs font-medium text-red-500 md:text-sm">
                                 {fieldState.error.message}
                             </span>
                         )}
@@ -49,70 +52,78 @@ function FormInfo({ form }: Props) {
                 )}
             />
 
-            {/* Số điện thoại */}
-            <Controller
-                name="phone_number"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                    <div
-                        className="flex flex-col gap-2"
-                        data-invalid={fieldState.invalid}
-                    >
-                        <Label htmlFor={field.name} className="font-semibold">
-                            {t("phoneNumber")}
-                        </Label>
-                        <Input
-                            {...field}
-                            id={field.name}
-                            aria-invalid={fieldState.invalid}
-                            placeholder={t("phoneNumberPlaceholder")}
-                            className={
-                                fieldState.invalid
-                                    ? "border-red-500 focus-visible:ring-red-500"
-                                    : ""
-                            }
-                        />
-                        {fieldState.error && (
-                            <span className="text-sm font-medium text-red-500">
-                                {fieldState.error.message}
-                            </span>
-                        )}
-                    </div>
-                )}
-            />
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
+                {/* Số điện thoại */}
+                <Controller
+                    name="phone_number"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <div
+                            className="flex flex-col gap-1.5 md:gap-2"
+                            data-invalid={fieldState.invalid}
+                        >
+                            <Label
+                                htmlFor={field.name}
+                                className="text-sm font-semibold md:text-base"
+                            >
+                                {t("phoneNumber")}
+                            </Label>
+                            <Input
+                                {...field}
+                                id={field.name}
+                                aria-invalid={fieldState.invalid}
+                                placeholder={t("phoneNumberPlaceholder")}
+                                className={`h-10 md:h-12 ${
+                                    fieldState.invalid
+                                        ? "border-red-500 focus-visible:ring-red-500"
+                                        : ""
+                                }`}
+                            />
+                            {fieldState.error && (
+                                <span className="text-xs font-medium text-red-500 md:text-sm">
+                                    {fieldState.error.message}
+                                </span>
+                            )}
+                        </div>
+                    )}
+                />
 
-            {/* Email */}
-            <Controller
-                name="email"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                    <div
-                        className="flex flex-col gap-2"
-                        data-invalid={fieldState.invalid}
-                    >
-                        <Label htmlFor={field.name} className="font-semibold">
-                            {t("email")}
-                        </Label>
-                        <Input
-                            {...field}
-                            id={field.name}
-                            type="email"
-                            aria-invalid={fieldState.invalid}
-                            placeholder={t("emailPlaceholder")}
-                            className={
-                                fieldState.invalid
-                                    ? "border-red-500 focus-visible:ring-red-500"
-                                    : ""
-                            }
-                        />
-                        {fieldState.error && (
-                            <span className="text-sm font-medium text-red-500">
-                                {fieldState.error.message}
-                            </span>
-                        )}
-                    </div>
-                )}
-            />
+                {/* Email */}
+                <Controller
+                    name="email"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <div
+                            className="flex flex-col gap-1.5 md:gap-2"
+                            data-invalid={fieldState.invalid}
+                        >
+                            <Label
+                                htmlFor={field.name}
+                                className="text-sm font-semibold md:text-base"
+                            >
+                                {t("email")}
+                            </Label>
+                            <Input
+                                {...field}
+                                id={field.name}
+                                type="email"
+                                aria-invalid={fieldState.invalid}
+                                placeholder={t("emailPlaceholder")}
+                                className={`h-10 md:h-12 ${
+                                    fieldState.invalid
+                                        ? "border-red-500 focus-visible:ring-red-500"
+                                        : ""
+                                }`}
+                            />
+                            {fieldState.error && (
+                                <span className="text-xs font-medium text-red-500 md:text-sm">
+                                    {fieldState.error.message}
+                                </span>
+                            )}
+                        </div>
+                    )}
+                />
+            </div>
 
             {/* Địa chỉ nhận hàng */}
             <Controller
@@ -120,10 +131,13 @@ function FormInfo({ form }: Props) {
                 control={form.control}
                 render={({ field, fieldState }) => (
                     <div
-                        className="flex flex-col gap-2"
+                        className="flex flex-col gap-1.5 md:gap-2"
                         data-invalid={fieldState.invalid}
                     >
-                        <Label htmlFor={field.name} className="font-semibold">
+                        <Label
+                            htmlFor={field.name}
+                            className="text-sm font-semibold md:text-base"
+                        >
                             {t("address")}
                         </Label>
                         <Input
@@ -131,14 +145,14 @@ function FormInfo({ form }: Props) {
                             id={field.name}
                             aria-invalid={fieldState.invalid}
                             placeholder={t("addressPlaceholder")}
-                            className={
+                            className={`h-10 md:h-12 ${
                                 fieldState.invalid
                                     ? "border-red-500 focus-visible:ring-red-500"
                                     : ""
-                            }
+                            }`}
                         />
                         {fieldState.error && (
-                            <span className="text-sm font-medium text-red-500">
+                            <span className="text-xs font-medium text-red-500 md:text-sm">
                                 {fieldState.error.message}
                             </span>
                         )}
@@ -152,10 +166,13 @@ function FormInfo({ form }: Props) {
                 control={form.control}
                 render={({ field, fieldState }) => (
                     <div
-                        className="flex flex-col gap-2"
+                        className="flex flex-col gap-1.5 md:gap-2"
                         data-invalid={fieldState.invalid}
                     >
-                        <Label htmlFor={field.name} className="font-semibold">
+                        <Label
+                            htmlFor={field.name}
+                            className="text-sm font-semibold md:text-base"
+                        >
                             {t("note")}
                         </Label>
                         <Textarea
@@ -163,10 +180,14 @@ function FormInfo({ form }: Props) {
                             id={field.name}
                             aria-invalid={fieldState.invalid}
                             placeholder={t("notePlaceholder")}
-                            className={`resize-none ${fieldState.invalid ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                            className={`min-h-[100px] resize-none md:min-h-[120px] ${
+                                fieldState.invalid
+                                    ? "border-red-500 focus-visible:ring-red-500"
+                                    : ""
+                            }`}
                         />
                         {fieldState.error && (
-                            <span className="text-sm font-medium text-red-500">
+                            <span className="text-xs font-medium text-red-500 md:text-sm">
                                 {fieldState.error.message}
                             </span>
                         )}

@@ -213,6 +213,7 @@ class ProductService {
 
     async listProducts(query: ListQuery) {
         const { lang } = query;
+        console.log(query);
 
         const qb = new QueryBuilder(query)
             .status()
@@ -523,36 +524,76 @@ class ProductService {
     }
 
     async deleteProduct(id: string) {
-        return prisma.products.delete({
-            where: { id },
-        });
+        try {
+            return await prisma.products.delete({
+                where: { id },
+            });
+        } catch (error: any) {
+            // P2003: Lỗi khóa ngoại (Sản phẩm đã có trong OrderItem, v.v.)
+            if (error.code === "P2003") {
+                throw new AppError(
+                    "Không thể xóa sản phẩm này vì đã có đơn hàng hoặc dữ liệu liên quan không cho phép xóa.",
+                    400,
+                );
+            }
+
+            if (error.code === "P2025") {
+                throw new AppError("Sản phẩm không tồn tại", 404);
+            }
+
+            throw error;
+        }
     }
 
     async bulkDelete(ids: string[]) {
         if (!ids?.length) {
-            throw new AppError("No IDs provided", 400);
+            throw new AppError("Danh sách ID không được để trống", 400);
         }
 
-        return await prisma.$transaction(async (tx) => {
-            // Xoá galleries trước (FK)
-            await tx.product_galleries.deleteMany({
-                where: { product_id: { in: ids } },
-            });
+        try {
+            return await prisma.$transaction(async (tx) => {
+                // 1. Xoá galleries trước (Dữ liệu phụ)
+                await tx.product_galleries.deleteMany({
+                    where: { product_id: { in: ids } },
+                });
 
-            // Xoá translations
-            await tx.product_translations.deleteMany({
-                where: { product_id: { in: ids } },
-            });
+                // 2. Xoá translations (Dữ liệu phụ)
+                await tx.product_translations.deleteMany({
+                    where: { product_id: { in: ids } },
+                });
 
-            // Xoá products
-            const deleted = await tx.products.deleteMany({
-                where: { id: { in: ids } },
-            });
+                // 3. Xoá products chính
+                const deleted = await tx.products.deleteMany({
+                    where: { id: { in: ids } },
+                });
 
-            return {
-                deletedCount: deleted.count,
-            };
-        });
+                if (deleted.count === 0) {
+                    throw new AppError(
+                        "Không tìm thấy sản phẩm nào để xóa",
+                        404,
+                    );
+                }
+
+                return {
+                    message: "Xóa các sản phẩm và dữ liệu liên quan thành công",
+                    deletedCount: deleted.count,
+                };
+            });
+        } catch (error: any) {
+            // Kiểm tra lỗi ràng buộc với bảng Orders/OrderItems
+            if (error.code === "P2003") {
+                throw new AppError(
+                    "Một số sản phẩm không thể xóa vì đã tồn tại trong các đơn hàng cũ.",
+                    400,
+                );
+            }
+
+            if (error instanceof AppError) {
+                throw error;
+            }
+
+            throw error;
+        }
     }
 }
 

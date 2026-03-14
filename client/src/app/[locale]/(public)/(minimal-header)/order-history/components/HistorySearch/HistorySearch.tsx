@@ -23,14 +23,14 @@ function HistorySearch({ searchTerm, onSearchChange }: Props) {
     }, [searchTerm]);
 
     return (
-        <div className="relative my-6 w-full max-w-sm">
+        <div className="relative my-4 w-full md:my-6">
             <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
 
             <Input
                 placeholder={t("placeholder")}
                 value={localValue}
                 onChange={(e) => setLocalValue(e.target.value)}
-                className="pl-10"
+                className="pl-10 text-sm md:text-base"
             />
         </div>
     );

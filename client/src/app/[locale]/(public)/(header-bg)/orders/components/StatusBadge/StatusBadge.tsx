@@ -1,37 +1,27 @@
 import { OrderStatus } from "@/services/orderHistoryService";
+import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
 
-const statusConfig: Record<OrderStatus, { label: string; className: string }> =
-    {
-        pending: {
-            label: "Pending",
-            className: "border-yellow-500 text-yellow-700 bg-yellow-50",
-        },
-        confirmed: {
-            label: "Confirmed",
-            className: "border-blue-500 text-blue-700 bg-blue-50",
-        },
-        cancelled: {
-            label: "Cancelled",
-            className: "border-red-500 text-red-700 bg-red-50",
-        },
-        completed: {
-            label: "Completed",
-            className: "border-green-500 text-green-700 bg-green-50",
-        },
-        all: {
-            label: "All",
-            className: "border-gray-400 text-gray-700 bg-gray-50",
-        },
-    };
+const statusStyles: Record<OrderStatus, string> = {
+    pending: "border-yellow-500 text-yellow-700 bg-yellow-50/50",
+    confirmed: "border-blue-500 text-blue-700 bg-blue-50/50",
+    cancelled: "border-red-500 text-red-700 bg-red-50/50",
+    completed: "border-green-500 text-green-700 bg-green-50/50",
+    all: "border-gray-400 text-gray-700 bg-gray-50",
+};
 
 function StatusBadge({ status }: { status: OrderStatus }) {
-    const config = statusConfig[status];
+    const t = useTranslations("orderStatus");
+    const style = statusStyles[status] || statusStyles.all;
 
     return (
         <span
-            className={`inline-flex items-center rounded-none border-1 px-2 py-1 text-xs font-semibold ${config.className}`}
+            className={cn(
+                "inline-flex items-center rounded-sm border px-3 py-1.5 text-[10px] font-bold tracking-wider uppercase sm:text-xs",
+                style,
+            )}
         >
-            {config.label}
+            {t(status)}
         </span>
     );
 }

@@ -51,7 +51,7 @@ function UserSection() {
         return (
             <DropdownMenu>
                 <DropdownMenuTrigger className="outline-none">
-                    <div className="flex cursor-pointer items-center gap-2 rounded-full border border-transparent p-1 pr-2 transition-all hover:border-white/20 hover:bg-white/10">
+                    <div className="flex cursor-pointer items-center gap-0 rounded-full border border-transparent p-1 pr-2 transition-all hover:border-white/20 hover:bg-white/10 lg:gap-2">
                         {/* Avatar tròn tạo điểm nhấn thị giác */}
                         <Avatar className="h-8 w-8 border border-white/20 object-cover">
                             <AvatarImage
@@ -62,7 +62,7 @@ function UserSection() {
                             </AvatarFallback>
                         </Avatar>
 
-                        <div className="hidden flex-col items-start leading-none md:flex">
+                        <div className="hidden flex-col items-start leading-none lg:flex">
                             <span className="text-xs font-semibold text-white">
                                 {user.username}
                             </span>
@@ -114,7 +114,12 @@ function UserSection() {
                     </DropdownMenuItem>
 
                     {user.role === "admin" && (
-                        <DropdownMenuItem className="text-primary focus:text-primary cursor-pointer">
+                        <DropdownMenuItem
+                            className="text-primary focus:text-primary cursor-pointer"
+                            onClick={() => {
+                                router.push("/admin");
+                            }}
+                        >
                             <LayoutDashboard className="mr-2 h-4 w-4" />
                             <span>{t("admin")}</span>
                         </DropdownMenuItem>

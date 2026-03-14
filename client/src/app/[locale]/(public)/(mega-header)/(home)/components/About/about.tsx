@@ -15,7 +15,7 @@ function About() {
             <div className="relative container flex h-full items-center">
                 <AboutData />
             </div>
-            <div className="absolute -top-1.25 right-60 -z-10 hidden h-full w-70 md:block">
+            <div className="absolute -top-1.25 right-60 -z-10 hidden h-full w-70 lg:block">
                 <Image
                     src={images.bg_spa}
                     alt="Decor"

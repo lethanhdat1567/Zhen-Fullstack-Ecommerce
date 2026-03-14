@@ -1,3 +1,5 @@
+import { Prisma } from "@prisma/client";
+
 export interface ListQuery {
     search?: string;
     lang?: string;
@@ -128,19 +130,12 @@ export class QueryBuilder {
 
         switch (sort) {
             case "price_asc":
-                this.orderBy = [
-                    { sale_price: { sort: "asc", nulls: "last" } },
-                    { price: "asc" },
-                ];
+                this.orderBy = { price: "asc" };
                 break;
 
             case "price_desc":
-                this.orderBy = [
-                    { sale_price: { sort: "desc", nulls: "last" } },
-                    { price: "desc" },
-                ];
+                this.orderBy = { price: "desc" };
                 break;
-
             case "oldest":
                 this.orderBy = { created_at: "asc" };
                 break;

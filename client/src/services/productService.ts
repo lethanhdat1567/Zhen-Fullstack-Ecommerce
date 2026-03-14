@@ -1,17 +1,9 @@
 import { http } from "@/lib/http/http";
+import { ListQuery } from "@/services/service";
 
 /* =========================
    TYPES
 ========================= */
-
-export type ProductQueryParams = {
-    search?: string;
-    page?: number;
-    limit?: number;
-    lang?: string;
-    categorySlug?: string;
-    isActive?: boolean;
-};
 
 export type ProductTranslationPayload = {
     language_code: string;
@@ -61,6 +53,7 @@ export type Product = {
     category: {
         id: string;
         name: string;
+        slug: string;
         translations: {
             name: string;
             slug: string;
@@ -142,7 +135,7 @@ export const productService = {
         return res.data;
     },
 
-    async list(params?: ProductQueryParams) {
+    async list(params?: ListQuery) {
         const query = new URLSearchParams();
 
         if (params?.search) query.append("search", params.search);
@@ -151,9 +144,12 @@ export const productService = {
         if (params?.lang) query.append("lang", params.lang);
         if (params?.categorySlug)
             query.append("categorySlug", params.categorySlug);
-        if (typeof params?.isActive === "boolean")
+        if (typeof params?.isActive === "boolean") {
             query.append("isActive", String(params.isActive));
-
+        }
+        if (params?.minPrice) query.append("minPrice", String(params.minPrice));
+        if (params?.maxPrice) query.append("maxPrice", String(params.maxPrice));
+        if (params?.sort) query.append("sort", params.sort);
         const queryString = query.toString();
         const url = queryString ? `/products?${queryString}` : "/products";
 
